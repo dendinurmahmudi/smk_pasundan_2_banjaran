@@ -1,0 +1,15 @@
+.oval{
+        border-top-left-radius: 250px;
+        border-bottom-left-radius: 250px; 
+        background-color: #ffffff;
+    }
+    #side ul li a:hover{
+        border-top-left-radius: 250px;
+        border-bottom-left-radius: 250px; 
+    }
+    #side .oval:hover
+    {
+        border-top-left-radius: 250px;
+        border-bottom-left-radius: 250px; 
+        background-color: #ffffff;   
+    }
