@@ -7,7 +7,7 @@
 <div class="row">
     <div class="col-sm-12">
         <div class="white-box">
-         <div class="row">
+           <div class="row">
             <div class="col-md-12 col-sm-12 col-xs-12">
                 <div class="white-box">
                     <h3 class="box-title">Jumlah alumni tiap jurusan yang bekerja pertahun</h3>
@@ -94,37 +94,37 @@
                                         </tr>
                                     </thead>
                                     <tbody>
-                                            @foreach($kelistrikan as $k)
-                                        <tr>@if($k->id_jurusan==1)
+                                        @foreach($kelistrikan as $k)
+                                        <tr>
                                             <td>{{$k->tahun_lulus}}</td>
                                             <td class="text-center">{{$k->jumlah}}</td>
                                             <td class="text-center">{{$k->kesesuaian}}</td>
                                             <td class="text-center">{{$k->kosong}}</td>
-                                            @endif
+                                            
                                             <th></th>
-                                            @if($k->id_jurusan==2)
+                                            
                                             <td class="text-center">{{$k->jumlah}}</td>
                                             <td class="text-center">{{$k->kesesuaian}}</td>
                                             <td class="text-center">{{$k->kosong}}</td>
-                                            @endif
+                                            
                                             <th></th>
-                                            @if($k->id_jurusan==3)
+                                            
                                             <td class="text-center">{{$k->jumlah}}</td>
                                             <td class="text-center">{{$k->kesesuaian}}</td>
                                             <td class="text-center">{{$k->kosong}}</td>
-                                            @endif
+                                            
                                             <th></th>
-                                            @if($k->id_jurusan==4)
+                                            
                                             <td class="text-center">{{$k->jumlah}}</td>
                                             <td class="text-center">{{$k->kesesuaian}}</td>
                                             <td class="text-center">{{$k->kosong}}</td>
-                                            @endif
+                                            
                                             <th></th>
-                                            @if($k->id_jurusan==5)
+                                            
                                             <td class="text-center">{{$k->jumlah}}</td>
                                             <td class="text-center">{{$k->kesesuaian}}</td>
                                             <td class="text-center">{{$k->kosong}}</td>
-                                            @endif
+                                            
                                             <th></th>
                                         </tr>
                                         @endforeach
@@ -152,10 +152,10 @@
                                             </tr>
                                         </thead>
                                         <tbody>
-                                         <?php $no=1;
-                                         ?>
-                                         @foreach($perusahaan as $p)
-                                         <tr>
+                                           <?php $no=1;
+                                           ?>
+                                           @foreach($perusahaan as $p)
+                                           <tr>
                                             @if($p->nama_perusahaan==null)
 
                                             @else
@@ -179,33 +179,42 @@
                 Morris.Area({
                     element: 'morris-area-chart',
                     data: [
-                    {<?php 
-                        echo "period : '2018'";
-                        echo ",Kelistrikan : 1";
-                        echo ",Permesinan : 2";
-                        echo ",TKR : 4";
-                        echo ",TKJ : 4";
-                        echo ",TBSM : 5";
+                    <?php 
+                    foreach ($jurusan as $j) { 
+                            echo "{period : '".$j->tahun_lulus."'";
+                            if ($j->id_jurusan==1) {
+                                echo ",Kelistrikan : ".$j->jumlah."";
+                            }
+                            else{
+                                echo ",Kelistrikan : 0";
+                            }
+                            if ($j->id_jurusan==2) {
+                                echo ",Permesinan : ".$j->jumlah."";
+                            }
+                            else{
+                                echo ",Permesinan : 0";
+                            }
+                            if ($j->id_jurusan==3) {
+                                echo ",TKJ : ".$j->jumlah."";
+                            }
+                            else{
+                                echo ",TKJ : 0";
+                            }
+                            if ($j->id_jurusan==4) {
+                                echo ",TKR : ".$j->jumlah."";
+                            }
+                            else{
+                                echo ",TKR : 0";
+                            }if ($j->id_jurusan==5) {
+                                echo ",TBSM : ".$j->jumlah."},";
+                            }
+                            else{
+                                echo ",TBSM : 0},";
+                            }
+                        }
                         ?>
-                    },{
-                        <?php 
-                        echo "period : '2019'";
-                        echo ",Kelistrikan : 3";
-                        echo ",Permesinan : 2";
-                        echo ",TKR : 5";
-                        echo ",TKJ : 4";
-                        echo ",TBSM : 5";
-                        ?>
-                    },{
-                        <?php 
-                        echo "period : '2020'";
-                        echo ",Kelistrikan : 1";
-                        echo ",Permesinan : 2";
-                        echo ",TKR : 10";
-                        echo ",TKJ : 4";
-                        echo ",TBSM : 5"; ?>
-                    },],
-                    xkey: 'period',
+                        ],
+                        xkey: 'period',
                     ykeys: ['Kelistrikan','Permesinan','TKR','TKJ','TBSM'],
                     labels: ['Kelistrikan','Permesinan','TKR','TKJ','TBSM'],
                     pointSize: 3,
