@@ -65,6 +65,12 @@ return [
             'endpoint' => env('AWS_ENDPOINT'),
         ],
 
+        'berkas' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/data_file/berkas_lamaran'),
+            'url' => env('APP_URL').'/storage',
+            'visibility' => 'public',
+        ],
     ],
 
     /*

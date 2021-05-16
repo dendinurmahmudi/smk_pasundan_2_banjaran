@@ -9,6 +9,7 @@
     <div class="col-sm-12">
         <div class="white-box">
             <div class="row row-in">
+                <a href="/dataalumni" title="">
                 <div class="col-lg-4 col-sm-12 row-in-br">
                     <ul class="col-in">
                         <li>
@@ -27,6 +28,8 @@
                             </li>
                         </ul>
                     </div>
+                    </a>
+                    <a href="/datapenelusuran" title="">
                     <div class="col-lg-4 col-sm-12 row-in-br  b-r-none">
                         <ul class="col-in">
                             <li>
@@ -48,6 +51,7 @@
                                 </li>
                             </ul>
                         </div>
+                        </a>
                         <div class="col-lg-4 col-sm-12  b-0">
                             <ul class="col-in">
                                 <li>
@@ -81,7 +85,9 @@
                             $hitung1 = $bekerja/$all*100;
                             ?>
                             <div class="col-sm-3">
-                                <div class="chart easy-pie-chart-3" data-percent="{{ $hitung1 }}"> <span class="percent"></span> <br><b>Alumni yang bekerja</b></div>
+                            <a href="/databekerja" title="">
+                                <div class="chart easy-pie-chart-3" data-percent="{{ $hitung1 }}"> <span class="percent"></span> <br><h5>Alumni yang bekerja</h5></div>
+                            </a>
                             </div>
                             <div class="col-sm-3">
                                 <?php 
@@ -89,7 +95,9 @@
                                 $pencaker = count($pencaker); 
                                 $hitung2 = $pencaker/$all*100;
                                 ?>
-                                <div class="chart easy-pie-chart-4" data-percent="{{ $hitung2 }}"> <span class="percent"></span> <br><b>Alumni yang belum bekerja</b></div>
+                                <a href="/datapencaker" title="">
+                                <div class="chart easy-pie-chart-4" data-percent="{{ $hitung2 }}"> <span class="percent"></span> <br><h5>Alumni yang belum bekerja</h5></div>
+                                </a>
                             </div>
                             <div class="col-sm-3">
                                 <?php 
@@ -97,7 +105,9 @@
                                 $kuliah = count($kuliah); 
                                 $hitung3 = $kuliah/$all*100;
                                 ?>
-                                <div class="chart easy-pie-chart-5" data-percent="{{ $hitung3 }}"> <span class="percent"></span>  <br><b>Alumni yang melanjutkan sekolah</b></div>
+                                <a href="/datakuliah" title="">
+                                <div class="chart easy-pie-chart-5" data-percent="{{ $hitung3 }}"> <span class="percent"></span>  <br><h5>Alumni yang melanjutkan sekolah</h5></div>
+                                </a>
                             </div>
                             <div class="col-sm-3">
                                 <?php 
@@ -105,7 +115,9 @@
                                 $sesuai = count($sesuai); 
                                 $hitung = $sesuai/$kesesuaian*100;
                                 ?>
-                                <div class="chart easy-pie-chart-2" data-percent="{{$hitung}}"> <span class="percent"></span>  <br><b>kesesuaian jurusan dan pekerjaan</b></div>
+                                <a href="/datasesuai" title="">
+                                <div class="chart easy-pie-chart-2" data-percent="{{$hitung}}"> <span class="percent"></span>  <br><h5>kesesuaian jurusan dan pekerjaan</h5></div>
+                                </a>
                             </div>
                         </div>
                     </div>

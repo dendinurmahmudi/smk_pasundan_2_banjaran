@@ -42,7 +42,7 @@
 				</div>
 			</form>
 		</div>
-		<div class="table-responsive">
+		<div class="table-responsive" id="table">
 			<table id="example23" class="display nowrap" cellspacing="0" width="100%">
 				<thead>
 					<tr>
@@ -80,7 +80,8 @@
 						<td align="center" >{{ $a->tahun_lulus }}</td>
 						@endif
 						<td class="text-nowrap">
-							<a href="/hapusdata/{{$a->nisn}}/{{$a->nama_jurusan}}" data-toggle="tooltip" title="Hapus data {{$a->name}}" onclick="return confirm('Yakin hapus data {{ $a->name }} ?');"> <i class="fa fa-trash text-inverse"></i> </a> 
+							<!-- <a href="/hapusdata/{{$a->nisn}}/{{$a->nama_jurusan}}" data-toggle="tooltip" title="Hapus data {{$a->name}}" onclick="return confirm('Yakin hapus data {{ $a->name }} ?');"> <i class="fa fa-trash text-inverse"></i> </a>  -->
+							<a href="#" class="fa fa-trash text-inverse" data-toggle="modal" id="btndltnotif" data-id="{{$a->nisn}}" data-name="{{$a->name}}" data-jurusan="{{$a->nama_jurusan}}" title="Hapus data {{$a->name}}"></a>
 							<a href="#" data-toggle="modal" data-target="#edit{{$a->id}}" title="Edit data {{$a->name}}"> <i class="fa fa-pencil text-inverse m-l-15"></i> </a> 
 							<a href="#" data-toggle="modal" title="Lihat data {{$a->name}}" data-target="#lihatdata{{$a->id}}"> <i class="fa fa-eye text-inverse m-l-15"></i> </a>
 						</td>
@@ -101,7 +102,28 @@
 <script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
 <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
-<script>
+<script type="text/javascript">
+	$('#table').on('click', '#btndltnotif', function() {
+            const id = $(this).data('id');
+            var nama = $(this).data('name');
+            var jur = $(this).data('jurusan');
+            swal({
+                title: 'Apakah anda yakin?',
+                text: "Data "+nama+" akan di hapus!",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                cancelButtonText: 'Batal',
+                confirmButtonText: 'Ya, Hapus!'
+            }, function(isConfirm) {
+                if (isConfirm) {
+                    window.location.href = '/hapusdata/'+id+'/'+jur;
+
+                }
+            });
+        });
+
 	$(document).ready(function() {
 		$('#myTable').DataTable();
 		$(document).ready(function() {

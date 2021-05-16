@@ -15,7 +15,7 @@
 <div class="col-sm-12">
     <div class="white-box">
         <p class="text-muted m-b-30">Export data ke Excel, PDF & Print</p>
-        <div class="table-responsive">
+        <div class="table-responsive" id="table">
             <table id="example23" class="display nowrap" cellspacing="0" width="100%">
                 <thead>
                     <tr>
@@ -51,7 +51,8 @@
                     <td><i class="fa fa-close text-danger"></i> Non-Aktif</td>
                     @endif
                     <td class="text-nowrap">
-                        <a href="/hapusdatap/{{$a->nisn}}" data-toggle="tooltip" title="Hapus data {{$a->name}}" onclick="return confirm('Yakin hapus data {{ $a->name }} ?');"> <i class="fa fa-trash text-inverse m-l-15"></i> </a> 
+                        <!-- <a href="/hapusdatap/{{$a->nisn}}" data-toggle="tooltip" title="Hapus data {{$a->name}}" onclick="return confirm('Yakin hapus data {{ $a->name }} ?');"> <i class="fa fa-trash text-inverse m-l-15"></i> </a>  -->
+                        <a href="#" class="fa fa-trash text-inverse" data-toggle="modal" id="btndltnotif" data-id="{{$a->nisn}}" data-name="{{$a->name}}" title="Hapus data {{$a->name}}"></a>
                         <a href="#" data-toggle="modal" data-target="#edit{{$a->nisn}}" title="Edit data {{$a->name}}"> <i class="fa fa-pencil text-inverse m-l-15"></i> </a> 
                     </td>
                 </tr>
@@ -72,6 +73,26 @@
 <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
 <script>
+    $('#table').on('click', '#btndltnotif', function() {
+            const id = $(this).data('id');
+            var nama = $(this).data('name');
+            swal({
+                title: 'Apakah anda yakin?',
+                text: "Data "+nama+" akan di hapus!",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                cancelButtonText: 'Batal',
+                confirmButtonText: 'Ya, Hapus!'
+            }, function(isConfirm) {
+                if (isConfirm) {
+                    window.location.href = '/hapusdatap/'+id;
+
+                }
+            });
+        });
+
     $(document).ready(function() {
         $('#myTable').DataTable();
         $(document).ready(function() {
@@ -203,7 +224,7 @@
                         <div class="col-sm-12 col-xs-12">
                             <button type="submit" class="btn btn-success waves-effect waves-light m-r-10">Simpan</button>
                         </form>
-                        <button type="button" class="btn btn-info waves-effect waves-light m-r-10">Reset password</button>
+                         <a href="/resetpass/{{$p->nisn}}" class="btn btn-info waves-effect waves-light m-r-10">Reset password</a>
                     </div>
                 </div>
             </div>

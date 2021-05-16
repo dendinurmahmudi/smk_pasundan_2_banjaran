@@ -97,10 +97,10 @@
                                 <input type="text" class="form-control" id="exampleInputEmail1" name="email" value="{{ $alumni->email }}" placeholder=""> </div>
                                 <div class="form-group">
                                     <label for="exampleInputEmail1">No Hp :</label>
-                                    <input type="text" class="form-control" id="exampleInputEmail1" name="no_hp" value="{{ $alumni->no_hp }}" placeholder=""> </div>
+                                    <input type="text" class="form-control" id="exampleInputEmail1" name="no_hp" value="{{ $alumni->no_hp }}" placeholder="Isi No Hp..."> </div>
                                     <div class="form-group">
                                         <label for="exampleInputEmail1">Alamat :</label>
-                                        <input type="text" class="form-control" id="exampleInputEmail1" name="alamat" value="{{ $alumni->alamat }}" placeholder=""> </div>
+                                        <input type="text" class="form-control" id="exampleInputEmail1" name="alamat" value="{{ $alumni->alamat }}" placeholder="Isi alamat..."> </div>
                                         <div class="form-group">
                                             <label for="exampleInputEmail1">Lulusan :</label>
                                             <input type="text" class="form-control" id="exampleInputEmail1" name="tahun_lulus" value="{{ $alumni->tahun_lulus }}" placeholder=""> </div>

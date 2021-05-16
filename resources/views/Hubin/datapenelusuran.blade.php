@@ -10,6 +10,7 @@
             <form method="POST" action="/penelusuranBy_jurusan_tahun">
                 {{ csrf_field() }}
                 <div class="col-sm-3">
+                    {{$ket}}
                     <p class="text-muted m-b-30">Export data ke Excel, PDF & Print</p>
                 </div>
                 <div class="form-group" style="margin-bottom: 50px">
@@ -93,52 +94,52 @@
                     @endif
 
                     @if($p->nama_perusahaan == null)
-                    <td align="center"><i class="fa fa-minus text-warning"></i></td>
+                    <td align="center"><i class="fa fa-minus text-warning fa-fw"></i>T</td>
                     @else
                     <td>{{ $p->nama_perusahaan }}</td>
                     @endif
                     @if($p->nama_kampus == null)
-                    <td align="center"><i class="fa fa-minus text-warning"></i></td>
+                    <td align="center"><i class="fa fa-minus text-warning fa-fw"></i>T</td>
                     @else
                     <td>{{ $p->nama_kampus }}</td>
                     @endif
 
                     @if($p->pencaker == 'Y')
-                    <td align="center"><i class="fa fa-check text-success"></i></td>
+                    <td align="center"><i class="fa fa-check text-success fa-fw"></i>Y</td>
                     @elseif($p->pencaker == 'B')
-                    <td align="center"><i class="fa fa-close text-danger"></i></td>
+                    <td align="center"><i class="fa fa-close text-danger fa-fw"></i>T</td>
                     @elseif($p->pencaker == 'T')
-                    <td align="center"><i class="fa fa-close text-danger"></i></td>
+                    <td align="center"><i class="fa fa-close text-danger fa-fw"></i>T</td>
                     @else
-                    <td align="center"><i class="fa fa-minus text-warning"></i></td>
+                    <td align="center"><i class="fa fa-minus text-warning fa-fw"></i>T</td>
                     @endif
 
                     @if($p->sesuai_kompetensi == 'Y')
-                    <td align="center"><i class="fa fa-check text-success"></i></td>
+                    <td align="center"><i class="fa fa-check text-success fa-fw"></i>Y</td>
                     @elseif($p->sesuai_kompetensi == 'B')
-                    <td align="center"><i class="fa fa-minus text-warning"></i></td>
+                    <td align="center"><i class="fa fa-minus text-warning fa-fw"></i>T</td>
                     @elseif($p->sesuai_kompetensi == 'T')
-                    <td align="center"><i class="fa fa-close text-danger"></i></td>
+                    <td align="center"><i class="fa fa-close text-danger fa-fw"></i>T</td>
                     @else
-                    <td align="center"><i class="fa fa-minus text-warning"></i></td>
+                    <td align="center"><i class="fa fa-minus text-warning fa-fw"></i>T</td>
                     @endif
 
                     @if($p-> gaji == 'B')
-                    <td align="center"><i class="fa fa-minus text-warning"></i></td>
+                    <td align="center"><i class="fa fa-minus text-warning fa-fw"></i>T</td>
                     @elseif($p->gaji == null)
-                    <td align="center"><i class="fa fa-minus text-warning"></i></td>
+                    <td align="center"><i class="fa fa-minus text-warning fa-fw"></i>T</td>
                     @else
                     <td align="center">{{ $p->gaji }}</td>
                     @endif
 
                     @if($p->kepuasan == 'Y')
-                    <td align="center"><i class="fa fa-check text-success"></i></td>
+                    <td align="center"><i class="fa fa-check text-success fa-fw"></i>Y</td>
                     @elseif($p->kepuasan == 'B')
-                    <td align="center"><i class="fa fa-minus text-warning"></i></td>
+                    <td align="center"><i class="fa fa-minus text-warning fa-fw"></i>T</td>
                     @elseif($p->kepuasan == 'T')
-                    <td align="center"><i class="fa fa-close text-danger"></i></td>
+                    <td align="center"><i class="fa fa-close text-danger fa-fw"></i>T</td>
                     @else
-                    <td align="center"><i class="fa fa-minus text-warning"></i></td>
+                    <td align="center"><i class="fa fa-minus text-warning fa-fw"></i>T</td>
                     @endif
                     <td align="center">
                         <a href="#" data-toggle="modal" title="Lihat data" data-target="#lihat{{$p->id}}"> <i class="fa fa-eye text-inverse m-l-15"></i> </a>

@@ -5,10 +5,13 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+use Exception;
+use File;
+use Response;
 use Validator;
 use Hash;
 use Session;
-
 use App\Alumni;
 use App\penelusuran;
 use App\perusahaan;
@@ -57,9 +60,65 @@ class HubinController extends Controller
         $jurusan = DB::table('jurusan')->get();
         $warna = ['','','','','oval',''];
         $lulusan = alumni::select('tahun_lulus')->groupBy('tahun_lulus')->get();
-        return view('Hubin/datapenelusuran',['penelusuran' => $penelusuran,'warna'=>$warna,'jurusan'=>$jurusan,'lulusan'=>$lulusan]);
+        $ket = 'Semua data Alumni';
+        return view('Hubin/datapenelusuran',['penelusuran' => $penelusuran,'warna'=>$warna,'jurusan'=>$jurusan,'lulusan'=>$lulusan,'ket'=>$ket]);
     }
-
+    public function databekerja(){
+        $penelusuran = penelusuran::join('users','penelusuran.nisn','=','users.nisn')
+        ->join('alumni','alumni.nisn','=','users.nisn')
+        ->join('jurusan','alumni.jurusan','=','jurusan.id_jurusan')
+        ->whereRaw('nama_perusahaan!="null"')
+        ->orderBy('users.name')
+        ->get();
+        
+        $jurusan = DB::table('jurusan')->get();
+        $warna = ['','','','','oval',''];
+        $lulusan = alumni::select('tahun_lulus')->groupBy('tahun_lulus')->get();
+        $ket = 'Alumni yang bekerja';
+        return view('Hubin/datapenelusuran',['penelusuran' => $penelusuran,'warna'=>$warna,'jurusan'=>$jurusan,'lulusan'=>$lulusan,'ket'=>$ket]);
+    }
+    public function datapencaker(){
+        $penelusuran = penelusuran::join('users','penelusuran.nisn','=','users.nisn')
+        ->join('alumni','alumni.nisn','=','users.nisn')
+        ->join('jurusan','alumni.jurusan','=','jurusan.id_jurusan')
+        ->where('pencaker','Y')
+        ->orderBy('users.name')
+        ->get();
+        
+        $jurusan = DB::table('jurusan')->get();
+        $warna = ['','','','','oval',''];
+        $lulusan = alumni::select('tahun_lulus')->groupBy('tahun_lulus')->get();
+        $ket = 'Alumni yang belum bekerja';
+        return view('Hubin/datapenelusuran',['penelusuran' => $penelusuran,'warna'=>$warna,'jurusan'=>$jurusan,'lulusan'=>$lulusan,'ket'=>$ket]);
+    }
+    public function datakuliah(){
+        $penelusuran = penelusuran::join('users','penelusuran.nisn','=','users.nisn')
+        ->join('alumni','alumni.nisn','=','users.nisn')
+        ->join('jurusan','alumni.jurusan','=','jurusan.id_jurusan')
+        ->whereRaw('nama_kampus!="null"')
+        ->orderBy('users.name')
+        ->get();
+        
+        $jurusan = DB::table('jurusan')->get();
+        $warna = ['','','','','oval',''];
+        $lulusan = alumni::select('tahun_lulus')->groupBy('tahun_lulus')->get();
+        $ket = 'Alumni yang melanjutkan sekolah';
+        return view('Hubin/datapenelusuran',['penelusuran' => $penelusuran,'warna'=>$warna,'jurusan'=>$jurusan,'lulusan'=>$lulusan,'ket'=>$ket]);
+    }
+    public function datasesuai(){
+        $penelusuran = penelusuran::join('users','penelusuran.nisn','=','users.nisn')
+        ->join('alumni','alumni.nisn','=','users.nisn')
+        ->join('jurusan','alumni.jurusan','=','jurusan.id_jurusan')
+        ->where('sesuai_kompetensi','Y')
+        ->orderBy('users.name')
+        ->get();
+        
+        $jurusan = DB::table('jurusan')->get();
+        $warna = ['','','','','oval',''];
+        $lulusan = alumni::select('tahun_lulus')->groupBy('tahun_lulus')->get();
+        $ket = 'kesesuaian jurusan';
+        return view('Hubin/datapenelusuran',['penelusuran' => $penelusuran,'warna'=>$warna,'jurusan'=>$jurusan,'lulusan'=>$lulusan,'ket'=>$ket]);
+    }
     public function dataalumni()
     {
     	$alumni = alumni::join('users','alumni.nisn','=','users.nisn')
@@ -195,10 +254,17 @@ class HubinController extends Controller
     }
     public function datapelamar($id)
     {
-        $pelamar = DB::select('select berkas_lamaran.untuk_perusahaan, users.name, users.email, berkas_lamaran.created_at from berkas_lamaran join users on berkas_lamaran.nisn=users.nisn where untuk_perusahaan="'.$id.'"');
+        $pelamar = DB::select('select berkas_lamaran.untuk_perusahaan,berkas_lamaran.file_lamaran, users.name, users.email, berkas_lamaran.created_at from berkas_lamaran join users on berkas_lamaran.nisn=users.nisn where untuk_perusahaan="'.$id.'"');
         $warna = ['','','oval','','',''];
         return view('Hubin/datalamaran',['pelamar'=> $pelamar,'warna'=>$warna]);
     }
+    public function getlamaran($filename,$id)
+    {
+       return response()->download(Storage::disk('public')->get('index.php'));
+       $pelamar = DB::select('select berkas_lamaran.untuk_perusahaan,berkas_lamaran.file_lamaran, users.name, users.email, berkas_lamaran.created_at from berkas_lamaran join users on berkas_lamaran.nisn=users.nisn where untuk_perusahaan="'.$id.'"');
+       $warna = ['','','oval','','',''];
+       return view('Hubin/datalamaran',['pelamar'=> $pelamar,'warna'=>$warna]);         
+   }
     public function profile()
     {
         $warna = ['','','','','',''];

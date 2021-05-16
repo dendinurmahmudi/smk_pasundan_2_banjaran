@@ -29,7 +29,7 @@
                     <td>{{ $p->name }}</td>
                     <td>{{ $p->email }}</td>
                     <td>{{ $p->created_at }}</td>
-                    <td><a href="#" data-toggle="tooltip" title="Unduh file"><i class="fa fa-download text-success m-r-5"></i>  Unduh file</a></td>
+                    <td><a href="/get/{{$p->file_lamaran}}/{{$p->untuk_perusahaan}}" data-toggle="tooltip" title="Unduh file"><i class="fa fa-download text-success fa-fw"></i>Unduh file</a></td>
                 </tr>
                 @endforeach
             </tbody>

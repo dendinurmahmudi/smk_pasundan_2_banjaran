@@ -71,7 +71,7 @@
                         <!--  -->
                         <!--  -->
                         @if($profile->alamat == null || $profile->jenis_kelamin == null || $profile->tahun_lulus == null || $profile->file_lamaran == null)
-                        <a href="/profile" title="Mohon lengkapi data diri anda">
+                        <a href="/profile1" title="Mohon lengkapi data diri anda">
                         <div class="col-lg-4 col-sm-12  b-0">
                             <ul class="col-in">
                                 <li>

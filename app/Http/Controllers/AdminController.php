@@ -103,6 +103,14 @@ class AdminController extends Controller
     	Session::flash('success', 'Berhasil Mengedit data '.$request->id);
         return redirect('/datpengguna');	
     }
+    public function resetpass($id)
+    {
+        user::where('nisn',$id)->update([
+            'password' => Hash::make($id),
+        ]);
+        Session::flash('success', 'Berhasil Reset password '.$id);
+        return redirect('/datpengguna');    
+    }
     public function profile()
     {
         $warna = ['','','','',''];
@@ -418,7 +426,12 @@ class AdminController extends Controller
         } else {
             Session::flash('errors', ['' => 'Register gagal! Silahkan ulangi beberapa saat lagi']);
             return redirect()->route('datajurusan');
+            }
         }
     }
-}
+    public function chatadmin()
+    {
+        $warna = ['','','','','oval',''];
+        return view('Admin/chat',['warna'=>$warna]);        
+    }
 }

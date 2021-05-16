@@ -110,7 +110,7 @@
                                 </div>
                             </li>
                             <li>
-                                <a class="text-center" href="javascript:void(0);"> <strong>See all notifications</strong> <i class="fa fa-angle-right"></i> </a>
+                                <a class="text-center" href="/chat{{ Auth::user()->hak_akses}}"> <strong>See all notifications</strong> <i class="fa fa-angle-right"></i> </a>
                             </li>
                         </ul>
                         <!-- /.dropdown-messages -->
@@ -175,18 +175,22 @@
     <script src="{{ asset('assets/templates/plugins/bower_components/jquery/dist/jquery.min.js') }}"></script>
     <script src="{{ asset('assets/templates/plugins/bower_components/jquery/dist/jquery.js') }}"></script>
     <script src="{{ asset('assets/js2/jquery.min.js') }}"></script>
+
     <script src="{{ asset('assets/templates/js/jquery.slimscroll.js') }}"></script>
+    <script src="{{ asset('assets/templates/js/chat.js') }}"></script>
     <!--Morris JavaScript -->
     <script src="{{ asset('assets/templates/plugins/bower_components/raphael/raphael-min.js') }}"></script>
     <script src="{{ asset('assets/templates/plugins/bower_components/morrisjs/morris.js') }}"></script>
     <script src="{{ asset('assets/templates/js/morris-data.js') }}"></script>
+    <script src="{{ asset('assets/templates/plugins/bower_components/sweetalert/sweetalert.min.js') }}"></script>
+    <script src="{{ asset('assets/templates/plugins/bower_components/sweetalert/jquery.sweet-alert.custom.js') }}"></script>
 <!-- <script src="{{ asset('assets/templates/bootstrap/dist/js/bootstrap.min.js') }}"></script> -->
 @yield('konten')
 <!-- end konten -->
+ </div>    
  <footer class=" footer text-center">
      {{date('Y')}} &copy; SMK Pasundan 2 Banjaran, BY themedesigner.in
  </footer>
- </div>    
 </div>
 </div>
     <script src="{{ asset('assets/templates/plugins/bower_components/sidebar-nav/dist/sidebar-nav.min.js') }}"></script>

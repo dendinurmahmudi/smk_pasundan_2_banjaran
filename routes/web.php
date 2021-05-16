@@ -57,6 +57,12 @@ Route::group(['middleware' => ['auth','CekLevel:2']], function () {
     Route::post('/alumniBy_jurusan_tahun','HubinController@alumniBy_jurusan_tahun');
     Route::post('/penelusuranBy_jurusan_tahun','HubinController@penelusuranBy_jurusan_tahun');
     Route::get('/dashboard','HubinController@dashboard')->name('dashboard');
+    Route::get('/databekerja','HubinController@databekerja');
+    Route::get('/datapencaker','HubinController@datapencaker');
+    Route::get('/datakuliah','HubinController@datakuliah');
+    Route::get('/datasesuai','HubinController@datasesuai');
+    Route::get('/get/{file}/{id}','HubinController@getlamaran');
+    
 });
 Route::group(['middleware' => ['auth','CekLevel:3']], function () {
     Route::get('/kepsek', 'KepsekController@index')->name('kepsek');
@@ -82,5 +88,7 @@ Route::group(['middleware' => ['auth','CekLevel:4']], function () {
     Route::get('/hapusjurusan/{id}','AdminController@hapusjurusan');
     Route::post('/editjurusan','AdminController@editjurusan');
     Route::post('/tambahalumni','AdminController@tambahalumni');
+    Route::get('/resetpass/{id}','AdminController@resetpass');
+    Route::get('/chat4','AdminController@chatadmin');
 
 });

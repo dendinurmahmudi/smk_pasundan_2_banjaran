@@ -1,6 +1,6 @@
 /*jslint browser: true*/
 /*global $, jQuery, alert*/
-
+console.log('ok');
 $(document).ready(function () {
 
     "use strict";
