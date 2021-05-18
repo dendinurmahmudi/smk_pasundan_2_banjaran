@@ -66,6 +66,13 @@ Route::group(['middleware' => ['auth','CekLevel:2']], function () {
 });
 Route::group(['middleware' => ['auth','CekLevel:3']], function () {
     Route::get('/kepsek', 'KepsekController@index')->name('kepsek');
+    Route::get('/datapenelusuran1','KepsekController@datapenelusuran1');
+    Route::get('/dataalumni1','KepsekController@dataalumni1');
+    Route::get('/dataperusahaan1','KepsekController@dataperusahaan1');
+    Route::get('/databekerja1','KepsekController@databekerja1');
+    Route::get('/datapencaker1','KepsekController@datapencaker1');
+    Route::get('/datakuliah1','KepsekController@datakuliah1');
+    Route::get('/datasesuai1','KepsekController@datasesuai1');
 });
 Route::group(['middleware' => ['auth','CekLevel:4']], function () {
     Route::get('/admin', 'AdminController@index')->name('admin');
