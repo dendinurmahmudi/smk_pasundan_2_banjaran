@@ -431,7 +431,29 @@ class AdminController extends Controller
     }
     public function chatadmin()
     {
-        $warna = ['','','','','oval',''];
-        return view('Admin/chat',['warna'=>$warna]);        
+        $warna = ['','','','','',''];
+        $history = DB::select('select name,foto,nisn from users u join pesan p on u.nisn=p.untuk where p.dari='.Auth::user()->nisn.' group by name');
+        return view('Admin/chat',['warna'=>$warna,'history'=>$history]);        
+    }
+    public function search($id)
+    {
+        $data = user::select('name','foto','nisn')->whereRaw('name LIKE "%'.$id.'%" limit 5')->get();
+        echo json_encode($data);
+    }
+    public function kirimp($nisn,$pesan)
+    {   
+        $zona = time()+(60*60*7);
+        DB::table('pesan')->insert([
+            'id'    => Auth::user()->nisn,
+            'dari'  => Auth::user()->nisn,
+            'untuk' => $nisn,
+            'isi'   => $pesan,
+            'waktu' => gmdate('H:i',$zona)
+        ]);
+    }
+    public function isichat($nisn)
+    {
+        $data = DB::select('select dari,isi,untuk,name,foto,waktu from pesan p join users u on p.untuk=u.nisn where dari='.Auth::user()->nisn.' and untuk='.$nisn);
+        echo json_encode($data);   
     }
 }

@@ -6,7 +6,7 @@
 @section('konten')
 <div class="row">
 	<div class="col-sm-12">
-		<div class="col-lg-3 col-sm-6 col-xs-12">
+		<div class="col-lg-3">
 			<a href="/datajurusan" title="">
 				<div class="white-box">
 					<h3 class="box-title">Data Alumni</h3>
@@ -17,7 +17,7 @@
 				</div>
 			</a>
 		</div>
-		<div class="col-lg-3 col-sm-6 col-xs-12">
+		<div class="col-lg-3">
 			<a href="/datpengguna" title="">
 				<div class="white-box">
 					<h3 class="box-title">Data Pengguna</h3>
@@ -28,7 +28,7 @@
 				</div>
 			</a>
 		</div>
-		<div class="col-lg-3 col-sm-6 col-xs-12">
+		<div class="col-lg-3">
 			<a href="/datpenelusuran" title="">
 				<div class="white-box">
 					<h3 class="box-title">Data Penelusuran</h3>
@@ -40,7 +40,7 @@
 				</div>
 			</a>
 		</div>
-		<div class="col-lg-3 col-sm-6 col-xs-12">
+		<div class="col-lg-3">
 			<a href="/datperusahaan" title="">
 				<div class="white-box">
 					<h3 class="box-title">Data Perusahaan</h3>

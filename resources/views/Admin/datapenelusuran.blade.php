@@ -68,82 +68,82 @@
                 </tr>
             </thead>
             <tbody>
-               <?php $no=1; ?>
-               @foreach ($penelusuran as $p)
-               <tr>
-                <td>{{ $no++ }}</td>
-                <td>{{ $p->nisn }}</td>
+                <?php $no=1; ?>
+                @foreach ($penelusuran as $p)
+                <tr>
+                    <td>{{ $no++ }}</td>
+                    <td>{{ $p->nisn }}</td>
 
-                @if($p->nama_perusahaan==null && $p->nama_kampus==null && $p->pencaker==null)
-                <td class="text-danger" title="Belum isi data penelusuran">{{ $p->name }}</td>
-                @else
-                <td>{{ $p->name }}</td>
-                @endif
+                    @if($p->nama_perusahaan==null && $p->nama_kampus==null && $p->pencaker==null)
+                    <td class="text-danger" title="Belum isi data penelusuran">{{ $p->name }}</td>
+                    @else
+                    <td>{{ $p->name }}</td>
+                    @endif
 
-                @if($p->nama_jurusan == 'Belum diatur')
-                <td class="text-danger">Belum diatur</td>
-                @else
-                <td>{{ $p->nama_jurusan }}</td>
-                @endif
+                    @if($p->nama_jurusan == 'Belum diatur')
+                    <td class="text-danger">Belum diatur</td>
+                    @else
+                    <td>{{ $p->nama_jurusan }}</td>
+                    @endif
 
-                @if($p->tahun_lulus == null)
-                <td align="center"><a href="#" title="Minta atur">Belum diatur</a></td>
-                @else
-                <td align="center">{{ $p->tahun_lulus }}</td>
-                @endif
+                    @if($p->tahun_lulus == null)
+                    <td align="center"><a href="#" title="Minta atur">Belum diatur</a></td>
+                    @else
+                    <td align="center">{{ $p->tahun_lulus }}</td>
+                    @endif
 
-                @if($p->nama_perusahaan == null)
-                <td align="center"><i class="fa fa-minus text-warning"></i></td>
-                @else
-                <td>{{ $p->nama_perusahaan }}</td>
-                @endif
-                @if($p->nama_kampus == null)
-                <td align="center"><i class="fa fa-minus text-warning"></i></td>
-                @else
-                <td>{{ $p->nama_kampus }}</td>
-                @endif
+                    @if($p->nama_perusahaan == null)
+                    <td align="center"><i class="fa fa-minus text-warning fa-fw"></i>T</td>
+                    @else
+                    <td>{{ $p->nama_perusahaan }}</td>
+                    @endif
+                    @if($p->nama_kampus == null)
+                    <td align="center"><i class="fa fa-minus text-warning fa-fw"></i>T</td>
+                    @else
+                    <td>{{ $p->nama_kampus }}</td>
+                    @endif
 
-                @if($p->pencaker == 'Y')
-                <td align="center"><i class="fa fa-check text-success"></i></td>
-                @elseif($p->pencaker == 'B')
-                <td align="center"><i class="fa fa-close text-danger"></i></td>
-                @elseif($p->pencaker == 'T')
-                <td align="center"><i class="fa fa-close text-danger"></i></td>
-                @else
-                <td align="center"><i class="fa fa-minus text-warning"></i></td>
-                @endif
+                    @if($p->pencaker == 'Y')
+                    <td align="center"><i class="fa fa-check text-success fa-fw"></i>Y</td>
+                    @elseif($p->pencaker == 'B')
+                    <td align="center"><i class="fa fa-close text-danger fa-fw"></i>T</td>
+                    @elseif($p->pencaker == 'T')
+                    <td align="center"><i class="fa fa-close text-danger fa-fw"></i>T</td>
+                    @else
+                    <td align="center"><i class="fa fa-minus text-warning fa-fw"></i>T</td>
+                    @endif
 
-                @if($p->sesuai_kompetensi == 'Y')
-                <td align="center"><i class="fa fa-check text-success"></i></td>
-                @elseif($p->sesuai_kompetensi == 'B')
-                <td align="center"><i class="fa fa-minus text-warning"></i></td>
-                @elseif($p->sesuai_kompetensi == 'T')
-                <td align="center"><i class="fa fa-close text-danger"></i></td>
-                @else
-                <td align="center"><i class="fa fa-minus text-warning"></i></td>
-                @endif
+                    @if($p->sesuai_kompetensi == 'Y')
+                    <td align="center"><i class="fa fa-check text-success fa-fw"></i>Y</td>
+                    @elseif($p->sesuai_kompetensi == 'B')
+                    <td align="center"><i class="fa fa-minus text-warning fa-fw"></i>T</td>
+                    @elseif($p->sesuai_kompetensi == 'T')
+                    <td align="center"><i class="fa fa-close text-danger fa-fw"></i>T</td>
+                    @else
+                    <td align="center"><i class="fa fa-minus text-warning fa-fw"></i>T</td>
+                    @endif
 
-                @if($p-> gaji == 'B')
-                <td align="center"><i class="fa fa-minus text-warning"></i></td>
-                @elseif($p->gaji == null)
-                <td align="center"><i class="fa fa-minus text-warning"></i></td>
-                @else
-                <td align="center">{{ $p->gaji }}</td>
-                @endif
+                    @if($p-> gaji == 'B')
+                    <td align="center"><i class="fa fa-minus text-warning fa-fw"></i>T</td>
+                    @elseif($p->gaji == null)
+                    <td align="center"><i class="fa fa-minus text-warning fa-fw"></i>T</td>
+                    @else
+                    <td align="center">{{ $p->gaji }}</td>
+                    @endif
 
-                @if($p->kepuasan == 'Y')
-                <td align="center"><i class="fa fa-check text-success"></i></td>
-                @elseif($p->kepuasan == 'B')
-                <td align="center"><i class="fa fa-minus text-warning"></i></td>
-                @elseif($p->kepuasan == 'T')
-                <td align="center"><i class="fa fa-close text-danger"></i></td>
-                @else
-                <td align="center"><i class="fa fa-minus text-warning"></i></td>
-                @endif
-                <td align="center">
-                    <a href="#" data-toggle="modal" title="Lihat data" data-target="#lihat{{$p->id}}"> <i class="fa fa-eye text-inverse m-l-15"></i> </a>
-                </td>
-            </tr>
+                    @if($p->kepuasan == 'Y')
+                    <td align="center"><i class="fa fa-check text-success fa-fw"></i>Y</td>
+                    @elseif($p->kepuasan == 'B')
+                    <td align="center"><i class="fa fa-minus text-warning fa-fw"></i>T</td>
+                    @elseif($p->kepuasan == 'T')
+                    <td align="center"><i class="fa fa-close text-danger fa-fw"></i>T</td>
+                    @else
+                    <td align="center"><i class="fa fa-minus text-warning fa-fw"></i>T</td>
+                    @endif
+                    <td align="center">
+                        <a href="#" data-toggle="modal" title="Lihat data" data-target="#lihat{{$p->id}}"> <i class="fa fa-eye text-inverse m-l-15"></i> </a>
+                    </td>
+                </tr>
             @endforeach
         </tbody>
     </table>

@@ -90,5 +90,7 @@ Route::group(['middleware' => ['auth','CekLevel:4']], function () {
     Route::post('/tambahalumni','AdminController@tambahalumni');
     Route::get('/resetpass/{id}','AdminController@resetpass');
     Route::get('/chat4','AdminController@chatadmin');
-
+    Route::get('/search/{id}', 'AdminController@search');
+    Route::get('/kirimp/{nisn}/{pesan}','AdminController@kirimp');
+    Route::get('/isichat/{nisn}','AdminController@isichat');
 });

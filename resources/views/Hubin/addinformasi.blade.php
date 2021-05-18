@@ -40,8 +40,9 @@
 <div class="row m-t-15">
 	<div class="col-md-12">
 		<div class="white-box">
-			<div class="pull-right">
-				<a href="hapusinformasi/{{$i->id}}" data-toggle="tooltip" title="Hapus" onclick="return confirm('Yakin hapus informasi {{ $i->judul }} ?');"> <i class="fa fa-trash text-inverse m-l-20"></i> </a>
+			<div class="pull-right" id="table">
+				<!-- <a href="hapusinformasi/{{$i->id}}" data-toggle="tooltip" title="Hapus" onclick="return confirm('Yakin hapus informasi {{ $i->judul }} ?');"> <i class="fa fa-trash text-inverse m-l-20"></i> </a> -->
+				<a href="#" class="fa fa-trash text-inverse" data-toggle="modal" id="btndltnotif" data-id="{{$i->id}}" data-name="{{$i->judul}}" title="Hapus informasi {{$i->judul}}"></a>
 				<a href="#" data-toggle="modal" data-target="#edit{{ $i->id }}" title="Edit"> <i class="fa fa-pencil text-inverse m-l-20"></i> 
 				</a>
 				@if($i->buka_apply=='Y')
@@ -102,13 +103,13 @@
 										<input type="file" id="input-file-now" name="file" class="dropify" data-default-file="{{ asset('data_file/informasi/'.$i->foto ) }}"/>
 									</div>
 									<div class="form-group">
-                                         <label for="exampleInputEmail1">Buka apply lamaran :</label>
-                                         <input type="radio" name="buka_lamaran" id="radio" value="Y" <?php if ($i->buka_apply == 'Y')  echo "checked"; ?>>
-                                         <label for="radio"> Ya </label>
-
-                                         <input type="radio" name="buka_lamaran" id="radio2" value="T" <?php if ($i->buka_apply == 'T')  echo "checked"; ?>>
-                                         <label for="radio2"> Tidak </label>
-                                     </div>
+										<label for="exampleInputEmail1">Buka apply lamaran :</label>
+										<input type="radio" name="buka_lamaran" id="radio" value="Y" <?php if ($i->buka_apply == 'Y')  echo "checked"; ?>>
+										<label for="radio"> Ya </label>
+|
+										<input type="radio" name="buka_lamaran" id="radio2" value="T" <?php if ($i->buka_apply == 'T')  echo "checked"; ?>>
+										<label for="radio2"> Tidak </label>
+									</div>
 								</div>
 								<div class="col-sm-12 col-xs-12">
 									<button type="submit" class="btn btn-success waves-effect waves-light m-r-10">Kirim</button>
@@ -150,14 +151,14 @@
 
 											<input type="file" id="input-file-now" name="file" class="dropify"/>
 										</div>
-									<div class="form-group">
-                                         <label for="exampleInputEmail1">Buka apply lamaran :</label>
-                                         <input type="radio" name="buka_lamaran" id="radio" value="Y">
-                                         <label for="radio"> Ya </label>
-
-                                         <input type="radio" name="buka_lamaran" id="radio2" value="T">
-                                         <label for="radio2"> Tidak </label>
-                                     </div>
+										<div class="form-group">
+											<label for="exampleInputEmail1">Buka apply lamaran :</label>
+											<input type="radio" name="buka_lamaran" id="radio3" value="Y">
+											<label for="radio3"> Ya </label>
+|
+											<input type="radio" name="buka_lamaran" id="radio4" value="T">
+											<label for="radio4"> Tidak </label>
+										</div>
 									</div>
 									<div class="col-sm-12 col-xs-12">
 										<button type="submit" class="btn btn-success waves-effect waves-light m-r-10">Kirim</button>
@@ -169,6 +170,29 @@
 					</div>
 					<!-- /.modal-content -->
 				</div>
+				</div>
+					</div>
 				<!-- /.modal-dialog -->
 				<!-- /.modal -->
+				<script type="text/javascript">
+					$('#table').on('click', '#btndltnotif', function() {
+						const id = $(this).data('id');
+						var nama = $(this).data('name');
+						swal({
+							title: 'Apakah anda yakin?',
+							text: "Data informasi "+nama+" akan di hapus!",
+							type: 'warning',
+							showCancelButton: true,
+							confirmButtonColor: '#3085d6',
+							cancelButtonColor: '#d33',
+							cancelButtonText: 'Batal',
+							confirmButtonText: 'Ya, Hapus!'
+						}, function(isConfirm) {
+							if (isConfirm) {
+								window.location.href = 'hapusinformasi/'+id;
+
+							}
+						});
+					});
+				</script>
 				@endsection

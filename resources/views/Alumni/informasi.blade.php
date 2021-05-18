@@ -33,7 +33,7 @@
 					<input type="hidden" name="file" value="{{$file->file_lamaran}}">
 					<input type="hidden" name="nisn" value="{{$file->nisn}}">
 					<input type="hidden" name="judul" value="{{$i->judul}}">
-					<button type="submit" title="Apply lamaran" class="btn btn-success waves-effect waves-light"><i class="fa fa-check text-inverse"></i></button>
+					<button type="submit" title="Apply lamaran" class="btn btn-success btn-circle"><i class="fa fa-check"></i></button>
 				</form>
 				@endif
 			</div>

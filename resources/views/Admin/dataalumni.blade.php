@@ -115,11 +115,12 @@
                 confirmButtonColor: '#3085d6',
                 cancelButtonColor: '#d33',
                 cancelButtonText: 'Batal',
-                confirmButtonText: 'Ya, Hapus!'
+                confirmButtonText: 'Ya, Hapus!',
+                closeOnConfirm: false 
             }, function(isConfirm) {
                 if (isConfirm) {
                     window.location.href = '/hapusdata/'+id+'/'+jur;
-
+                    swal("Terhapus!", "Data "+nama+" berhasil dihapus.", "success");
                 }
             });
         });

@@ -35,22 +35,25 @@
                     <input type="hidden" name="nisn" value="{{ $penelusuran->nisn }}"> <br/>
                     <div class="col-md-6">
                         <div class="form-group">
-                            <label for="bekerja">Bekerja:</label>
+                            <b><label for="bekerja">Bekerja:</label></b>
                             <input type="text" class="typeahead form-control" id="bekerja" name="bekerja" value="{{$penelusuran->nama_perusahaan}}" placeholder="*kosongkan jika belum bekerja dan centang pencaker"> </div>
-                            <div id="cari" class="m-b-5">
+                            <div id="cari">
+
+                            </div>
+                            <div id="hr">
 
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="form-group">
-                                <label for="kuliah">Kuliah:</label>
+                                <b><label for="kuliah">Kuliah:</label></b>
                                 <input type="text" class="form-control" id="kuliah" name="kuliah" value="{{$penelusuran->nama_kampus}}" placeholder="*kosongkan jika tidak melanjutkan kuliah"> </div>
 
                             </div>
 
                             <div class="col-md-8">
                                 <div class="form-group">
-                                    <input type="checkbox" id="pencaker" name="pencaker" value="Y"<?php if ($penelusuran->pencaker == 'Y')  echo "checked"; ?>> <label for="pencaker">Pencaker</label></div>
+                                    <input type="checkbox" id="pencaker" name="pencaker" value="Y"<?php if ($penelusuran->pencaker == 'Y')  echo "checked"; ?>> <b><label for="pencaker">Pencaker</label></b></div>
                                     <p class="text-muted m-b-30 font-13"> Detail pekerjaan </p>
 
                                     <div class="form-group">
@@ -124,8 +127,9 @@
                             $.each(data,(i,pt)=>{
                                 $('#cari').append(`<label title="Pilih" data-bekerja="${pt.nama_perusahaan}">${pt.nama_perusahaan}</label><br>`);
                             });
-                            
+                            $('#cari').append(`<hr>`);
                         });    
+                        $('#cari').html('')
                     });
                     
                     $('#cari').on('click',(cari)=>{

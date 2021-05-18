@@ -89,7 +89,7 @@
 					<div class="modal-body">
 						<div class="white-box">
 							<a href="#" data-toggle="modal" data-target="#tambahjurusan" title="Tambah data Jurusan"><i class="fa fa-plus-circle m-b-10"></i> Tambah Jurusan</a>
-							<div class="table-responsive">
+							<div class="table-responsive" id="table">
 								<table class="table table-striped">
 									<thead>
 										<tr>
@@ -107,7 +107,8 @@
 												{{$j->nama_jurusan}}
 											</td>
 											<td class="text-nowrap">
-												<a href="/hapusjurusan/{{$j->id_jurusan}}" onclick="return confirm('Yakin hapus data {{ $j->nama_jurusan }} ?');" title="Hapus"> <i class="fa fa-trash text-inverse fa-fw"></i> </a>
+												<!-- <a href="/hapusjurusan/{{$j->id_jurusan}}" onclick="return confirm('Yakin hapus data {{ $j->nama_jurusan }} ?');" title="Hapus"> <i class="fa fa-trash text-inverse fa-fw"></i> </a> -->
+												<a href="#" class="fa fa-trash text-inverse fa-fw" data-toggle="modal" id="btndltnotif" data-id="{{$j->id_jurusan}}" data-name="{{$j->nama_jurusan}}" title="Hapus data {{$j->nama_jurusan}}"></a>
 												<a href="#" data-toggle="modal" title="Edit" data-target="#editjurusan{{$j->id_jurusan}}"> <i class="fa fa-pencil text-inverse"></i> </a>
 											</td>
 										</tr>
@@ -233,5 +234,34 @@
 	</div>
 </div>
 
+<script type="text/javascript">
+	$('#table').on('click', '#btndltnotif', function() {
+		const id = $(this).data('id');
+		var nama = $(this).data('name');
+		swal({
+			title: 'Apakah anda yakin?',
+			text: "Data "+nama+" akan di hapus!",
+			type: 'warning',
+			showCancelButton: true,
+			confirmButtonColor: '#3085d6',
+			cancelButtonColor: '#d33',
+			cancelButtonText: 'Batal',
+			confirmButtonText: 'Ya, Hapus!',
+			closeOnConfirm: false 
+		}, function(isConfirm) {
+			if (isConfirm) {
+				window.location.href = '/hapusjurusan/'+id;
+				swal("Terhapus!", "Data "+nama+" berhasil dihapus.", "success");
+			}
+		});
+	});
+
+	$('#success').click(function(){
+		swal("Berhasil!", "Berhasil menambah data jurusan", "success")
+	});
+	$('#sukses').click(function(){
+		swal("Berhasil!", "Berhasil mengedit data jurusan", "success")
+	});
+</script>
 <!-- end tambah-->
 @endsection
