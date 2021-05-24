@@ -91,7 +91,7 @@
 									Lupa Password
 								</span>
 								<div class="wrap-input100 validate-input" data-validate = "Enter email">
-									<input class="input100" type="text" name="id" placeholder="Masukan id">
+									<input class="input100" type="text" name="id" placeholder="Masukan NISN/NIP">
 								</div>
 								<div class="container-login100-form-btn">
 									<button class="login100-form-btn" name="btn_login">

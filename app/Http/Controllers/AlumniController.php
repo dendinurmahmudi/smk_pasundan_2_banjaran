@@ -21,8 +21,10 @@ class AlumniController extends Controller
         $info = informasi::whereRaw('left(created_at,10)="'.date('Y-m-d').'"')->get();
         $penelusuran = penelusuran::where('nisn',Auth::user()->nisn)->first();
         $profile = alumni::where('nisn',Auth::user()->nisn)->first();
+        $file = alumni::select('file_lamaran','nisn')->where('nisn',Auth::user()->nisn)->first();
+        $perusahaan = DB::select('select nama_perusahaan, count(nama_perusahaan)as jumlah,count(if(sesuai_kompetensi="Y",sesuai_kompetensi,null))as kesesuaian, count(if(kepuasan="Y", kepuasan,null))as kepuasan from penelusuran where nama_perusahaan!="null" group by nama_perusahaan');
         $warna = ['oval','','','',''];
-    	return view('Alumni/index',['info' => $info,'penelusuran' => $penelusuran,'profile'=>$profile,'warna' =>$warna]);
+    	return view('Alumni/index',['info' => $info,'penelusuran' => $penelusuran,'profile'=>$profile,'warna' =>$warna,'file'=>$file,'perusahaan'=>$perusahaan]);
     }
     public function profile()
     {
@@ -246,12 +248,7 @@ class AlumniController extends Controller
         $warna = ['','oval','','',''];
         return view('Alumni/applylamaran',['berkas'=>$berkas,'warna'=>$warna]);
     }
-    public function daftarperusahaan()
-    {
-        $perusahaan = DB::select('select nama_perusahaan, count(nama_perusahaan)as jumlah,count(if(sesuai_kompetensi="Y",sesuai_kompetensi,null))as kesesuaian, count(if(kepuasan="Y", kepuasan,null))as kepuasan from penelusuran where nama_perusahaan!="null" group by nama_perusahaan');
-        $warna = ['','','','','oval'];
-        return view('Alumni/daftarperusahaan',['perusahaan' => $perusahaan,'warna'=>$warna]);
-    }
+    
     public function hapuslam($id)
     {
         berkas_lamaran::where('id',$id)->delete();
@@ -289,6 +286,33 @@ class AlumniController extends Controller
             Session::flash('gagal', 'Password lama salah');
                 return redirect('profile'.Auth::user()->hak_akses);   
         }
+    }
+    public function chatalumni1()
+    {
+        $warna = ['','','','','',''];
+        $history = DB::select('select name,foto,nisn from users u join pesan p on u.nisn=p.untuk or u.nisn=p.dari where p.dari='.Auth::user()->nisn.' or p.untuk='.Auth::user()->nisn.' group by name');
+        return view('Alumni/chat1',['warna'=>$warna,'history'=>$history]);        
+    }
+    public function search1($id)
+    {
+        $data = user::select('name','foto','nisn')->whereRaw('name LIKE "%'.$id.'%" limit 5')->get();
+        echo json_encode($data);
+    }
+    public function kirimp($nisn,$pesan)
+    {   
+        $zona = time()+(60*60*7);
+        DB::table('pesan')->insert([
+            'id'    => Auth::user()->nisn,
+            'dari'  => Auth::user()->nisn,
+            'untuk' => $nisn,
+            'isi'   => $pesan,
+            'waktu' => gmdate('H:i',$zona)
+        ]);
+    }
+    public function isichat1($nisn)
+    {
+        $data = DB::select('select dari,isi,untuk,name,foto,waktu from pesan p join users u on p.untuk=u.nisn where dari='.Auth::user()->nisn.' and untuk='.$nisn.' or dari='.$nisn.' and untuk='.Auth::user()->nisn);
+        echo json_encode($data);   
     }
     
 }

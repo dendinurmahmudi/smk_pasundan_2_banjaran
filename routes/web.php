@@ -37,9 +37,12 @@ Route::group(['middleware' => ['auth','CekLevel:1']], function () {
     Route::get('/informasi','AlumniController@informasi')->name('informasi');
     Route::post('kirimlamaran', 'AlumniController@kirimlamaran')->name('kirimlamaran');
     Route::get('/apllylamaranalumni/{id}','AlumniController@applylamaran')->name('apllylamaranalumni');
-    Route::get('/daftarperusahaan','AlumniController@daftarperusahaan')->name('daftarperusahaan');
     Route::get('/hapuslam/{id}','AlumniController@hapuslam');
     Route::post('/gantipass1','AlumniController@gantipass1');
+    Route::get('/chat1','AlumniController@chatalumni1');
+    Route::get('/search1/{id}', 'AlumniController@search1');
+    Route::get('/kirimp1/{nisn}/{pesan}','AlumniController@kirimp');
+    Route::get('/isichat1/{nisn}','AlumniController@isichat1');
 });
 Route::group(['middleware' => ['auth','CekLevel:2']], function () {
     Route::get('/hubin', 'HubinController@index')->name('hubin');

@@ -43,8 +43,8 @@ class AuthController extends Controller
     ];
 
     $messages = [
-        'nisn.required'        => 'Nisn wajib diisi',
-        'nisn.numeric'         => 'Nisn hanya boleh angka',
+        'nisn.required'        => 'NISN/NIP wajib diisi',
+        'nisn.numeric'         => 'NISN/NIP hanya boleh angka',
         'password.required'    => 'Password wajib diisi'
     ];
 
@@ -87,11 +87,11 @@ class AuthController extends Controller
 }elseif ($pass) {
 foreach ($passdb as $p) {
     if ($pass == password_verify($pass, $p->password)) {
-    Session::flash('error', 'NISN tidak ditemukan');
+    Session::flash('error', 'NISN/NIP tidak ditemukan');
     return redirect()->route('login');
     }
 }
-    Session::flash('error', 'Nisn dan password salah');
+    Session::flash('error', 'NISN/NIP dan Password salah');
     return redirect()->route('login');
 }
 }
@@ -179,7 +179,7 @@ public function logout()
         ];
 
         $messages = [
-            'id.required' 	     => 'Id wajib diisi'
+            'id.required' 	     => 'NISN/NIP wajib diisi'
         ];
         $validator = Validator::make($request->all(), $rules, $messages);
         if($validator->fails()){
@@ -188,10 +188,10 @@ public function logout()
         $id = DB::table('users')->where('id',$request->id)->value('id');
     	//
         if ($request->id!=$id) {
-          Session::flash('error', 'Id tidak ditemukan!');
+          Session::flash('error', 'NISN/NIP tidak ditemukan!');
           return redirect()->route('login');
       } else{
-         $email = DB::table('users')->where('id',$request->id)->value('email');
+         $email = DB::table('users')->where('nisn',$request->id)->value('email');
          try{
             Mail::send('Auth/lupapass', array('email' => $email) , function($pesan) use($request){
              $email = DB::table('users')->where('id',$request->id)->value('email');

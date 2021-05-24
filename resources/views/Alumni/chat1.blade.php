@@ -2,7 +2,7 @@
 @section('judul','Pesan')
 @section('class','ti-email fa-fw')
 @section('label','Pesan')
-@extends('Admin/sidebar')
+@extends('Alumni/sidebar')
 @section('konten')
 <div class="chat-main-box">
 	<!-- .chat-left-panel -->
@@ -87,7 +87,7 @@
 
 		$('#seacrh').on('keyup',(a)=>{
 			let seacrh = $('#seacrh').val();
-			$.getJSON(`/search/${seacrh}`,(data)=>{
+			$.getJSON(`/search1/${seacrh}`,(data)=>{
 				$('#slimtest3').html('')
 				$.each(data,(i,pt)=>{
 					console.log(pt.name);
@@ -109,9 +109,9 @@
 				</div>
 				`);
 			$('#isikirim').html('')
-			$.getJSON(`/isichat/${slimtest3.target.dataset.nisn}`,(data)=>{
+			$.getJSON(`/isichat1/${slimtest3.target.dataset.nisn}`,(data)=>{
 				$('#isichat').html('')
-				console.log('yai');
+				console.log(slimtest3.target.dataset.nisn);
 				$.each(data,(i,psn)=>{
 					console.log(psn.dari);
 					$('#isichat').append(`
@@ -150,7 +150,7 @@
 				<p>`+p+`</p> <b>`+w+`</b> </div>
 				</div>
 				</li>`);
-			$.getJSON(`/kirimp/${n}/${p}`);
+			$.getJSON(`/kirimp1/${n}/${p}`);
 			$('#isipesan').val('');
 		});
 

@@ -12,8 +12,6 @@
                 </li>
                 <li> <a href="/penelusuran" class="waves-effect {{$warna[3]}}"><i class="ti-clipboard fa-fw" data-icon="v"></i> Penelusuran</a> 
                 </li>
-                <li> <a href="/daftarperusahaan" class="waves-effect {{$warna[4]}}"><i class="fa fa-building-o  fa-fw" data-icon="v"></i> Perusahaan</a> 
-                </li>
                 <li><a href="/logout" class="waves-effect"><i class="mdi mdi-logout fa-fw"></i> <span class="hide-menu">Log out</span></a></li>
                 <li class="devider"></li>
             </ul>
