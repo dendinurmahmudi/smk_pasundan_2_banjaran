@@ -179,40 +179,63 @@
                 Morris.Area({
                     element: 'morris-area-chart',
                     data: [
-                    <?php 
-                    foreach ($jurusan as $j) { 
-                            echo "{period : '".$j->tahun_lulus."'";
-                            if ($j->id_jurusan==1) {
-                                echo ",Kelistrikan : ".$j->jumlah."";
-                            }
-                            else{
-                                echo ",Kelistrikan : 0";
-                            }
-                            if ($j->id_jurusan==2) {
-                                echo ",Permesinan : ".$j->jumlah."";
-                            }
-                            else{
-                                echo ",Permesinan : 0";
-                            }
-                            if ($j->id_jurusan==3) {
-                                echo ",TKJ : ".$j->jumlah."";
-                            }
-                            else{
-                                echo ",TKJ : 0";
-                            }
-                            if ($j->id_jurusan==4) {
-                                echo ",TKR : ".$j->jumlah."";
-                            }
-                            else{
-                                echo ",TKR : 0";
-                            }if ($j->id_jurusan==5) {
-                                echo ",TBSM : ".$j->jumlah."},";
-                            }
-                            else{
-                                echo ",TBSM : 0},";
-                            }
-                        }
-                        ?>
+                    {
+            period: '2010',
+            Kelistrikan: 50,
+            Permesinan: 80,
+            TKJ: 20,
+            TKR: 80,
+            TBSM: 80
+        }, {
+            period: '2011',
+            Kelistrikan: 130,
+            Permesinan: 100,
+            TKJ: 80,
+            TKR: 100,
+            TBSM: 100
+        }, {
+            period: '2012',
+            Kelistrikan: 80,
+            Permesinan: 60,
+            TKJ: 70,
+            TKR: 60,
+            TBSM: 60
+        },
+                    // <?php 
+                    // foreach ($jurusan as $j) { 
+                    //         echo "{period : '".$j->tahun_lulus."'";
+                    //         if ($j->id_jurusan==1) {
+                    //             echo ",Kelistrikan : ".$j->jumlah."";
+                    //         }
+                    //         else{
+                    //             echo ",Kelistrikan : 0";
+                    //         }
+                    //         if ($j->id_jurusan==2) {
+                    //             echo ",Permesinan : ".$j->jumlah."";
+                    //         }
+                    //         else{
+                    //             echo ",Permesinan : 0";
+                    //         }
+                    //         if ($j->id_jurusan==3) {
+                    //             echo ",TKJ : ".$j->jumlah."";
+                    //         }
+                    //         else{
+                    //             echo ",TKJ : 0";
+                    //         }
+                    //         if ($j->id_jurusan==4) {
+                    //             echo ",TKR : ".$j->jumlah."";
+                    //         }
+                    //         else{
+                    //             echo ",TKR : 0";
+                    //         }if ($j->id_jurusan==5) {
+                    //             echo ",TBSM : ".$j->jumlah."},";
+                    //         }
+                    //         else{
+                    //             echo ",TBSM : 0},";
+                    //         }
+                    //     }
+                    //     ?>
+
                         ],
                         xkey: 'period',
                     ykeys: ['Kelistrikan','Permesinan','TKR','TKJ','TBSM'],

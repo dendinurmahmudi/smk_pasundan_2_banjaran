@@ -18,6 +18,7 @@
 			<form method="POST" action="/alumniBy_tahun">
 				{{ csrf_field() }}
 				<div class="col-sm-7">
+					{{$ket}}
 					<p class="text-muted m-b-30">Export data ke Excel, PDF & Print</p>
 				</div>
 				<div class="form-group" style="margin-bottom: 50px">

@@ -58,17 +58,28 @@ class AdminController extends Controller
         ->orderBy('users.name')
         ->get();
         $warna = ['','','','oval',''];
-        $jurusan = DB::table('jurusan')->get();
+        $jurusan = DB::table('jurusan')->whereRaw('id_jurusan != 6')->get();
         $lulusan = alumni::select('tahun_lulus')->groupBy('tahun_lulus')->get();
         return view('Admin/datapenelusuran',['penelusuran' => $penelusuran,'warna'=>$warna,'jurusan'=>$jurusan,'lulusan'=>$lulusan]);
     }
     public function dataperusahaan()
   	{
-    $perusahaan = DB::select('select nama_perusahaan, count(nama_perusahaan)as jumlah,count(if(sesuai_kompetensi="Y",sesuai_kompetensi,null))as kesesuaian, count(if(kepuasan="Y", kepuasan,null))as kepuasan,count(tahun_lulus)jml from penelusuran join alumni on penelusuran.nisn=alumni.nisn where nama_perusahaan!="null" group by nama_perusahaan');
+    $perusahaan = DB::select('select nama_perusahaan, count(nama_perusahaan)as jumlah,count(if(sesuai_kompetensi="Y",sesuai_kompetensi,null))as kesesuaian, count(if(kepuasan="Y", kepuasan,null))as kepuasan,count(tahun_lulus)jml from penelusuran join alumni on penelusuran.nisn=alumni.nisn where nama_perusahaan!="null" group by nama_perusahaan order by jumlah desc');
     $jmltahun = DB::select('select nama_perusahaan, tahun_lulus from penelusuran join alumni on penelusuran.nisn=alumni.nisn where nama_perusahaan!="null" group by tahun_lulus');
     $allprshn = DB::select('select nama_perusahaan,tahun_lulus from penelusuran p join alumni a on p.nisn=a.nisn');
     $warna = ['','','','','oval'];
     return view('Admin/dataperusahaan',['perusahaan' => $perusahaan,'warna'=>$warna,'jmltahun'=>$jmltahun,'allprshn'=>$allprshn]);
+    }
+    public function prshn($perusahaan)
+    {
+        $data = DB::select('select '.$perusahaan.', count(nama_perusahaan)as jumlah,count(if(sesuai_kompetensi="Y",sesuai_kompetensi,null))as kesesuaian, count(if(kepuasan="Y", kepuasan,null))as kepuasan,count(tahun_lulus)jml from penelusuran join alumni on penelusuran.nisn=alumni.nisn where nama_perusahaan!="null" group by nama_perusahaan order by jumlah desc');
+        echo json_encode($data);
+    }
+    public function confidence($perusahaan)
+    {
+        $data = DB::select('select tahun_lulus from penelusuran p join alumni a on p.nisn=a.nisn where nama_perusahaan="'.$perusahaan.'" group by tahun_lulus;');
+        $hsl = [count($data)];
+        echo json_encode($hsl);
     }
     public function datajurusan()
     {
@@ -236,6 +247,7 @@ class AdminController extends Controller
             ->where('alumni.tahun_lulus',$request->lulusan)
             ->orderBy('users.name')
             ->get();
+            $ket = 'Menampilkan alumni lulusan tahun '.$request->lulusan;
         }
         $jrsn = alumni::join('users','alumni.nisn','=','users.nisn')
             ->join('penelusuran','alumni.nisn','=','penelusuran.nisn')
@@ -246,7 +258,7 @@ class AdminController extends Controller
         $jurusan = DB::select('select * from jurusan where id_jurusan!=6');
         $warna = ['','oval','','',''];
         $lulusan = alumni::select('tahun_lulus')->groupBy('tahun_lulus')->get();
-      return view('Admin/dataalumni',['alumni' => $alumni,'warna'=>$warna,'jurusan'=>$jurusan,'lulusan'=>$lulusan,'jrsn'=>$jrsn]);        
+      return view('Admin/dataalumni',['alumni' => $alumni,'warna'=>$warna,'jurusan'=>$jurusan,'lulusan'=>$lulusan,'jrsn'=>$jrsn,'ket'=>$ket]);        
     }
     public function penelusuranBy_jurusan_tahun1(Request $request)
     {
@@ -342,8 +354,8 @@ class AdminController extends Controller
             }
         }
       
-        $jurusan = DB::table('jurusan')->get();
-        $warna = ['','','','','oval',''];
+        $jurusan = DB::table('jurusan')->whereRaw('id_jurusan!=6')->get();
+        $warna = ['','','','oval','',''];
         $lulusan = alumni::select('tahun_lulus')->groupBy('tahun_lulus')->get();
         return view('Admin/datapenelusuran',['penelusuran' => $penelusuran,'warna'=>$warna,'jurusan'=>$jurusan,'lulusan'=>$lulusan]);
     

@@ -9,63 +9,43 @@
         <p class="text-muted m-b-30">Export data ke Excel, PDF & Print</p>
         <div class="table-responsive">
             <table id="example23" class="display nowrap" cellspacing="0" width="100%">
-					<thead>
-						<tr>
-							<th>No</th>
-							<th>Perusahaan</th>
-							<th>Alumni bekerja</th>
-							<th>Sesuai kompetensi</th>
-							<th>Merasa puas</th>
-                            <th>Support</th>
-                            <th>Confidance</th>
-							<th class="text-nowrap" width="50px">Pilihan</th>
-						</tr>
-					</thead>
-					<tbody>
-						<?php $no=1;
-						?>
-						@foreach($perusahaan as $p)
-						<tr>
-							@if($p->nama_perusahaan==null)
-
-							@else
-							<td>{{ $no++ }}</td>
-							<td>{{ $p->nama_perusahaan }}</td>
-							<td>{{ $p->jumlah }}</td>
-							<td>{{ $p->kesesuaian }}</td>
-							<td>{{ $p->kepuasan }}</td>
-                            <td>{{ $p->jumlah/count($jmltahun) }}</td>
-                            <?php 
-                            foreach ($allprshn as $a) {
-                            $thn = $a->tahun_lulus;
-                            $nmprshn = $a->nama_perusahaan;
-                            if($nmprshn){
-                                if ($thn=='2019' && $thn=='2018'){
-                                    $jml=2;                                
-                                }
-                                elseif ($thn=='2018') {
-                                    $jml=1;
-                                }
-                                elseif ($thn=='2019') {
-                                    $jml=1;
-                                }
-                            }
-                            }
-                             ?>
-                            <td>{{ $p->jumlah/$jml }}</td>
-							<td class="text-nowrap">
-								<a href="#" data-toggle="tooltip" title="Edit"> <i class="fa fa-pencil text-inverse m-l-15"></i> </a> 
-								<a href="#" data-toggle="modal" data-target="" title="Lihat data"> <i class="fa fa-eye text-inverse m-l-15"></i> </a>
-							</td>
-							@endif
-							
-						</tr>
-						@endforeach
-					</tbody>
-				</table>
-			</div>
-		</div>
-	</div>
+               <thead>
+                  <tr>
+                     <th>No</th>
+                     <th>Perusahaan</th>
+                     <th>Alumni bekerja</th>
+                     <th>Sesuai kompetensi</th>
+                     <th>Merasa puas</th>
+                     <th>Support</th>
+                     <th>Confidance</th>
+                     <th class="text-nowrap" width="50px">Pilihan</th>
+                 </tr>
+             </thead>
+             <tbody>
+              <?php $no=1;
+              ?>
+              @foreach($perusahaan as $p)
+              <tr>
+                 <td>{{ $no++ }}</td>
+                 <td>{{ $p->nama_perusahaan }}</td>
+                 <td>{{ $p->jumlah }}</td>
+                 <td>{{ $p->kesesuaian }}</td>
+                 <td>{{ $p->kepuasan }}</td>
+                 <td>{{ $p->jumlah/count($jmltahun) }}</td>
+                 <td>{{ $p->jumlah }}</td>    
+                 <td class="text-nowrap">
+                    <a href="#" data-toggle="tooltip" title="Edit"> <i class="fa fa-pencil text-inverse m-l-15"></i> </a> 
+                    <a href="#" data-toggle="modal" data-target="" title="Lihat data"> <i class="fa fa-eye text-inverse m-l-15"></i> </a>
+                </td>
+                <input type="hidden" name="" class="perusahaan" id="" value="{{$p->nama_perusahaan}}">
+                <input type="hidden" name="" id="jumlah" value="{{$p->jumlah}}">
+            </tr>
+            @endforeach
+        </tbody>
+    </table>
+</div>
+</div>
+</div>
 
 <script src="{{ asset('assets/templates/plugins/bower_components/datatables/jquery.dataTables.min.js') }}"></script>
 <!-- start - This is for export functionality only -->
@@ -122,5 +102,20 @@
         'excel', 'pdf', 'print'
         ]
     });
+    // $(document).ready(function() {
+    //     $.getJSON(`/prshn/nama_perusahaan`,(data)=>{
+    //         $.each(data,(i,pt)=>{
+    //             $.getJSON(`/conf/${pt.nama_perusahaan}`,(data1)=>{
+    //                 $.each(data1,(i,hs)=>{
+    //                     console.log(pt.nama_perusahaan);
+    //                     console.log(pt.jumlah);
+    //                     console.log(data1[0]);
+    //                     console.log(pt.jumlah/data1[0])
+    //                     $('#hasil').append(`<p>${pt.jumlah/data1[0]}</p>`);
+    //                 });
+    //             }); 
+    //         }); 
+    //     });  
+    // });
 </script>
 @endsection

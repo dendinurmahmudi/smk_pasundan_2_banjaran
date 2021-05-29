@@ -110,12 +110,12 @@
 				`);
 			$('#isikirim').html('')
 			$.getJSON(`/isichat/${slimtest3.target.dataset.nisn}`,(data)=>{
-				$('#isichat').html('')
-				console.log('yai');
+				$('#isichat').html('');
 				$.each(data,(i,psn)=>{
 					console.log(psn.dari);
+					var id = psn.dari;
 					$('#isichat').append(`
-						@if(Auth::user()->nisn)
+						@if(12345==Auth::user()->nisn)
 							<div id="pengirim">
 							<li class="odd" onFocus="true">
 							<div class="chat-image"> <img alt="Female" width="40" height="40" src="{{ asset('data_file/profile/'.Auth::user()->foto) }}"> </div>
@@ -133,7 +133,7 @@
 							</div>
 							</li>
 						@endif
-							`);
+						`);
 				});
 			});    
 		});
