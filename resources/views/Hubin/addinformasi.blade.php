@@ -34,7 +34,7 @@
 	{{ Session::get('hapus') }}
 </div>
 @endif
-<a href="#" data-toggle="modal" data-target="#myModal" title="Tambah" class="btn btn-success">+ Tambah Informasi</a>
+<a href="#" data-toggle="modal" data-target="#myModal" title="Tambah" class="btn btn-info"><i class="fa fa-plus-circle"></i> Tambah Informasi</a>
 <?php $no=1;$no2=1; ?>
 @foreach($info as $i)
 <div class="row m-t-15">
