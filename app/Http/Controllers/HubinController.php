@@ -63,6 +63,20 @@ class HubinController extends Controller
         $ket = 'Semua data Alumni';
         return view('Hubin/datapenelusuran',['penelusuran' => $penelusuran,'warna'=>$warna,'jurusan'=>$jurusan,'lulusan'=>$lulusan,'ket'=>$ket]);
     }
+    public function databelumisi(){
+        $penelusuran = penelusuran::join('users','penelusuran.nisn','=','users.nisn')
+        ->join('alumni','alumni.nisn','=','users.nisn')
+        ->join('jurusan','alumni.jurusan','=','jurusan.id_jurusan')
+        ->where('nama_perusahaan',null)->where('nama_kampus',null)->where('pencaker',null)
+        ->orderBy('users.name')
+        ->get();
+        
+        $jurusan = DB::table('jurusan')->get();
+        $warna = ['','','','','oval',''];
+        $lulusan = alumni::select('tahun_lulus')->groupBy('tahun_lulus')->get();
+        $ket = 'Data belum isi penelusuran';
+        return view('Hubin/datapenelusuran',['penelusuran' => $penelusuran,'warna'=>$warna,'jurusan'=>$jurusan,'lulusan'=>$lulusan,'ket'=>$ket]);
+    }
     public function databekerja(){
         $penelusuran = penelusuran::join('users','penelusuran.nisn','=','users.nisn')
         ->join('alumni','alumni.nisn','=','users.nisn')
@@ -366,6 +380,7 @@ class HubinController extends Controller
             ->whereRaw('alumni.jurusan="'.$request->jurusan.'" and alumni.tahun_lulus="null"')
             ->orderBy('users.name')
             ->get();        
+            $ket = 'Data jurusan '.$request->jurusan;
 
         }else if($request->lulusan==null){
             $penelusuran = penelusuran::join('users','penelusuran.nisn','=','users.nisn')
@@ -374,6 +389,7 @@ class HubinController extends Controller
             ->where('alumni.tahun_lulus',null)
             ->orderBy('users.name')
             ->get();        
+            $ket = '';
 
         }else if($request->jurusan){
             $penelusuran = penelusuran::join('users','penelusuran.nisn','=','users.nisn')
@@ -381,7 +397,8 @@ class HubinController extends Controller
             ->join('jurusan','alumni.jurusan','=','jurusan.id_jurusan')
             ->where('alumni.jurusan',$request->jurusan)
             ->orderBy('users.name')
-            ->get();        
+            ->get(); 
+            $ket = 'Data jurusan '.$request->jurusan;       
 
         }else if($request->lulusan){
             $penelusuran = penelusuran::join('users','penelusuran.nisn','=','users.nisn')
@@ -390,6 +407,7 @@ class HubinController extends Controller
             ->where('alumni.tahun_lulus',$request->lulusan)
             ->orderBy('users.name')
             ->get();        
+            $ket = 'Data lulusan '.$request->lulusan;
 
         }else if($request->tampilan=='Y'){
             $penelusuran = penelusuran::join('users','penelusuran.nisn','=','users.nisn')
@@ -398,6 +416,7 @@ class HubinController extends Controller
             ->whereRaw('penelusuran.nama_perusahaan!="null" or penelusuran.nama_kampus!="null" or penelusuran.pencaker!="null"')
             ->orderBy('users.name')
             ->get();    
+            $ket = 'Mengisi data penelusuran';
 
         }else if ($request->tampilan=='T') {
             $penelusuran = penelusuran::join('users','penelusuran.nisn','=','users.nisn')
@@ -406,6 +425,7 @@ class HubinController extends Controller
             ->where('penelusuran.nama_perusahaan',null)->where('penelusuran.nama_kampus',null)->where('penelusuran.pencaker',null)
             ->orderBy('users.name')
             ->get();    
+            $ket = 'Belum isi data penelusuran';
 
         }else if($request->tampilan==0){
             $penelusuran = penelusuran::join('users','penelusuran.nisn','=','users.nisn')
@@ -413,13 +433,15 @@ class HubinController extends Controller
             ->join('jurusan','alumni.jurusan','=','jurusan.id_jurusan')
             ->orderBy('users.name')
             ->get();        
+            $ket = '';
 
         }else if($request->jurusan==0 && $request->lulusan==0 && $request->tampilan==0){
             $penelusuran = penelusuran::join('users','penelusuran.nisn','=','users.nisn')
             ->join('alumni','alumni.nisn','=','users.nisn')
             ->join('jurusan','alumni.jurusan','=','jurusan.id_jurusan')
             ->orderBy('users.name')
-            ->get();        
+            ->get();
+            $ket = '';        
 
         }else if($request->jurusan && $request->lulusan){
             $penelusuran = penelusuran::join('users','penelusuran.nisn','=','users.nisn')
@@ -427,7 +449,8 @@ class HubinController extends Controller
             ->join('jurusan','alumni.jurusan','=','jurusan.id_jurusan')
             ->whereRaw('alumni.jurusan="'.$request->jurusan.'" and alumni.tahun_lulus="'.$request->lulusan.'"')
             ->orderBy('users.name')
-            ->get();        
+            ->get(); 
+            $ket = 'Data '.$request->jurusan.', '.$request->lulusan;       
 
         }else if($request->jurusan && $request->lulusan){
             if ($request->tampilan=='Y') {
@@ -437,6 +460,7 @@ class HubinController extends Controller
                 ->whereRaw('penelusuran.nama_perusahaan!="null" or penelusuran.nama_kampus!="null" or penelusuran.pencaker!="null" and alumni.jurusan="'.$request->jurusan.'" and alumni.tahun_lulus="'.$request->lulusan.'"')
                 ->orderBy('users.name')
                 ->get();    
+                $ket = 'Mengisi, '.$request->jurusan.', '.$request->lulusan;                
             }else if($request->tampilan=='T'){
             $penelusuran = penelusuran::join('users','penelusuran.nisn','=','users.nisn')
             ->join('alumni','alumni.nisn','=','users.nisn')
@@ -447,6 +471,7 @@ class HubinController extends Controller
             ->whereRaw('alumni.jurusan="'.$request->jurusan.'" and alumni.tahun_lulus="'.$request->lulusan.'"')
             ->orderBy('users.name')
             ->get();    
+            $ket = 'Tidak isi, '.$request->jurusan.', '.$request->lulusan;                
 
             }
         }
@@ -454,7 +479,7 @@ class HubinController extends Controller
         $jurusan = DB::table('jurusan')->get();
         $warna = ['','','','','oval',''];
         $lulusan = alumni::select('tahun_lulus')->groupBy('tahun_lulus')->get();
-        return view('Hubin/datapenelusuran',['penelusuran' => $penelusuran,'warna'=>$warna,'jurusan'=>$jurusan,'lulusan'=>$lulusan]);
+        return view('Hubin/datapenelusuran',['penelusuran' => $penelusuran,'warna'=>$warna,'jurusan'=>$jurusan,'lulusan'=>$lulusan,'ket'=>$ket]);
     }
 
 }

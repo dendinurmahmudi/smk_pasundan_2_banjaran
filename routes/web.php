@@ -65,6 +65,7 @@ Route::group(['middleware' => ['auth','CekLevel:2']], function () {
     Route::get('/datakuliah','HubinController@datakuliah');
     Route::get('/datasesuai','HubinController@datasesuai');
     Route::get('/get/{file}/{id}','HubinController@getlamaran');
+    Route::get('/databelumisi', 'HubinController@databelumisi');
     
 });
 Route::group(['middleware' => ['auth','CekLevel:3']], function () {
