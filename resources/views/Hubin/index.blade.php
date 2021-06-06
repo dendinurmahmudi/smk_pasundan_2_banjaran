@@ -135,6 +135,7 @@
                                         <th>No</th>
                                         <th>Jurusan</th>
                                         <th>Jumlah bekerja</th>
+                                        <th>Jumlah pencaker</th>
                                         <th>Sesuai kompetensi</th>
                                         <th>Tidak sesuai</th>
                                         <th>Merasa puas</th>
@@ -149,6 +150,7 @@
                                     <td>{{ $no++ }}</td>
                                     <td>{{ $p->nama_jurusan }}</td>
                                     <td>{{ $p->jumlah }}</td>
+                                    <td>{{ $p->pnckr }}</td>
                                     <td>{{ $p->kesesuaian }}</td>
                                     <td>{{ $p->tdksesuai }}</td>
                                     <td>{{ $p->kepuasan }}</td>

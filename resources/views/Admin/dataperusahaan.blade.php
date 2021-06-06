@@ -27,18 +27,17 @@
               @foreach($perusahaan as $p)
               <tr>
                  <td>{{ $no++ }}</td>
-                 <td>{{ $p->nama_perusahaan }}</td>
-                 <td>{{ $p->jumlah }}</td>
-                 <td>{{ $p->kesesuaian }}</td>
-                 <td>{{ $p->kepuasan }}</td>
-                 <td>{{ $p->jumlah/count($jmltahun) }}</td>
-                 <td>{{ $p->jumlah }}</td>    
+                 <td>{{ $p['nama_perusahaan'] }}</td>
+                 <td>{{ $p['jumlah']}}</td>
+                 <td>{{ $p['kesesuaian']}}</td>
+                 <td>{{ $p['kepuasan']}}</td>
+                 <td>{{ $p['jumlah']/count($jmltahun)}}</td>
+                 <td>{{ $p['jumlah']/$p['confidence']}}</td>    
                  <td class="text-nowrap">
                     <a href="#" data-toggle="tooltip" title="Edit"> <i class="fa fa-pencil text-inverse m-l-15"></i> </a> 
                     <a href="#" data-toggle="modal" data-target="" title="Lihat data"> <i class="fa fa-eye text-inverse m-l-15"></i> </a>
                 </td>
-                <input type="hidden" name="" class="perusahaan" id="" value="{{$p->nama_perusahaan}}">
-                <input type="hidden" name="" id="jumlah" value="{{$p->jumlah}}">
+                
             </tr>
             @endforeach
         </tbody>

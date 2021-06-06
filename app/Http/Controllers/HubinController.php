@@ -35,21 +35,52 @@ class HubinController extends Controller
             count(if(sesuai_kompetensi="T",sesuai_kompetensi,null))as tdksesuai, 
             count(if(kepuasan="Y", kepuasan,null))as kepuasan,
             count(if(kepuasan="T", kepuasan,null))as tdkpuas,
+            count(if(pencaker="Y", pencaker,null))as pnckr,
             jurusan.id_jurusan,jurusan.nama_jurusan,alumni.tahun_lulus 
             from alumni join penelusuran on penelusuran.nisn=alumni.nisn 
             join jurusan on alumni.jurusan=jurusan.id_jurusan 
-            where nama_perusahaan!="null" group by nama_jurusan order by jumlah desc');
+            where nama_perusahaan!="null" or pencaker="Y" group by nama_jurusan order by jumlah desc');
         return view('Hubin/index',['penelusuran' => $penelusuran, 'sesuai' => $sesuai, 'bekerja' => $bekerja, 'pencaker' => $pencaker, 'kuliah' => $kuliah, 'kesesuaian' => $kesesuaian, 'tidakisi' => $tidakisi, 'all'=>$all,'warna'=>$warna,'countjurusan'=> $countjurusan]);
     }public function dashboard()
     {
         $jurusan = DB::select('select jurusan.id_jurusan,jurusan.nama_jurusan,count(nama_jurusan)jumlah,alumni.tahun_lulus from penelusuran left join alumni on penelusuran.nisn=alumni.nisn left join jurusan on alumni.jurusan=jurusan.id_jurusan where nama_perusahaan!="null" group by nama_jurusan');
         $perusahaan = DB::select('select nama_perusahaan, count(nama_perusahaan)as jumlah,count(if(sesuai_kompetensi="Y",sesuai_kompetensi,null))as kesesuaian, count(if(kepuasan="Y", kepuasan,null))as kepuasan from penelusuran where nama_perusahaan!="null" group by nama_perusahaan');
         $kelistrikan = DB::select("select count(nama_perusahaan)jumlah,count(*)-count(nama_perusahaan)kosong,nama_jurusan,id_jurusan,tahun_lulus,count(if(sesuai_kompetensi='Y',sesuai_kompetensi,null))as kesesuaian,nama_perusahaan from penelusuran join alumni on penelusuran.nisn=alumni.nisn join jurusan on alumni.jurusan=jurusan.id_jurusan group by nama_jurusan");
-        $jmlthn = DB::select('select jurusan.id_jurusan,jurusan.nama_jurusan,alumni.tahun_lulus from penelusuran left join alumni on penelusuran.nisn=alumni.nisn left join jurusan on alumni.jurusan=jurusan.id_jurusan where nama_perusahaan!="null" group by tahun_lulus');
+        $jmlthn = DB::select('select tahun_lulus from alumni group by tahun_lulus');
+        $alljrsn = DB::table('jurusan')->whereRaw('id_jurusan!=6')->get();
         $warna = ['oval','','','','',''];
-        return view('Hubin/dashboard',['warna'=>$warna,'jurusan'=>$jurusan,'perusahaan'=>$perusahaan,'kelistrikan'=>$kelistrikan,'jmlthn'=>$jmlthn]);
+        foreach ($alljrsn as $th) {
+            $th2018 []=[ 
+                'tahun'=>'2018',
+                'id_jurusan'=>$th->id_jurusan,
+                'nama_jurusan'=>$th->nama_jurusan,
+                'jumlah'=>$this->jmljurusan($th->id_jurusan,'2018'),
+            ];
+            $th2019 []=[ 
+                'tahun'=>'2019',
+                'id_jurusan'=>$th->id_jurusan,
+                'nama_jurusan'=>$th->nama_jurusan,
+                'jumlah'=>$this->jmljurusan($th->id_jurusan,'2019'),
+            ];
+            $th2020 []=[ 
+                'tahun'=>'2020',
+                'id_jurusan'=>$th->id_jurusan,
+                'nama_jurusan'=>$th->nama_jurusan,
+                'jumlah'=>$this->jmljurusan($th->id_jurusan,'2020'),
+            ];
+        }
+        echo json_encode($th2018);
+        die;
+        return view('Hubin/dashboard',['warna'=>$warna,'jurusan'=>$jurusan,'perusahaan'=>$perusahaan,'kelistrikan'=>$kelistrikan,'jmlthn'=>$jmlthn,'th2018'=>$th2018,'th2019'=>$th2019,'th2020'=>$th2020]);
     }
-
+    public function jmljurusan($jrsn,$thn)
+    {
+        $idjurusan = DB::select('select count(nama_jurusan)jumlah from penelusuran left join alumni on penelusuran.nisn=alumni.nisn left join jurusan on alumni.jurusan=jurusan.id_jurusan where pencaker!="Y" and pencaker!="B" and id_jurusan='.$jrsn.' and tahun_lulus="'.$thn.'"');
+        foreach ($idjurusan as $k) {
+            $jml= $k->jumlah;
+        }
+        return $jml;
+    }
     public function datapenelusuran(){
     	$penelusuran = penelusuran::join('users','penelusuran.nisn','=','users.nisn')
         ->join('alumni','alumni.nisn','=','users.nisn')

@@ -43,7 +43,8 @@ class AdminController extends Controller
         ->where('jurusan.nama_jurusan',$id)
         ->orderBy('users.name')
         ->get();
-      return view('Admin/dataalumni',['alumni' => $alumni,'warna'=>$warna,'jurusan'=>$jurusan,'lulusan'=>$lulusan,'jrsn'=>$jrsn]);
+        $ket = 'Menampilkan alumni jurusan '.$id;
+      return view('Admin/dataalumni',['alumni' => $alumni,'warna'=>$warna,'jurusan'=>$jurusan,'lulusan'=>$lulusan,'jrsn'=>$jrsn,'ket'=>$ket]);
   	}
   	public function datapengguna()
   	{
@@ -64,7 +65,18 @@ class AdminController extends Controller
     }
     public function dataperusahaan()
   	{
-    $perusahaan = DB::select('select nama_perusahaan, count(nama_perusahaan)as jumlah,count(if(sesuai_kompetensi="Y",sesuai_kompetensi,null))as kesesuaian, count(if(kepuasan="Y", kepuasan,null))as kepuasan,count(tahun_lulus)jml from penelusuran join alumni on penelusuran.nisn=alumni.nisn where nama_perusahaan!="null" group by nama_perusahaan order by jumlah desc');
+    $peru = DB::select('select nama_perusahaan, count(nama_perusahaan)as jumlah,count(if(sesuai_kompetensi="Y",sesuai_kompetensi,null))as kesesuaian, count(if(kepuasan="Y", kepuasan,null))as kepuasan,count(tahun_lulus)jml from penelusuran join alumni on penelusuran.nisn=alumni.nisn where nama_perusahaan!="null" group by nama_perusahaan order by jumlah desc');
+    
+    foreach ($peru as $pt) {
+        $perusahaan[]=[
+            'nama_perusahaan'=>$pt->nama_perusahaan,
+            'jumlah'=>$pt->jumlah,
+            'kesesuaian'=>$pt->kesesuaian,
+            'kepuasan'=>$pt->kepuasan,
+            'jml'=>$pt->jml,
+            'confidence'=>$this->confidence($pt->nama_perusahaan),
+        ];
+    }
     $jmltahun = DB::select('select nama_perusahaan, tahun_lulus from penelusuran join alumni on penelusuran.nisn=alumni.nisn where nama_perusahaan!="null" group by tahun_lulus');
     $allprshn = DB::select('select nama_perusahaan,tahun_lulus from penelusuran p join alumni a on p.nisn=a.nisn');
     $warna = ['','','','','oval'];
@@ -78,8 +90,9 @@ class AdminController extends Controller
     public function confidence($perusahaan)
     {
         $data = DB::select('select tahun_lulus from penelusuran p join alumni a on p.nisn=a.nisn where nama_perusahaan="'.$perusahaan.'" group by tahun_lulus;');
-        $hsl = [count($data)];
-        echo json_encode($hsl);
+        $hsl = count($data);
+        // echo json_encode($hsl);
+        return $hsl;
     }
     public function datajurusan()
     {

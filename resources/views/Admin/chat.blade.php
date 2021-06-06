@@ -111,29 +111,48 @@
 			$('#isikirim').html('')
 			$.getJSON(`/isichat/${slimtest3.target.dataset.nisn}`,(data)=>{
 				$('#isichat').html('');
+
 				$.each(data,(i,psn)=>{
-					console.log(psn.dari);
-					var id = psn.dari;
-					$('#isichat').append(`
-						@if(12345==Auth::user()->nisn)
-							<div id="pengirim">
+					console.log('dari '+psn.dari);
+					// $('#isichat').append(`
+					// 	@if(12345==Auth::user()->nisn)
+							// <div id="pengirim">
+							// <li class="odd" onFocus="true">
+							// <div class="chat-image"> <img alt="Female" width="40" height="40" src="{{ asset('data_file/profile/'.Auth::user()->foto) }}"> </div>
+							// <div class="chat-body">
+							// <div class="chat-text">
+							// <p>${psn.isi}</p> <b>${psn.waktu}</b> </div>
+							// </div>
+							// </li>
+					// 	@else
+						// 	<li>
+						// 	<div class="chat-image"> <img alt="male"  width="40" height="40" src="{{ asset('data_file/profile/`+psn.foto+`') }}"> </div>
+						// 	<div class="chat-body">
+						// 	<div class="chat-text">
+						// 	<p>${psn.isi}</p> <b>${psn.waktu}</b> </div>
+						// 	</div>
+						// 	</li>
+						// @endif
+					// 	`);
+
+					if(psn.dari=={{Auth::user()->nisn}}){
+						$('#isichat').append(`<div id="pengirim">
 							<li class="odd" onFocus="true">
 							<div class="chat-image"> <img alt="Female" width="40" height="40" src="{{ asset('data_file/profile/'.Auth::user()->foto) }}"> </div>
 							<div class="chat-body">
 							<div class="chat-text">
 							<p>${psn.isi}</p> <b>${psn.waktu}</b> </div>
 							</div>
-							</li>
-						@else
-							<li>
+							</li>`)
+					}else{
+						$('#isichat').append(`<li>
 							<div class="chat-image"> <img alt="male"  width="40" height="40" src="{{ asset('data_file/profile/`+psn.foto+`') }}"> </div>
 							<div class="chat-body">
 							<div class="chat-text">
 							<p>${psn.isi}</p> <b>${psn.waktu}</b> </div>
 							</div>
-							</li>
-						@endif
-						`);
+							</li>`)
+					}
 				});
 			});    
 		});
