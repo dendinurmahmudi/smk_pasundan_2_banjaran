@@ -18,7 +18,7 @@
 						@foreach($history as $h)
 						@if($h->nisn != Auth::user()->nisn)
 						<li class="tab">
-							<a data-toggle="tab" href="#vhome3" aria-expanded="true"><img src="{{ asset('data_file/profile/'.$h->foto) }}"  width="35" height="35" alt="user-img" class="img-circle"><span data-nisn="{{$h->nisn}}" data-nama="{{$h->name}}" data-foto="{{$h->foto}}">{{$h->name}}</span></a>
+							<a data-toggle="tab" href="#vhome3" aria-expanded="true" data-nisn="{{$h->nisn}}" data-nama="{{$h->name}}" data-foto="{{$h->foto}}"><img data-nisn="{{$h->nisn}}" data-nama="{{$h->name}}" data-foto="{{$h->foto}}" src="{{ asset('data_file/profile/'.$h->foto) }}"  width="35" height="35" alt="user-img" class="img-circle"><span data-nisn="{{$h->nisn}}" data-nama="{{$h->name}}" data-foto="{{$h->foto}}">{{$h->name}}</span></a>
 						</li>
 						@else
 						@endif
@@ -72,7 +72,7 @@
 		<!-- .chat-right-panel -->
 	</div>
 	<?php $zona = time()+(60*60*7); ?> 
-	<input type="hidden" name="" id="waktu" value="{{gmdate('H:i',$zona)}}">
+	<input type="hidden" name="" id="waktu" value="{{gmdate('d-m-Y H:i:s',$zona)}}">
 	<script type="text/javascript">
 
 		$('#slimtest1').slimScroll({
@@ -91,7 +91,7 @@
 				$('#slimtest3').html('')
 				$.each(data,(i,pt)=>{
 					console.log(pt.name);
-					$('#slimtest3').append(`<li class="tab"><a data-toggle="tab" href="#" aria-expanded="true"><img src="{{ asset("data_file/profile/`+pt.foto+`") }}" alt="user-img" width="35" height="35" class="img-circle"><span data-nisn="${pt.nisn}" data-nama="${pt.name}" data-foto="${pt.foto}">${pt.name}</span></a></li>`);
+					$('#slimtest3').append(`<li class="tab"><a data-toggle="tab" href="#" aria-expanded="true" data-nisn="${pt.nisn}" data-nama="${pt.name}" data-foto="${pt.foto}"><img data-nisn="${pt.nisn}" data-nama="${pt.name}" data-foto="${pt.foto}" src="{{ asset("data_file/profile/`+pt.foto+`") }}" alt="user-img" width="35" height="35" class="img-circle"><span data-nisn="${pt.nisn}" data-nama="${pt.name}" data-foto="${pt.foto}">${pt.name}</span></a></li>`);
 				});
 			});    
 		});
@@ -139,7 +139,7 @@
 					if(psn.dari=={{Auth::user()->nisn}}){
 						$('#isichat').append(`<div id="pengirim">
 							<li class="odd" onFocus="true">
-							<div class="chat-image"> <img alt="Female" width="40" height="40" src="{{ asset('data_file/profile/'.Auth::user()->foto) }}"> </div>
+							<div class="chat-image"> <img alt="Female" width="40" height="40" src="{{ asset('data_file/profile/`+psn.foto+`') }}"> </div>
 							<div class="chat-body">
 							<div class="chat-text">
 							<p>${psn.isi}</p> <b>${psn.waktu}</b> </div>

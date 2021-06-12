@@ -99,7 +99,7 @@
 									</button>
 								</div>
 								<div class="text-center p-t-80" style="margin-top: -50px;">
-									Masukan ID anda dan pastikan email yang anda daftarkan aktif untuk mengikuti langkah-langkah mengubah password anda.
+									Masukan NISN/NIP anda dan pastikan email yang anda daftarkan aktif untuk mengikuti langkah-langkah mengubah password anda.
 								</div>
 							</form>
 						</div>

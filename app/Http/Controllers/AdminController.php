@@ -460,6 +460,7 @@ class AdminController extends Controller
         $history = DB::select('select name,foto,nisn from users u join pesan p on u.nisn=p.untuk or u.nisn=p.dari where p.dari='.Auth::user()->nisn.' or p.untuk='.Auth::user()->nisn.' group by name');
         return view('Admin/chat',['warna'=>$warna,'history'=>$history]);        
     }
+   
     public function search($id)
     {
         $data = user::select('name','foto','nisn')->whereRaw('name LIKE "%'.$id.'%" limit 5')->get();
@@ -473,12 +474,12 @@ class AdminController extends Controller
             'dari'  => Auth::user()->nisn,
             'untuk' => $nisn,
             'isi'   => $pesan,
-            'waktu' => gmdate('H:i',$zona)
+            'waktu' => gmdate('d-m-Y H:i:s',$zona)
         ]);
     }
     public function isichat($nisn)
     {
-        $data = DB::select('select dari,isi,untuk,name,foto,waktu from pesan p join users u on p.untuk=u.nisn where dari='.Auth::user()->nisn.' and untuk='.$nisn.' or dari='.$nisn.' and untuk='.Auth::user()->nisn);
+        $data = DB::select('select dari,isi,untuk,name,foto,waktu from pesan p join users u on p.dari=u.nisn where dari='.Auth::user()->nisn.' and untuk='.$nisn.' or dari='.$nisn.' and untuk='.Auth::user()->nisn.' order by waktu');
         echo json_encode($data);   
     }
 }

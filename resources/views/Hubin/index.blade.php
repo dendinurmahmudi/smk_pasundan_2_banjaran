@@ -7,6 +7,14 @@
 @section('konten')
 <div class="row">
     <div class="col-sm-12">
+        @if (Session::has('success'))
+        <div class="alert alert-success">
+            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            {{ Session::get('success') }}
+        </div>
+        @endif
         <div class="white-box">
             <div class="row row-in">
                 <a href="/dataalumni" title="">
@@ -127,7 +135,7 @@
                 <!-- jurusan -->
                 <div class="col-sm-12 m-t-10">
                     <div class="white-box">
-                        <p class="text-muted m-b-30">Jurusan bekerja</p>
+                        <p class="text-muted m-b-30">Kompetensi Kerja Lulusan</p>
                         <div class="table-responsive">
                             <table id="example23" class="display nowrap" cellspacing="0" width="100%">
                                 <thead>
@@ -143,10 +151,10 @@
                                     </tr>
                                 </thead>
                                 <tbody>
-                                   <?php $no=1;
-                                   ?>
-                                   @foreach($countjurusan as $p)
-                                   <tr>
+                                 <?php $no=1;
+                                 ?>
+                                 @foreach($countjurusan as $p)
+                                 <tr>
                                     <td>{{ $no++ }}</td>
                                     <td>{{ $p->nama_jurusan }}</td>
                                     <td>{{ $p->jumlah }}</td>
@@ -162,7 +170,10 @@
                     </div>
                 </div>
             </div>
-            <div class="col-sm-12 m-b-20">
+            <div class="col-sm-6 m-b-20">
+                <a href="/kirimemail"><button class="btn btn-outline btn-success btn-lg btn-block">Minta Alumni isi data penelusuran</button></a>
+            </div>
+            <div class="col-sm-6 m-b-20">
                 <a href="/dashboard"><button class="btn btn-outline btn-info btn-lg btn-block">Informasi Lainya</button></a>
             </div>
         </div>

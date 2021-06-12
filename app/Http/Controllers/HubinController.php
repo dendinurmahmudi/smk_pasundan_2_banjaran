@@ -12,6 +12,7 @@ use Response;
 use Validator;
 use Hash;
 use Session;
+use Mail;
 use App\Alumni;
 use App\penelusuran;
 use App\perusahaan;
@@ -48,29 +49,38 @@ class HubinController extends Controller
         $kelistrikan = DB::select("select count(nama_perusahaan)jumlah,count(*)-count(nama_perusahaan)kosong,nama_jurusan,id_jurusan,tahun_lulus,count(if(sesuai_kompetensi='Y',sesuai_kompetensi,null))as kesesuaian,nama_perusahaan from penelusuran join alumni on penelusuran.nisn=alumni.nisn join jurusan on alumni.jurusan=jurusan.id_jurusan group by nama_jurusan");
         $jmlthn = DB::select('select tahun_lulus from alumni group by tahun_lulus');
         $alljrsn = DB::table('jurusan')->whereRaw('id_jurusan!=6')->get();
+
         $warna = ['oval','','','','',''];
         foreach ($alljrsn as $th) {
-            $th2018 []=[ 
+            $th2018[] =[ 
                 'tahun'=>'2018',
                 'id_jurusan'=>$th->id_jurusan,
                 'nama_jurusan'=>$th->nama_jurusan,
                 'jumlah'=>$this->jmljurusan($th->id_jurusan,'2018'),
+                'pencaker'=>$this->jmlpnckr($th->id_jurusan,'2018'),
+                'kosong'=>$this->jmlkosong($th->id_jurusan,'2018'),
+                'sesuai'=>$this->jmlsesuai($th->id_jurusan,'2018'),
             ];
-            $th2019 []=[ 
+            $th2019[] =[ 
                 'tahun'=>'2019',
                 'id_jurusan'=>$th->id_jurusan,
                 'nama_jurusan'=>$th->nama_jurusan,
                 'jumlah'=>$this->jmljurusan($th->id_jurusan,'2019'),
+                'pencaker'=>$this->jmlpnckr($th->id_jurusan,'2019'),
+                'kosong'=>$this->jmlkosong($th->id_jurusan,'2019'),
+                'sesuai'=>$this->jmlsesuai($th->id_jurusan,'2019'),
             ];
-            $th2020 []=[ 
+            $th2020[] =[ 
                 'tahun'=>'2020',
                 'id_jurusan'=>$th->id_jurusan,
                 'nama_jurusan'=>$th->nama_jurusan,
                 'jumlah'=>$this->jmljurusan($th->id_jurusan,'2020'),
-            ];
+                'pencaker'=>$this->jmlpnckr($th->id_jurusan,'2020'),
+                'kosong'=>$this->jmlkosong($th->id_jurusan,'2020'),
+                'sesuai'=>$this->jmlsesuai($th->id_jurusan,'2020'),
+            ];           
         }
-        echo json_encode($th2018);
-        die;
+        
         return view('Hubin/dashboard',['warna'=>$warna,'jurusan'=>$jurusan,'perusahaan'=>$perusahaan,'kelistrikan'=>$kelistrikan,'jmlthn'=>$jmlthn,'th2018'=>$th2018,'th2019'=>$th2019,'th2020'=>$th2020]);
     }
     public function jmljurusan($jrsn,$thn)
@@ -80,6 +90,30 @@ class HubinController extends Controller
             $jml= $k->jumlah;
         }
         return $jml;
+    }
+    public function jmlkosong($id,$thn)
+    {
+        $jrsn = DB::select('select count(*)-count(nama_perusahaan)kosong from penelusuran left join alumni on penelusuran.nisn=alumni.nisn left join jurusan on alumni.jurusan=jurusan.id_jurusan where pencaker is null and id_jurusan='.$id.' and tahun_lulus="'.$thn.'"');
+        foreach ($jrsn as $k) {
+            $ksg= $k->kosong;
+        }
+        return $ksg;
+    }
+    public function jmlsesuai($id,$thn)
+    {
+        $jrs = DB::select('select count(if(sesuai_kompetensi="Y",sesuai_kompetensi,null))as kesesuaian from penelusuran left join alumni on penelusuran.nisn=alumni.nisn left join jurusan on alumni.jurusan=jurusan.id_jurusan where id_jurusan='.$id.' and tahun_lulus="'.$thn.'"');
+        foreach ($jrs as $k) {
+            $kss= $k->kesesuaian;
+        }
+        return $kss;
+    }
+    public function jmlpnckr($id,$thn)
+    {
+        $pnckr = DB::select('select count(if(pencaker="Y",pencaker,null))as pencaker from penelusuran left join alumni on penelusuran.nisn=alumni.nisn left join jurusan on alumni.jurusan=jurusan.id_jurusan where id_jurusan='.$id.' and tahun_lulus="'.$thn.'"');
+        foreach ($pnckr as $p) {
+            $pc= $p->pencaker;
+        }
+        return $pc;
     }
     public function datapenelusuran(){
     	$penelusuran = penelusuran::join('users','penelusuran.nisn','=','users.nisn')
@@ -174,21 +208,35 @@ class HubinController extends Controller
         $jurusan = DB::table('jurusan')->get();
         $warna = ['','oval','','','',''];
         $lulusan = alumni::select('tahun_lulus')->groupBy('tahun_lulus')->get();
-      return view('Hubin/dataalumni',['alumni' => $alumni,'warna'=>$warna,'jurusan'=>$jurusan,'lulusan'=>$lulusan]);
-  }
-
-  public function dataperusahaan()
-  {
-    $perusahaan = DB::select('select nama_perusahaan, count(nama_perusahaan)as jumlah,
-        count(if(sesuai_kompetensi="Y",sesuai_kompetensi,null))as kesesuaian,
-        count(if(sesuai_kompetensi="T",sesuai_kompetensi,null))as tdksesuai, 
-        count(if(kepuasan="Y", kepuasan,null))as kepuasan,
-        count(if(kepuasan="T", kepuasan,null))as tdkpuas from penelusuran 
-        where nama_perusahaan!="null" group by nama_perusahaan');
-    $warna = ['','','','','','oval'];
-    return view('Hubin/dataperusahaan',['perusahaan' => $perusahaan,'warna'=>$warna]);
+        return view('Hubin/dataalumni',['alumni' => $alumni,'warna'=>$warna,'jurusan'=>$jurusan,'lulusan'=>$lulusan]);
     }
 
+    public function dataperusahaan()
+    {
+        $peru = DB::select('select nama_perusahaan, count(nama_perusahaan)as jumlah,count(if(sesuai_kompetensi="Y",sesuai_kompetensi,null))as kesesuaian, count(if(kepuasan="Y", kepuasan,null))as kepuasan,count(tahun_lulus)jml from penelusuran join alumni on penelusuran.nisn=alumni.nisn where nama_perusahaan!="null" group by nama_perusahaan order by jumlah desc');
+
+        foreach ($peru as $pt) {
+            $perusahaan[]=[
+                'nama_perusahaan'=>$pt->nama_perusahaan,
+                'jumlah'=>$pt->jumlah,
+                'kesesuaian'=>$pt->kesesuaian,
+                'kepuasan'=>$pt->kepuasan,
+                'jml'=>$pt->jml,
+                'confidence'=>$this->confidence($pt->nama_perusahaan),
+            ];
+        }
+        $jmltahun = DB::select('select nama_perusahaan, tahun_lulus from penelusuran join alumni on penelusuran.nisn=alumni.nisn where nama_perusahaan!="null" group by tahun_lulus');
+        $allprshn = DB::select('select nama_perusahaan,tahun_lulus from penelusuran p join alumni a on p.nisn=a.nisn');
+        $warna = ['','','','','','oval'];
+        return view('Hubin/dataperusahaan',['perusahaan' => $perusahaan,'warna'=>$warna,'jmltahun'=>$jmltahun,'allprshn'=>$allprshn]);
+    }
+    public function confidence($perusahaan)
+    {
+        $data = DB::select('select tahun_lulus from penelusuran p join alumni a on p.nisn=a.nisn where nama_perusahaan="'.$perusahaan.'" group by tahun_lulus;');
+        $hsl = count($data);
+        // echo json_encode($hsl);
+        return $hsl;
+    }
     public function addinformasi()
     {
         $info = informasi::orderBy('created_at','desc')->get();
@@ -198,26 +246,26 @@ class HubinController extends Controller
     public function tambahinformasi(Request $request)
     {
         $rules = [
-                'file' => 'file|image|mimes:jpeg,png,jpg|max:2048',
-                'judul' => 'required',
-                'buka_lamaran' => 'required',
-                'isi' => 'required'
-          ];
-         $messages = [
-                'judul.required'        => 'Judul informasi harus diisi',
-                'isi.required'          => 'Isi informasi harus diisi',
-                'file.image'            => 'File harus Foto',
-                'file.mimes'            => 'File yang diperbolehkan jpeg,png,jpg',
-                'file.max'              => 'ukuran max 2 mb',
-                'buka_lamaran.required' => 'Mohon pilih buka lamaran, Ya atau Tidak'
-            ];
+            'file' => 'file|image|mimes:jpeg,png,jpg|max:2048',
+            'judul' => 'required',
+            'buka_lamaran' => 'required',
+            'isi' => 'required'
+        ];
+        $messages = [
+            'judul.required'        => 'Judul informasi harus diisi',
+            'isi.required'          => 'Isi informasi harus diisi',
+            'file.image'            => 'File harus Foto',
+            'file.mimes'            => 'File yang diperbolehkan jpeg,png,jpg',
+            'file.max'              => 'ukuran max 2 mb',
+            'buka_lamaran.required' => 'Mohon pilih buka lamaran, Ya atau Tidak'
+        ];
 
-            $validator = Validator::make($request->all(), $rules, $messages);
+        $validator = Validator::make($request->all(), $rules, $messages);
 
-            if($validator->fails()){
-                return redirect()->back()->withErrors($validator)->withInput($request->all);
-            }
-     if ($request->file!=null) {
+        if($validator->fails()){
+            return redirect()->back()->withErrors($validator)->withInput($request->all);
+        }
+        if ($request->file!=null) {
             $file = $request->file('file');
             $nama_file = time()."_".$file->getClientOriginalName();
             $tujuan_upload = 'data_file/informasi';
@@ -243,26 +291,26 @@ class HubinController extends Controller
     public function editinformasi(Request $request)
     {
         $rules = [
-                'file'          => 'file|image|mimes:jpeg,png,jpg|max:2048',
-                'judul'         => 'required',
-                'buka_lamaran'  => 'required',
-                'isi'           => 'required'
-          ];
-         $messages = [
-                'judul.required'        => 'Judul informasi harus diisi',
-                'isi.required'          => 'Isi informasi harus diisi',
-                'file.image'            => 'File harus Foto',
-                'file.mimes'            => 'File yang diperbolehkan jpeg,png,jpg',
-                'file.max'              => 'ukuran max 2 mb',
-                'buka_lamaran.required' => 'Mohon pilih buka lamaran, Ya atau Tidak'
-            ];
+            'file'          => 'file|image|mimes:jpeg,png,jpg|max:2048',
+            'judul'         => 'required',
+            'buka_lamaran'  => 'required',
+            'isi'           => 'required'
+        ];
+        $messages = [
+            'judul.required'        => 'Judul informasi harus diisi',
+            'isi.required'          => 'Isi informasi harus diisi',
+            'file.image'            => 'File harus Foto',
+            'file.mimes'            => 'File yang diperbolehkan jpeg,png,jpg',
+            'file.max'              => 'ukuran max 2 mb',
+            'buka_lamaran.required' => 'Mohon pilih buka lamaran, Ya atau Tidak'
+        ];
 
-            $validator = Validator::make($request->all(), $rules, $messages);
+        $validator = Validator::make($request->all(), $rules, $messages);
 
-            if($validator->fails()){
-                return redirect()->back()->withErrors($validator)->withInput($request->all);
-            }
-     if ($request->file!=null) {
+        if($validator->fails()){
+            return redirect()->back()->withErrors($validator)->withInput($request->all);
+        }
+        if ($request->file!=null) {
             $file = $request->file('file');
             $nama_file = time()."_".$file->getClientOriginalName();
             $tujuan_upload = 'data_file/informasi';
@@ -310,189 +358,189 @@ class HubinController extends Controller
        $warna = ['','','oval','','',''];
        return view('Hubin/datalamaran',['pelamar'=> $pelamar,'warna'=>$warna]);         
    }
-    public function profile()
-    {
-        $warna = ['','','','','',''];
-        return view('Hubin/profilehubin',['warna'=>$warna]);
+   public function profile()
+   {
+    $warna = ['','','','','',''];
+    return view('Hubin/profilehubin',['warna'=>$warna]);
+}
+public function gantipass(Request $request)
+{
+ $rules = [
+     'passwordBaru1'         => 'min:6'
+ ];
+ $messages = [
+     'passwordBaru1.min'          => 'Password minimal 6 karakter'
+ ];
+ $validator = Validator::make($request->all(), $rules, $messages);
+ if($validator->fails()){
+    return redirect()->back()->withErrors($validator)->withInput($request->all);
+}
+
+$passlama = $request->passwordLama;
+$passbaru = $request->passwordBaru1;
+$passbaru2 = $request->passwordBaru2;
+if ($passlama==password_verify($passlama, Auth::user()->password)) {
+    if($passbaru!=$passbaru2){
+        Session::flash('gagal', 'Password tidak sama, mohon ulangi');
+        return redirect('profile'.Auth::user()->hak_akses);   
+    }else{
+        user::where('id',$request->id)->update([
+            'password' => Hash::make($passbaru)
+        ]);
+        Session::flash('success', 'Password berhasil diubah');
+        return redirect('profile'.Auth::user()->hak_akses);   
     }
-    public function gantipass(Request $request)
-    {
-         $rules = [
-             'passwordBaru1'         => 'min:6'
-         ];
-         $messages = [
-             'passwordBaru1.min'          => 'Password minimal 6 karakter'
-         ];
-         $validator = Validator::make($request->all(), $rules, $messages);
-         if($validator->fails()){
-            return redirect()->back()->withErrors($validator)->withInput($request->all);
-        }
+}else{
+    Session::flash('gagal', 'Password lama salah');
+    return redirect('profile'.Auth::user()->hak_akses);   
+}
+}
+public function alumniBy_jurusan_tahun(Request $request)
+{
+    if ($request->jurusan && $request->lulusan==null) {
+        $alumni = alumni::join('users','alumni.nisn','=','users.nisn')
+        ->join('penelusuran','alumni.nisn','=','penelusuran.nisn')
+        ->join('jurusan','alumni.jurusan','=','jurusan.id_jurusan')
+        ->whereRaw('alumni.jurusan="'.$request->jurusan.'" and alumni.tahun_lulus="null"')
+        ->orderBy('users.name')
+        ->get();               
 
-        $passlama = $request->passwordLama;
-        $passbaru = $request->passwordBaru1;
-        $passbaru2 = $request->passwordBaru2;
-        if ($passlama==password_verify($passlama, Auth::user()->password)) {
-            if($passbaru!=$passbaru2){
-                Session::flash('gagal', 'Password tidak sama, mohon ulangi');
-                return redirect('profile'.Auth::user()->hak_akses);   
-            }else{
-                user::where('id',$request->id)->update([
-                    'password' => Hash::make($passbaru)
-                ]);
-                Session::flash('success', 'Password berhasil diubah');
-                return redirect('profile'.Auth::user()->hak_akses);   
-            }
-        }else{
-            Session::flash('gagal', 'Password lama salah');
-            return redirect('profile'.Auth::user()->hak_akses);   
-        }
+    }else if($request->lulusan==null){
+        $alumni = alumni::join('users','alumni.nisn','=','users.nisn')
+        ->join('penelusuran','alumni.nisn','=','penelusuran.nisn')
+        ->join('jurusan','alumni.jurusan','=','jurusan.id_jurusan')
+        ->where('alumni.tahun_lulus',null)
+        ->orderBy('users.name')
+        ->get();                        
+
+    }else if ($request->jurusan==0 && $request->lulusan==0) {
+        $alumni = alumni::join('users','alumni.nisn','=','users.nisn')
+        ->join('penelusuran','alumni.nisn','=','penelusuran.nisn')
+        ->join('jurusan','alumni.jurusan','=','jurusan.id_jurusan')
+        ->orderBy('users.name')
+        ->get();               
+
+    }else if($request->lulusan && $request->jurusan){
+        $alumni = alumni::join('users','alumni.nisn','=','users.nisn')
+        ->join('penelusuran','alumni.nisn','=','penelusuran.nisn')
+        ->join('jurusan','alumni.jurusan','=','jurusan.id_jurusan')
+        ->whereRaw('alumni.jurusan="'.$request->jurusan.'" and alumni.tahun_lulus="'.$request->lulusan.'"')
+        ->orderBy('users.name')
+        ->get();               
+
+    }else if($request->jurusan){
+        $alumni = alumni::join('users','alumni.nisn','=','users.nisn')
+        ->join('penelusuran','alumni.nisn','=','penelusuran.nisn')
+        ->join('jurusan','alumni.jurusan','=','jurusan.id_jurusan')
+        ->where('alumni.jurusan',$request->jurusan)
+        ->orderBy('users.name')
+        ->get();                        
+
+    }else if($request->lulusan){
+        $alumni = alumni::join('users','alumni.nisn','=','users.nisn')
+        ->join('penelusuran','alumni.nisn','=','penelusuran.nisn')
+        ->join('jurusan','alumni.jurusan','=','jurusan.id_jurusan')
+        ->where('alumni.tahun_lulus',$request->lulusan)
+        ->orderBy('users.name')
+        ->get();                        
     }
-    public function alumniBy_jurusan_tahun(Request $request)
-    {
-        if ($request->jurusan && $request->lulusan==null) {
-            $alumni = alumni::join('users','alumni.nisn','=','users.nisn')
-                    ->join('penelusuran','alumni.nisn','=','penelusuran.nisn')
-                    ->join('jurusan','alumni.jurusan','=','jurusan.id_jurusan')
-                    ->whereRaw('alumni.jurusan="'.$request->jurusan.'" and alumni.tahun_lulus="null"')
-                    ->orderBy('users.name')
-                    ->get();               
+    $jurusan = DB::table('jurusan')->get();
+    $warna = ['','oval','','','',''];
+    $lulusan = alumni::select('tahun_lulus')->groupBy('tahun_lulus')->get();
 
-        }else if($request->lulusan==null){
-            $alumni = alumni::join('users','alumni.nisn','=','users.nisn')
-                    ->join('penelusuran','alumni.nisn','=','penelusuran.nisn')
-                    ->join('jurusan','alumni.jurusan','=','jurusan.id_jurusan')
-                    ->where('alumni.tahun_lulus',null)
-                    ->orderBy('users.name')
-                    ->get();                        
+    return view('Hubin/dataalumni',['alumni' => $alumni,'warna'=>$warna,'jurusan'=>$jurusan,'lulusan'=>$lulusan]);
+}
+public function penelusuranBy_jurusan_tahun(Request $request)
+{
+    if($request->jurusan && $request->lulusan==null){
+        $penelusuran = penelusuran::join('users','penelusuran.nisn','=','users.nisn')
+        ->join('alumni','alumni.nisn','=','users.nisn')
+        ->join('jurusan','alumni.jurusan','=','jurusan.id_jurusan')
+        ->whereRaw('alumni.jurusan="'.$request->jurusan.'" and alumni.tahun_lulus="null"')
+        ->orderBy('users.name')
+        ->get();        
+        $ket = 'Data jurusan '.$request->jurusan;
 
-        }else if ($request->jurusan==0 && $request->lulusan==0) {
-            $alumni = alumni::join('users','alumni.nisn','=','users.nisn')
-                    ->join('penelusuran','alumni.nisn','=','penelusuran.nisn')
-                    ->join('jurusan','alumni.jurusan','=','jurusan.id_jurusan')
-                    ->orderBy('users.name')
-                    ->get();               
+    }else if($request->lulusan==null){
+        $penelusuran = penelusuran::join('users','penelusuran.nisn','=','users.nisn')
+        ->join('alumni','alumni.nisn','=','users.nisn')
+        ->join('jurusan','alumni.jurusan','=','jurusan.id_jurusan')
+        ->where('alumni.tahun_lulus',null)
+        ->orderBy('users.name')
+        ->get();        
+        $ket = '';
 
-        }else if($request->lulusan && $request->jurusan){
-            $alumni = alumni::join('users','alumni.nisn','=','users.nisn')
-                    ->join('penelusuran','alumni.nisn','=','penelusuran.nisn')
-                    ->join('jurusan','alumni.jurusan','=','jurusan.id_jurusan')
-                    ->whereRaw('alumni.jurusan="'.$request->jurusan.'" and alumni.tahun_lulus="'.$request->lulusan.'"')
-                    ->orderBy('users.name')
-                    ->get();               
-                    
-        }else if($request->jurusan){
-            $alumni = alumni::join('users','alumni.nisn','=','users.nisn')
-                    ->join('penelusuran','alumni.nisn','=','penelusuran.nisn')
-                    ->join('jurusan','alumni.jurusan','=','jurusan.id_jurusan')
-                    ->where('alumni.jurusan',$request->jurusan)
-                    ->orderBy('users.name')
-                    ->get();                        
+    }else if($request->jurusan){
+        $penelusuran = penelusuran::join('users','penelusuran.nisn','=','users.nisn')
+        ->join('alumni','alumni.nisn','=','users.nisn')
+        ->join('jurusan','alumni.jurusan','=','jurusan.id_jurusan')
+        ->where('alumni.jurusan',$request->jurusan)
+        ->orderBy('users.name')
+        ->get(); 
+        $ket = 'Data jurusan '.$request->jurusan;       
 
-        }else if($request->lulusan){
-            $alumni = alumni::join('users','alumni.nisn','=','users.nisn')
-                    ->join('penelusuran','alumni.nisn','=','penelusuran.nisn')
-                    ->join('jurusan','alumni.jurusan','=','jurusan.id_jurusan')
-                    ->where('alumni.tahun_lulus',$request->lulusan)
-                    ->orderBy('users.name')
-                    ->get();                        
-        }
-        $jurusan = DB::table('jurusan')->get();
-        $warna = ['','oval','','','',''];
-        $lulusan = alumni::select('tahun_lulus')->groupBy('tahun_lulus')->get();
-        
-        return view('Hubin/dataalumni',['alumni' => $alumni,'warna'=>$warna,'jurusan'=>$jurusan,'lulusan'=>$lulusan]);
-    }
-    public function penelusuranBy_jurusan_tahun(Request $request)
-    {
-        if($request->jurusan && $request->lulusan==null){
+    }else if($request->lulusan){
+        $penelusuran = penelusuran::join('users','penelusuran.nisn','=','users.nisn')
+        ->join('alumni','alumni.nisn','=','users.nisn')
+        ->join('jurusan','alumni.jurusan','=','jurusan.id_jurusan')
+        ->where('alumni.tahun_lulus',$request->lulusan)
+        ->orderBy('users.name')
+        ->get();        
+        $ket = 'Data lulusan '.$request->lulusan;
+
+    }else if($request->tampilan=='Y'){
+        $penelusuran = penelusuran::join('users','penelusuran.nisn','=','users.nisn')
+        ->join('alumni','alumni.nisn','=','users.nisn')
+        ->join('jurusan','alumni.jurusan','=','jurusan.id_jurusan')
+        ->whereRaw('penelusuran.nama_perusahaan!="null" or penelusuran.nama_kampus!="null" or penelusuran.pencaker!="null"')
+        ->orderBy('users.name')
+        ->get();    
+        $ket = 'Mengisi data penelusuran';
+
+    }else if ($request->tampilan=='T') {
+        $penelusuran = penelusuran::join('users','penelusuran.nisn','=','users.nisn')
+        ->join('alumni','alumni.nisn','=','users.nisn')
+        ->join('jurusan','alumni.jurusan','=','jurusan.id_jurusan')
+        ->where('penelusuran.nama_perusahaan',null)->where('penelusuran.nama_kampus',null)->where('penelusuran.pencaker',null)
+        ->orderBy('users.name')
+        ->get();    
+        $ket = 'Belum isi data penelusuran';
+
+    }else if($request->tampilan==0){
+        $penelusuran = penelusuran::join('users','penelusuran.nisn','=','users.nisn')
+        ->join('alumni','alumni.nisn','=','users.nisn')
+        ->join('jurusan','alumni.jurusan','=','jurusan.id_jurusan')
+        ->orderBy('users.name')
+        ->get();        
+        $ket = '';
+
+    }else if($request->jurusan==0 && $request->lulusan==0 && $request->tampilan==0){
+        $penelusuran = penelusuran::join('users','penelusuran.nisn','=','users.nisn')
+        ->join('alumni','alumni.nisn','=','users.nisn')
+        ->join('jurusan','alumni.jurusan','=','jurusan.id_jurusan')
+        ->orderBy('users.name')
+        ->get();
+        $ket = '';        
+
+    }else if($request->jurusan && $request->lulusan){
+        $penelusuran = penelusuran::join('users','penelusuran.nisn','=','users.nisn')
+        ->join('alumni','alumni.nisn','=','users.nisn')
+        ->join('jurusan','alumni.jurusan','=','jurusan.id_jurusan')
+        ->whereRaw('alumni.jurusan="'.$request->jurusan.'" and alumni.tahun_lulus="'.$request->lulusan.'"')
+        ->orderBy('users.name')
+        ->get(); 
+        $ket = 'Data '.$request->jurusan.', '.$request->lulusan;       
+
+    }else if($request->jurusan && $request->lulusan){
+        if ($request->tampilan=='Y') {
             $penelusuran = penelusuran::join('users','penelusuran.nisn','=','users.nisn')
             ->join('alumni','alumni.nisn','=','users.nisn')
             ->join('jurusan','alumni.jurusan','=','jurusan.id_jurusan')
-            ->whereRaw('alumni.jurusan="'.$request->jurusan.'" and alumni.tahun_lulus="null"')
-            ->orderBy('users.name')
-            ->get();        
-            $ket = 'Data jurusan '.$request->jurusan;
-
-        }else if($request->lulusan==null){
-            $penelusuran = penelusuran::join('users','penelusuran.nisn','=','users.nisn')
-            ->join('alumni','alumni.nisn','=','users.nisn')
-            ->join('jurusan','alumni.jurusan','=','jurusan.id_jurusan')
-            ->where('alumni.tahun_lulus',null)
-            ->orderBy('users.name')
-            ->get();        
-            $ket = '';
-
-        }else if($request->jurusan){
-            $penelusuran = penelusuran::join('users','penelusuran.nisn','=','users.nisn')
-            ->join('alumni','alumni.nisn','=','users.nisn')
-            ->join('jurusan','alumni.jurusan','=','jurusan.id_jurusan')
-            ->where('alumni.jurusan',$request->jurusan)
-            ->orderBy('users.name')
-            ->get(); 
-            $ket = 'Data jurusan '.$request->jurusan;       
-
-        }else if($request->lulusan){
-            $penelusuran = penelusuran::join('users','penelusuran.nisn','=','users.nisn')
-            ->join('alumni','alumni.nisn','=','users.nisn')
-            ->join('jurusan','alumni.jurusan','=','jurusan.id_jurusan')
-            ->where('alumni.tahun_lulus',$request->lulusan)
-            ->orderBy('users.name')
-            ->get();        
-            $ket = 'Data lulusan '.$request->lulusan;
-
-        }else if($request->tampilan=='Y'){
-            $penelusuran = penelusuran::join('users','penelusuran.nisn','=','users.nisn')
-            ->join('alumni','alumni.nisn','=','users.nisn')
-            ->join('jurusan','alumni.jurusan','=','jurusan.id_jurusan')
-            ->whereRaw('penelusuran.nama_perusahaan!="null" or penelusuran.nama_kampus!="null" or penelusuran.pencaker!="null"')
+            ->whereRaw('penelusuran.nama_perusahaan!="null" or penelusuran.nama_kampus!="null" or penelusuran.pencaker!="null" and alumni.jurusan="'.$request->jurusan.'" and alumni.tahun_lulus="'.$request->lulusan.'"')
             ->orderBy('users.name')
             ->get();    
-            $ket = 'Mengisi data penelusuran';
-
-        }else if ($request->tampilan=='T') {
-            $penelusuran = penelusuran::join('users','penelusuran.nisn','=','users.nisn')
-            ->join('alumni','alumni.nisn','=','users.nisn')
-            ->join('jurusan','alumni.jurusan','=','jurusan.id_jurusan')
-            ->where('penelusuran.nama_perusahaan',null)->where('penelusuran.nama_kampus',null)->where('penelusuran.pencaker',null)
-            ->orderBy('users.name')
-            ->get();    
-            $ket = 'Belum isi data penelusuran';
-
-        }else if($request->tampilan==0){
-            $penelusuran = penelusuran::join('users','penelusuran.nisn','=','users.nisn')
-            ->join('alumni','alumni.nisn','=','users.nisn')
-            ->join('jurusan','alumni.jurusan','=','jurusan.id_jurusan')
-            ->orderBy('users.name')
-            ->get();        
-            $ket = '';
-
-        }else if($request->jurusan==0 && $request->lulusan==0 && $request->tampilan==0){
-            $penelusuran = penelusuran::join('users','penelusuran.nisn','=','users.nisn')
-            ->join('alumni','alumni.nisn','=','users.nisn')
-            ->join('jurusan','alumni.jurusan','=','jurusan.id_jurusan')
-            ->orderBy('users.name')
-            ->get();
-            $ket = '';        
-
-        }else if($request->jurusan && $request->lulusan){
-            $penelusuran = penelusuran::join('users','penelusuran.nisn','=','users.nisn')
-            ->join('alumni','alumni.nisn','=','users.nisn')
-            ->join('jurusan','alumni.jurusan','=','jurusan.id_jurusan')
-            ->whereRaw('alumni.jurusan="'.$request->jurusan.'" and alumni.tahun_lulus="'.$request->lulusan.'"')
-            ->orderBy('users.name')
-            ->get(); 
-            $ket = 'Data '.$request->jurusan.', '.$request->lulusan;       
-
-        }else if($request->jurusan && $request->lulusan){
-            if ($request->tampilan=='Y') {
-                $penelusuran = penelusuran::join('users','penelusuran.nisn','=','users.nisn')
-                ->join('alumni','alumni.nisn','=','users.nisn')
-                ->join('jurusan','alumni.jurusan','=','jurusan.id_jurusan')
-                ->whereRaw('penelusuran.nama_perusahaan!="null" or penelusuran.nama_kampus!="null" or penelusuran.pencaker!="null" and alumni.jurusan="'.$request->jurusan.'" and alumni.tahun_lulus="'.$request->lulusan.'"')
-                ->orderBy('users.name')
-                ->get();    
-                $ket = 'Mengisi, '.$request->jurusan.', '.$request->lulusan;                
-            }else if($request->tampilan=='T'){
+            $ket = 'Mengisi, '.$request->jurusan.', '.$request->lulusan;                
+        }else if($request->tampilan=='T'){
             $penelusuran = penelusuran::join('users','penelusuran.nisn','=','users.nisn')
             ->join('alumni','alumni.nisn','=','users.nisn')
             ->join('jurusan','alumni.jurusan','=','jurusan.id_jurusan')
@@ -504,13 +552,61 @@ class HubinController extends Controller
             ->get();    
             $ket = 'Tidak isi, '.$request->jurusan.', '.$request->lulusan;                
 
-            }
         }
-      
-        $jurusan = DB::table('jurusan')->get();
-        $warna = ['','','','','oval',''];
-        $lulusan = alumni::select('tahun_lulus')->groupBy('tahun_lulus')->get();
-        return view('Hubin/datapenelusuran',['penelusuran' => $penelusuran,'warna'=>$warna,'jurusan'=>$jurusan,'lulusan'=>$lulusan,'ket'=>$ket]);
     }
+
+    $jurusan = DB::table('jurusan')->get();
+    $warna = ['','','','','oval',''];
+    $lulusan = alumni::select('tahun_lulus')->groupBy('tahun_lulus')->get();
+    return view('Hubin/datapenelusuran',['penelusuran' => $penelusuran,'warna'=>$warna,'jurusan'=>$jurusan,'lulusan'=>$lulusan,'ket'=>$ket]);
+}
+public function chathubin()
+{
+    $warna = ['','','','','',''];
+    $history = DB::select('select name,foto,nisn from users u join pesan p on u.nisn=p.untuk or u.nisn=p.dari where p.dari='.Auth::user()->nisn.' or p.untuk='.Auth::user()->nisn.' group by name');
+    return view('Hubin/chat2',['warna'=>$warna,'history'=>$history]);        
+}
+
+public function search2($id)
+{
+    $data = user::select('name','foto','nisn')->whereRaw('name LIKE "%'.$id.'%" limit 5')->get();
+    echo json_encode($data);
+}
+public function kirimp2($nisn,$pesan)
+{   
+    $zona = time()+(60*60*7);
+    DB::table('pesan')->insert([
+        'id'    => Auth::user()->nisn,
+        'dari'  => Auth::user()->nisn,
+        'untuk' => $nisn,
+        'isi'   => $pesan,
+        'waktu' => gmdate('d-m-Y H:i:s',$zona)
+    ]);
+}
+public function isichat2($nisn)
+{
+    $data = DB::select('select dari,isi,untuk,name,foto,waktu from pesan p join users u on p.dari=u.nisn where dari='.Auth::user()->nisn.' and untuk='.$nisn.' or dari='.$nisn.' and untuk='.Auth::user()->nisn.' order by waktu');
+    echo json_encode($data);   
+}
+public function kirimemail(Request $request)
+{
+    $user = DB::table('users')->whereRaw('hak_akses!="2" and hak_akses!="3" and hak_akses!="4"')->get();
+    foreach ($user as $u) {
+        try{
+            Mail::send('Hubin/kirimemail', array('email' => $u->email) , function($pesan) use($request){
+                $user = DB::table('users')->whereRaw('hak_akses!="2" and hak_akses!="3" and hak_akses!="4"')->get();
+                foreach ($user as $u) {
+                 $pesan->to($u->email,$u->email)->subject('Pemberitahuan pendataan penelusuran alumni');
+                 $pesan->from(env('MAIL_USERNAME','careerdevcenter.smkpasundan@gmail.com'),'CareerDevCenterSMKPasundan2Banjaran');
+             }
+         });
+                 
+        }catch (Exception $e){
+            return response (['status' => false,'errors' => $e->getMessage()]);
+        }
+    }
+    Session::flash('success', 'Email telah dikirim ke seluruh alumni');
+            return redirect('/hubin');
+}
 
 }

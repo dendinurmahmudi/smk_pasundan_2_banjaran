@@ -306,12 +306,12 @@ class AlumniController extends Controller
             'dari'  => Auth::user()->nisn,
             'untuk' => $nisn,
             'isi'   => $pesan,
-            'waktu' => gmdate('H:i',$zona)
+            'waktu' => gmdate('d-m-Y H:i:s',$zona)
         ]);
     }
     public function isichat1($nisn)
     {
-        $data = DB::select('select dari,isi,untuk,name,foto,waktu from pesan p join users u on p.untuk=u.nisn where dari='.Auth::user()->nisn.' and untuk='.$nisn.' or dari='.$nisn.' and untuk='.Auth::user()->nisn);
+        $data = DB::select('select dari,isi,untuk,name,foto,waktu from pesan p join users u on p.dari=u.nisn where dari='.Auth::user()->nisn.' and untuk='.$nisn.' or dari='.$nisn.' and untuk='.Auth::user()->nisn.' order by waktu');
         echo json_encode($data);   
     }
     

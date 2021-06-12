@@ -15,33 +15,28 @@
                         <th>Perusahaan</th>
                         <th>Alumni bekerja</th>
                         <th>Sesuai kompetensi</th>
-                        <th>Tidak sesuai</th>
                         <th>Merasa puas</th>
-                        <th>Tidak puas</th>
+                        <th>Support</th>
+                        <th>Confidance</th>
                     </tr>
                 </thead>
                 <tbody>
-                 <?php $no=1;
-                 ?>
-                 @foreach($perusahaan as $p)
-                 <tr>
-                    @if($p->nama_perusahaan==null)
-
-                    @else
-                    <td>{{ $no++ }}</td>
-                    <td>{{ $p->nama_perusahaan }}</td>
-                    <td>{{ $p->jumlah }}</td>
-                    <td>{{ $p->kesesuaian }}</td>
-                    <td>{{ $p->tdksesuai }}</td>
-                    <td>{{ $p->kepuasan }}</td>
-                    <td>{{ $p->tdkpuas }}</td>
-                    @endif
-
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
-    </div>
+                  <?php $no=1;
+                  ?>
+                  @foreach($perusahaan as $p)
+                  <tr>
+                   <td>{{ $no++ }}</td>
+                   <td>{{ $p['nama_perusahaan'] }}</td>
+                   <td>{{ $p['jumlah'] }}</td>
+                   <td>{{ $p['kesesuaian'] }}</td>
+                   <td>{{ $p['kepuasan'] }}</td>
+                   <td>{{ $p['jumlah']/count($jmltahun) }}</td>
+                   <td>{{ $p['jumlah']/$p['confidence'] }}</td>    
+               </tr>
+               @endforeach
+           </tbody>
+       </table>
+   </div>
 </div>
 </div>
 

@@ -66,7 +66,11 @@ Route::group(['middleware' => ['auth','CekLevel:2']], function () {
     Route::get('/datasesuai','HubinController@datasesuai');
     Route::get('/get/{file}/{id}','HubinController@getlamaran');
     Route::get('/databelumisi', 'HubinController@databelumisi');
-    
+    Route::get('/chat2','HubinController@chathubin');
+    Route::get('/search2/{id}', 'HubinController@search2');
+    Route::get('/kirimp2/{nisn}/{pesan}','HubinController@kirimp2');
+    Route::get('/isichat2/{nisn}','HubinController@isichat2');
+    Route::get('/kirimemail','HubinController@kirimemail');
 });
 Route::group(['middleware' => ['auth','CekLevel:3']], function () {
     Route::get('/kepsek', 'KepsekController@index')->name('kepsek');

@@ -2,7 +2,7 @@
 @section('judul','Pesan')
 @section('class','ti-email fa-fw')
 @section('label','Pesan')
-@extends('Admin/sidebar')
+@extends('Hubin/sidebar')
 @section('konten')
 <div class="chat-main-box">
 	<!-- .chat-left-panel -->
@@ -18,7 +18,7 @@
 						@foreach($history as $h)
 						@if($h->nisn != Auth::user()->nisn)
 						<li class="tab" >
-							<a data-toggle="tab" href="#vhome3" aria-expanded="true" data-nisn="{{$h->nisn}}" data-nama="{{$h->name}}" data-foto="{{$h->foto}}"><img data-nisn="{{$h->nisn}}" data-nama="{{$h->name}}" data-foto="{{$h->foto}}" src="{{ asset('data_file/profile/'.$h->foto) }}"  width="35" height="35" alt="user-img" class="img-circle"><span data-nisn="{{$h->nisn}}" data-nama="{{$h->name}}" data-foto="{{$h->foto}}">{{$h->name}}</span></a>
+							<a data-toggle="tab" href="#vhome3" aria-expanded="true" data-nisn="{{$h->nisn}}" data-nama="{{$h->name}}" data-foto="{{$h->foto}}"><img data-nisn="{{$h->nisn}}" data-nama="{{$h->name}}" data-foto="{{$h->foto}}" src="{{ asset('data_file/profile/'.$h->foto) }}"  width="35" height="35" alt="user-img" class="img-circle"><span data-nisn="{{$h->nisn}}" data-nama="{{$h->name}}" data-foto="{{$h->foto}}">{{$h->name}}</span><i class="refresh"></i></a>
 						</li>
 						@else
 						@endif
@@ -87,11 +87,11 @@
 
 		$('#seacrh').on('keyup',(a)=>{
 			let seacrh = $('#seacrh').val();
-			$.getJSON(`/search/${seacrh}`,(data)=>{
+			$.getJSON(`/search2/${seacrh}`,(data)=>{
 				$('#slimtest3').html('')
 				$.each(data,(i,pt)=>{
 					console.log(pt.name);
-					$('#slimtest3').append(`<li class="tab"><a data-toggle="tab" href="#" aria-expanded="true" data-nisn="${pt.nisn}" data-nama="${pt.name}" data-foto="${pt.foto}"><img data-nisn="${pt.nisn}" data-nama="${pt.name}" data-foto="${pt.foto}" src="{{ asset("data_file/profile/`+pt.foto+`") }}" alt="user-img" width="35" height="35" class="img-circle"><span data-nisn="${pt.nisn}" data-nama="${pt.name}" data-foto="${pt.foto}">${pt.name}</span></a></li>`);
+					$('#slimtest3').append(`<li class="tab"><a data-toggle="tab" href="#" aria-expanded="true" data-nisn="${pt.nisn}" data-nama="${pt.name}" data-foto="${pt.foto}"><img data-nisn="${pt.nisn}" data-nama="${pt.name}" data-foto="${pt.foto}" src="{{ asset("data_file/profile/`+pt.foto+`") }}" alt="user-img" width="35" height="35" class="img-circle"><span data-nisn="${pt.nisn}" data-nama="${pt.name}" data-foto="${pt.foto}">${pt.name}</span><i class="refresh" data-nisn="${pt.nisn}" data-nama="${pt.name}" data-foto="${pt.foto}"></i></a></li>`);
 				});
 			});    
 		});
@@ -99,6 +99,8 @@
 			console.log(slimtest3.target.dataset.nama);
 			$('#nama').html('')
 			$('#nisn').val(slimtest3.target.dataset.nisn);
+			$('.refresh').html('')
+			$('.refresh').append(`<i class="fa fa-refresh pull-right" data-nisn="`+slimtest3.target.dataset.nisn+`" data-nama="`+slimtest3.target.dataset.nama+`" data-foto="`+slimtest3.target.dataset.foto+`">`);
 			$('#nama').append(`<div class="col-sm-1 m-l-10">
 				<img src="{{ asset('data_file/profile/`+slimtest3.target.dataset.foto+`') }}" class="img-circle" alt="img" width="50" height="50">
 				</div>
@@ -109,7 +111,7 @@
 				</div>
 				`);
 			$('#isikirim').html('')
-			$.getJSON(`/isichat/${slimtest3.target.dataset.nisn}`,(data)=>{
+			$.getJSON(`/isichat2/${slimtest3.target.dataset.nisn}`,(data)=>{
 				$('#isichat').html('');
 
 				$.each(data,(i,psn)=>{
@@ -169,7 +171,7 @@
 				<p>`+p+`</p> <b>`+w+`</b> </div>
 				</div>
 				</li>`);
-			$.getJSON(`/kirimp/${n}/${p}`);
+			$.getJSON(`/kirimp2/${n}/${p}`);
 			$('#isipesan').val('');
 		});
 

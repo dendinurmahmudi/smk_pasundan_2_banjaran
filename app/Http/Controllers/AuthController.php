@@ -185,7 +185,7 @@ public function logout()
         if($validator->fails()){
             return redirect()->back()->withErrors($validator)->withInput($request->all);
         }
-        $id = DB::table('users')->where('id',$request->id)->value('id');
+        $id = DB::table('users')->where('nisn',$request->id)->value('nisn');
     	//
         if ($request->id!=$id) {
           Session::flash('error', 'NISN/NIP tidak ditemukan!');
@@ -194,7 +194,7 @@ public function logout()
          $email = DB::table('users')->where('nisn',$request->id)->value('email');
          try{
             Mail::send('Auth/lupapass', array('email' => $email) , function($pesan) use($request){
-             $email = DB::table('users')->where('id',$request->id)->value('email');
+             $email = DB::table('users')->where('nisn',$request->id)->value('email');
              $pesan->to($email,'Lupa password')->subject('Layanan Lupa password');
              $pesan->from(env('MAIL_USERNAME','careerdevcenter.smkpasundan@gmail.com'),'Layanan Lupa password');
          });
