@@ -608,5 +608,18 @@ public function kirimemail(Request $request)
     Session::flash('success', 'Email telah dikirim ke seluruh alumni');
             return redirect('/hubin');
 }
+public function prosesalgo()
+{
+    $perusahaan =DB::select('select nama_perusahaan,tahun_lulus from penelusuran join alumni on penelusuran.nisn=alumni.nisn where nama_perusahaan!="null" order by tahun_lulus');
+    foreach ($perusahaan as $p) {
+        $peru[] = [
+            'tahun' => $p->tahun_lulus,
+            'nama perusahaan' => [
+             'perusahaan' => $p->nama_perusahaan,
+            ]
+        ];
+    }
+    echo json_encode($peru);
+}
 
 }
