@@ -39,7 +39,6 @@
                                 <label for="inputEmail3" class="col-md-5 control-label">
                                     <h2 class="box-title m-b-0">Kompetensi Lulusan Pertahun</h2>
                                 </label>
-
                             </div>
                             <br>
                             <hr>
@@ -97,7 +96,7 @@
                                             <th></th>
                                         </tr>
                                     </thead>
-                                    <tbody>
+                                    <tbody id="tbljrsn">
                                         <tr>
                                             <td>2018</td>
                                             @foreach($th2018 as $t)

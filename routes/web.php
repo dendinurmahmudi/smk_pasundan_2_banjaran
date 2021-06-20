@@ -72,6 +72,7 @@ Route::group(['middleware' => ['auth','CekLevel:2']], function () {
     Route::get('/isichat2/{nisn}','HubinController@isichat2');
     Route::get('/kirimemail','HubinController@kirimemail');
     Route::get('/prosesalgo','HubinController@prosesalgo');
+    Route::get('/jrsnprthn/{id}','HubinController@jrsnprthn');
 });
 Route::group(['middleware' => ['auth','CekLevel:3']], function () {
     Route::get('/kepsek', 'KepsekController@index')->name('kepsek');

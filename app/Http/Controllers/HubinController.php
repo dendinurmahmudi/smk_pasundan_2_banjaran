@@ -41,7 +41,8 @@ class HubinController extends Controller
             from alumni join penelusuran on penelusuran.nisn=alumni.nisn 
             join jurusan on alumni.jurusan=jurusan.id_jurusan 
             where nama_perusahaan!="null" or pencaker="Y" group by nama_jurusan order by jumlah desc');
-        return view('Hubin/index',['penelusuran' => $penelusuran, 'sesuai' => $sesuai, 'bekerja' => $bekerja, 'pencaker' => $pencaker, 'kuliah' => $kuliah, 'kesesuaian' => $kesesuaian, 'tidakisi' => $tidakisi, 'all'=>$all,'warna'=>$warna,'countjurusan'=> $countjurusan]);
+        $lulusan = alumni::select('tahun_lulus')->groupBy('tahun_lulus')->get();
+        return view('Hubin/index',['penelusuran' => $penelusuran, 'sesuai' => $sesuai, 'bekerja' => $bekerja, 'pencaker' => $pencaker, 'kuliah' => $kuliah, 'kesesuaian' => $kesesuaian, 'tidakisi' => $tidakisi, 'all'=>$all,'warna'=>$warna,'countjurusan'=> $countjurusan,'lulusan'=>$lulusan]);
     }public function dashboard()
     {
         $jurusan = DB::select('select jurusan.id_jurusan,jurusan.nama_jurusan,count(nama_jurusan)jumlah,alumni.tahun_lulus from penelusuran left join alumni on penelusuran.nisn=alumni.nisn left join jurusan on alumni.jurusan=jurusan.id_jurusan where nama_perusahaan!="null" group by nama_jurusan');
@@ -82,6 +83,24 @@ class HubinController extends Controller
         }
         
         return view('Hubin/dashboard',['warna'=>$warna,'jurusan'=>$jurusan,'perusahaan'=>$perusahaan,'kelistrikan'=>$kelistrikan,'jmlthn'=>$jmlthn,'th2018'=>$th2018,'th2019'=>$th2019,'th2020'=>$th2020]);
+    }
+    public function jrsnprthn($tahun)
+    {
+        if ($tahun==0) {
+            $data = DB::select('select count(penelusuran.nama_perusahaan)jumlah,
+                count(if(sesuai_kompetensi="Y",sesuai_kompetensi,null))as kesesuaian,
+                count(if(sesuai_kompetensi="T",sesuai_kompetensi,null))as tdksesuai, 
+                count(if(kepuasan="Y", kepuasan,null))as kepuasan,
+                count(if(kepuasan="T", kepuasan,null))as tdkpuas,
+                count(if(pencaker="Y", pencaker,null))as pnckr,
+                jurusan.id_jurusan,jurusan.nama_jurusan,alumni.tahun_lulus 
+                from alumni join penelusuran on penelusuran.nisn=alumni.nisn 
+                join jurusan on alumni.jurusan=jurusan.id_jurusan 
+                where nama_perusahaan!="null" or pencaker="Y" group by nama_jurusan order by jumlah desc');
+        }else{
+            $data = DB::select('select count(penelusuran.nama_perusahaan)jumlah, count(if(sesuai_kompetensi="Y",sesuai_kompetensi,null))as kesesuaian, count(if(sesuai_kompetensi="T",sesuai_kompetensi,null))as tdksesuai, count(if(kepuasan="Y", kepuasan,null))as kepuasan, count(if(kepuasan="T", kepuasan,null))as tdkpuas, count(if(pencaker="Y", pencaker,null))as pnckr, jurusan.id_jurusan,jurusan.nama_jurusan from alumni join penelusuran on penelusuran.nisn=alumni.nisn join jurusan on alumni.jurusan=jurusan.id_jurusan where tahun_lulus="'.$tahun.'" group by nama_jurusan order by jumlah desc');
+        }
+        echo json_encode($data);
     }
     public function jmljurusan($jrsn,$thn)
     {
@@ -600,26 +619,49 @@ public function kirimemail(Request $request)
                  $pesan->from(env('MAIL_USERNAME','careerdevcenter.smkpasundan@gmail.com'),'CareerDevCenterSMKPasundan2Banjaran');
              }
          });
-                 
+
         }catch (Exception $e){
             return response (['status' => false,'errors' => $e->getMessage()]);
         }
     }
     Session::flash('success', 'Email telah dikirim ke seluruh alumni');
-            return redirect('/hubin');
+    return redirect('/hubin');
 }
 public function prosesalgo()
 {
-    $perusahaan =DB::select('select nama_perusahaan,tahun_lulus from penelusuran join alumni on penelusuran.nisn=alumni.nisn where nama_perusahaan!="null" order by tahun_lulus');
+    $perusahaan =DB::select('select nama_perusahaan, count(nama_perusahaan)jumlah from penelusuran right join alumni on penelusuran.nisn=alumni.nisn where nama_perusahaan!="null" and tahun_lulus="2018" group by nama_perusahaan order by jumlah desc');
+    $perusahaan19 =DB::select('select nama_perusahaan, count(nama_perusahaan)jumlah from penelusuran right join alumni on penelusuran.nisn=alumni.nisn where nama_perusahaan!="null" and tahun_lulus="2019" group by nama_perusahaan order by jumlah desc');
+    $perusahaan20 =DB::select('select nama_perusahaan, count(nama_perusahaan)jumlah from penelusuran right join alumni on penelusuran.nisn=alumni.nisn where nama_perusahaan!="null" and tahun_lulus="2020" group by nama_perusahaan order by jumlah desc');
     foreach ($perusahaan as $p) {
-        $peru[] = [
-            'tahun' => $p->tahun_lulus,
-            'nama perusahaan' => [
-             'perusahaan' => $p->nama_perusahaan,
-            ]
+        $peru2018[] = [
+            'perusahaan' => $p->nama_perusahaan,
+            'jumlah'=> $p->jumlah
+
         ];
     }
-    echo json_encode($peru);
+    foreach ($perusahaan19 as $p) {
+        $peru2019[] = [
+            'perusahaan' => $p->nama_perusahaan,
+            'jumlah'=> $p->jumlah
+        ];
+    }
+    foreach ($perusahaan20 as $p) {
+        $peru2020[] = [
+            'perusahaan' => $p->nama_perusahaan,
+            'jumlah'=> $p->jumlah
+        ];
+    }
+    echo "2018 ".json_encode($peru2018)."<hr>";
+    echo "2019 ".json_encode($peru2019)."<hr>";
+    echo "2020 ".json_encode($peru2020)."<hr>";
+}
+public function getperusahaan($tahun)
+{
+    $nmprshn = DB::select('select nama_perusahaan, count(nama_perusahaan)jumlah from penelusuran right join alumni on penelusuran.nisn=alumni.nisn where nama_perusahaan!="null" and tahun_lulus="'.$tahun.'" group by nama_perusahaan order by jumlah desc');
+    foreach ($nmprshn as $k) {
+        $jml= $k->nama_perusahaan;
+    }
+    return $jml;
 }
 
 }

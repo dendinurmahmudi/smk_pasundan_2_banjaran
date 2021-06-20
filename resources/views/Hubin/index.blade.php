@@ -135,80 +135,95 @@
                 <!-- jurusan -->
                 <div class="col-sm-12 m-t-10">
                     <div class="white-box">
-                        <p class="text-muted m-b-30">Kompetensi Kerja Lulusan</p>
-                        <div class="table-responsive">
-                            <table id="example23" class="display nowrap" cellspacing="0" width="100%">
-                                <thead>
-                                    <tr>
-                                        <th>No</th>
-                                        <th>Jurusan</th>
-                                        <th>Jumlah bekerja</th>
-                                        <th>Jumlah pencaker</th>
-                                        <th>Sesuai kompetensi</th>
-                                        <th>Tidak sesuai</th>
-                                        <th>Merasa puas</th>
-                                        <th>Tidak puas</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                 <?php $no=1;
-                                 ?>
-                                 @foreach($countjurusan as $p)
-                                 <tr>
-                                    <td>{{ $no++ }}</td>
-                                    <td>{{ $p->nama_jurusan }}</td>
-                                    <td>{{ $p->jumlah }}</td>
-                                    <td>{{ $p->pnckr }}</td>
-                                    <td>{{ $p->kesesuaian }}</td>
-                                    <td>{{ $p->tdksesuai }}</td>
-                                    <td>{{ $p->kepuasan }}</td>
-                                    <td>{{ $p->tdkpuas }}</td>
+                        <p class="text-muted tahun">Kompetensi Kerja Lulusan</p>
+                        <div class="row">
+                            <div class="col-sm-12">
+                                <div class="col-sm-4">
+
+                                </div>
+                                <div class="col-sm-4">
+                                    <select class="form-control" name="jurusan" id="pod">
+                                      <option value="0">Pilih tahun lulus</option>
+                                      @foreach($lulusan as $l)
+                                      <option value="{{$l->tahun_lulus}}">{{$l->tahun_lulus}}</option>
+                                      @endforeach
+                                  </select>
+                              </div>
+                          </div>
+                      </div>
+                      <div class="table-responsive">
+                        <table id="example23" class="display nowrap" cellspacing="0" width="100%">
+                            <thead>
+                                <tr>
+                                    <th>No</th>
+                                    <th>Jurusan</th>
+                                    <th>Jumlah bekerja</th>
+                                    <th>Jumlah pencaker</th>
+                                    <th>Sesuai kompetensi</th>
+                                    <th>Tidak sesuai</th>
+                                    <th>Merasa puas</th>
+                                    <th>Tidak puas</th>
                                 </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
-                    </div>
+                            </thead>
+                            <tbody id="jrsnprthn">
+                               <?php $no=1;
+                               ?>
+                               @foreach($countjurusan as $p)
+                               <tr>
+                                <td>{{ $no++ }}</td>
+                                <td>{{ $p->nama_jurusan }}</td>
+                                <td>{{ $p->jumlah }}</td>
+                                <td>{{ $p->pnckr }}</td>
+                                <td>{{ $p->kesesuaian }}</td>
+                                <td>{{ $p->tdksesuai }}</td>
+                                <td>{{ $p->kepuasan }}</td>
+                                <td>{{ $p->tdkpuas }}</td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
             </div>
-            <div class="col-sm-6 m-b-20">
-                <a href="/kirimemail"><button class="btn btn-outline btn-success btn-lg btn-block">Minta Alumni isi data penelusuran</button></a>
-            </div>
-            <div class="col-sm-6 m-b-20">
-                <a href="/dashboard"><button class="btn btn-outline btn-info btn-lg btn-block">Informasi Lainya</button></a>
-            </div>
         </div>
-        <script src="{{ asset('assets/templates/plugins/bower_components/datatables/jquery.dataTables.min.js') }}"></script>
-        <!-- start - This is for export functionality only -->
+        <div class="col-sm-6 m-b-20">
+            <a href="/kirimemail"><button class="btn btn-outline btn-success btn-lg btn-block">Minta Alumni isi data penelusuran</button></a>
+        </div>
+        <div class="col-sm-6 m-b-20">
+            <a href="/dashboard"><button class="btn btn-outline btn-info btn-lg btn-block">Informasi Lainya</button></a>
+        </div>
+    </div>
+    <script src="{{ asset('assets/templates/plugins/bower_components/datatables/jquery.dataTables.min.js') }}"></script>
+    <!-- start - This is for export functionality only -->
 
-        <script>
+    <script>
+        $(document).ready(function() {
+            $('#myTable').DataTable();
             $(document).ready(function() {
-                $('#myTable').DataTable();
-                $(document).ready(function() {
-                    var table = $('#example').DataTable({
-                        "columnDefs": [{
-                            "visible": false,
-                            "targets": 2
-                        }],
-                        "order": [
-                        [2, 'asc']
-                        ],
-                        "displayLength": 25,
-                        "drawCallback": function(settings) {
-                            var api = this.api();
-                            var rows = api.rows({
-                                page: 'current'
-                            }).nodes();
-                            var last = null;
-                            api.column(2, {
-                                page: 'current'
-                            }).data().each(function(group, i) {
-                                if (last !== group) {
-                                    $(rows).eq(i).before('<tr class="group"><td colspan="5">' + group + '</td></tr>');
-                                    last = group;
-                                }
-                            });
-                        }
-                    });
+                var table = $('#example').DataTable({
+                    "columnDefs": [{
+                        "visible": false,
+                        "targets": 2
+                    }],
+                    "order": [
+                    [2, 'asc']
+                    ],
+                    "displayLength": 25,
+                    "drawCallback": function(settings) {
+                        var api = this.api();
+                        var rows = api.rows({
+                            page: 'current'
+                        }).nodes();
+                        var last = null;
+                        api.column(2, {
+                            page: 'current'
+                        }).data().each(function(group, i) {
+                            if (last !== group) {
+                                $(rows).eq(i).before('<tr class="group"><td colspan="5">' + group + '</td></tr>');
+                                last = group;
+                            }
+                        });
+                    }
+                });
             // Order by the grouping
             $('#example tbody').on('click', 'tr.group', function() {
                 var currentOrder = table.order()[0];
@@ -219,13 +234,34 @@
                 }
             });
         });
+        });
+        $('#example23').DataTable({
+            dom: 'Bfrtip',
+            buttons: [
+            '', '', ''
+            ]
+        });
+        $('#pod').on('click',(pod)=>{
+            var tahun = $('#pod').val();
+            $.getJSON(`jrsnprthn/${tahun}`,(data)=>{
+                $('#jrsnprthn').html('');
+                $.each(data,(i,pt)=>{
+                    $('#jrsnprthn').append(`
+                        <tr>
+                        <td>1</td>
+                        <td>${pt.nama_jurusan}</td>
+                        <td>${pt.jumlah}</td>
+                        <td>${pt.pnckr}</td>
+                        <td>${pt.kesesuaian}</td>
+                        <td>${pt.tdksesuai}</td>
+                        <td>${pt.kepuasan}</td>
+                        <td>${pt.tdkpuas}</td>
+                        </tr>
+                        `);
+                });
             });
-            $('#example23').DataTable({
-                dom: 'Bfrtip',
-                buttons: [
-                '', '', ''
-                ]
-            });
-        </script>
 
-        @endsection
+        });
+    </script>
+
+    @endsection
