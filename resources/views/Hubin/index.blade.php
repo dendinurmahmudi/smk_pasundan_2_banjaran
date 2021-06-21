@@ -137,18 +137,13 @@
                     <div class="white-box">
                         <p class="text-muted tahun">Kompetensi Kerja Lulusan</p>
                         <div class="row">
-                            <div class="col-sm-12">
-                                <div class="col-sm-4">
-
-                                </div>
-                                <div class="col-sm-4">
-                                    <select class="form-control" name="jurusan" id="pod">
-                                      <option value="0">Pilih tahun lulus</option>
-                                      @foreach($lulusan as $l)
-                                      <option value="{{$l->tahun_lulus}}">{{$l->tahun_lulus}}</option>
-                                      @endforeach
-                                  </select>
-                              </div>
+                            <div class="col-sm-3">
+                                <select class="form-control" name="jurusan" id="pod">
+                                  <option value="0">Semua tahun lulus</option>
+                                  @foreach($lulusan as $l)
+                                  <option value="{{$l->tahun_lulus}}">{{$l->tahun_lulus}}</option>
+                                  @endforeach
+                              </select>
                           </div>
                       </div>
                       <div class="table-responsive">
@@ -243,12 +238,19 @@
         });
         $('#pod').on('click',(pod)=>{
             var tahun = $('#pod').val();
+            if (tahun == 0) {
+                $('.tahun').html('');
+                $('.tahun').append('Kompetensi Kerja Lulusan');    
+            }else{
+                $('.tahun').html('');
+                $('.tahun').append('Kompetensi Kerja Lulusan '+tahun);
+            }
             $.getJSON(`jrsnprthn/${tahun}`,(data)=>{
                 $('#jrsnprthn').html('');
                 $.each(data,(i,pt)=>{
                     $('#jrsnprthn').append(`
                         <tr>
-                        <td>1</td>
+                        <td>${i+1}</td>
                         <td>${pt.nama_jurusan}</td>
                         <td>${pt.jumlah}</td>
                         <td>${pt.pnckr}</td>
@@ -260,7 +262,6 @@
                         `);
                 });
             });
-
         });
     </script>
 

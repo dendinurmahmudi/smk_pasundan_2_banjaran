@@ -64,7 +64,7 @@
                     <th>Kesesuaian</th>
                     <th>Gaji</th>
                     <th>Kepuasan</th>
-                    <th class="text-nowrap">Pilihan</th>
+                    <th>Keterangan</th>
                 </tr>
             </thead>
             <tbody>

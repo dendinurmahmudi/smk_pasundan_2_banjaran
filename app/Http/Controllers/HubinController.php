@@ -629,31 +629,14 @@ public function kirimemail(Request $request)
 }
 public function prosesalgo()
 {
-    $perusahaan =DB::select('select nama_perusahaan, count(nama_perusahaan)jumlah from penelusuran right join alumni on penelusuran.nisn=alumni.nisn where nama_perusahaan!="null" and tahun_lulus="2018" group by nama_perusahaan order by jumlah desc');
-    $perusahaan19 =DB::select('select nama_perusahaan, count(nama_perusahaan)jumlah from penelusuran right join alumni on penelusuran.nisn=alumni.nisn where nama_perusahaan!="null" and tahun_lulus="2019" group by nama_perusahaan order by jumlah desc');
-    $perusahaan20 =DB::select('select nama_perusahaan, count(nama_perusahaan)jumlah from penelusuran right join alumni on penelusuran.nisn=alumni.nisn where nama_perusahaan!="null" and tahun_lulus="2020" group by nama_perusahaan order by jumlah desc');
-    foreach ($perusahaan as $p) {
-        $peru2018[] = [
-            'perusahaan' => $p->nama_perusahaan,
-            'jumlah'=> $p->jumlah
+    $lulusan = alumni::select('tahun_lulus')->groupBy('tahun_lulus')->get();
+    $th = 2018;
 
-        ];
-    }
-    foreach ($perusahaan19 as $p) {
-        $peru2019[] = [
-            'perusahaan' => $p->nama_perusahaan,
-            'jumlah'=> $p->jumlah
-        ];
-    }
-    foreach ($perusahaan20 as $p) {
-        $peru2020[] = [
-            'perusahaan' => $p->nama_perusahaan,
-            'jumlah'=> $p->jumlah
-        ];
-    }
-    echo "2018 ".json_encode($peru2018)."<hr>";
-    echo "2019 ".json_encode($peru2019)."<hr>";
-    echo "2020 ".json_encode($peru2020)."<hr>";
+    $peru2018 =DB::select('select nama_perusahaan, count(nama_perusahaan)jumlah from penelusuran right join alumni on penelusuran.nisn=alumni.nisn where nama_perusahaan!="null" and tahun_lulus="2018" group by nama_perusahaan order by jumlah desc');
+    $peru2019 =DB::select('select nama_perusahaan, count(nama_perusahaan)jumlah from penelusuran right join alumni on penelusuran.nisn=alumni.nisn where nama_perusahaan!="null" and tahun_lulus="2019" group by nama_perusahaan order by jumlah desc');
+    $peru2020 =DB::select('select nama_perusahaan, count(nama_perusahaan)jumlah from penelusuran right join alumni on penelusuran.nisn=alumni.nisn where nama_perusahaan!="null" and tahun_lulus="2020" group by nama_perusahaan order by jumlah desc');
+   
+    return view('Hubin/prosesalgo',['peru2018'=>$peru2018,'peru2019'=>$peru2019,'peru2020'=>$peru2020]);
 }
 public function getperusahaan($tahun)
 {

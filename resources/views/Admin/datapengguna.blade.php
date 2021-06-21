@@ -25,6 +25,7 @@
                         <th>Email</th>
                         <th>Akses</th>
                         <th>Status</th>
+                        <th>Login</th>
                         <th class="text-nowrap" width="50px">Pilihan</th>
                     </tr>
                 </thead>
@@ -49,6 +50,11 @@
                     <td><i class="fa fa-check text-success"></i> Aktif</td>
                     @else
                     <td><i class="fa fa-close text-danger"></i> Non-Aktif</td>
+                    @endif
+                    @if($a->last_login == null)
+                    <td><i class="fa fa-clock-o text-danger"></i> Belum ada aktivitas</td>
+                    @else
+                    <td title="Terakhir login"><i class="fa fa-clock-o text-success"></i> {{ $a->last_login }}</td>
                     @endif
                     <td class="text-nowrap">
                         <!-- <a href="/hapusdatap/{{$a->nisn}}" data-toggle="tooltip" title="Hapus data {{$a->name}}" onclick="return confirm('Yakin hapus data {{ $a->name }} ?');"> <i class="fa fa-trash text-inverse m-l-15"></i> </a>  -->

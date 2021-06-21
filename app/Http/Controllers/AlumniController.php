@@ -252,7 +252,7 @@ class AlumniController extends Controller
     public function hapuslam($id)
     {
         berkas_lamaran::where('id',$id)->delete();
-         Session::flash('success', 'Berhasil menambah berkas lamaran');        
+         Session::flash('success', 'Berhasil menghapus berkas lamaran');        
          return redirect('apllylamaranalumni/'.Auth::user()->nisn);
     }
     public function gantipass1(Request $request)

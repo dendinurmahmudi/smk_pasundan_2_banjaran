@@ -14,33 +14,33 @@
 @endif
 <div class="col-sm-12">
     <div class="white-box">
-        <div class="table-responsive">
+        <div class="table-responsive" id="table">
             <table id="example23" class="display nowrap" cellspacing="0" width="100%">
-                    <thead>
-                        <tr>
-                            <th>No</th>
-                            <th>Perusahaan</th>
-                            <th>Tanggal apply</th>
-                            <th class="text-nowrap">Opsi</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                       <?php $no=1;
-                       ?>
-                       @foreach($berkas as $p)
-                       <tr>
-                        <td>{{ $no++ }}</td>
-                        <td>{{ $p->untuk_perusahaan }}</td>
-                        <td>{{ $p->created_at }}</td>
-                        <td class="text-nowrap">
-                        	<a href="/hapuslam/{{$p->id}}" data-toggle="tooltip" title="Batalkan lamaran" onclick="return confirm('Yakin batalkan lamaran untuk {{ $p->untuk_perusahaan }} ?');"><i class="fa fa-close text-inverse"></i></a>
-                        </td>
+                <thead>
+                    <tr>
+                        <th>No</th>
+                        <th>Perusahaan</th>
+                        <th>Tanggal apply</th>
+                        <th class="text-nowrap">Opsi</th>
                     </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
-    </div>
+                </thead>
+                <tbody>
+                 <?php $no=1;
+                 ?>
+                 @foreach($berkas as $p)
+                 <tr>
+                    <td>{{ $no++ }}</td>
+                    <td>{{ $p->untuk_perusahaan }}</td>
+                    <td>{{ $p->created_at }}</td>
+                    <td class="text-nowrap">
+                       <a href="#" data-toggle="modal" id="btndltnotif" data-id="{{$p->id}}" data-name="{{$p->untuk_perusahaan}}" title="Batalkan lamaran"><i class="fa fa-close text-inverse"></i></a>
+                   </td>
+               </tr>
+               @endforeach
+           </tbody>
+       </table>
+   </div>
+</div>
 </div>
 
 <script src="{{ asset('assets/templates/plugins/bower_components/datatables/jquery.dataTables.min.js') }}"></script>
@@ -92,5 +92,27 @@
         's'
         ]
     });
+
+    $('#table').on('click', '#btndltnotif', function() {
+        const id = $(this).data('id');
+        var nama = $(this).data('name');
+        swal({
+            title: 'Apakah anda yakin?',
+            text: "Data lamaran "+nama+" akan di hapus!",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            cancelButtonText: 'Batal',
+            confirmButtonText: 'Ya, Hapus!',
+            closeOnConfirm: false 
+        }, function(isConfirm) {
+            if (isConfirm) {
+                window.location.href = '/hapuslam/'+id;
+                swal("Terhapus!", "Lamaran "+nama+" berhasil dihapus.", "success");
+            }
+        });
+    });
+    
 </script>
 @endsection
