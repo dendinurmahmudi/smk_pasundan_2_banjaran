@@ -141,7 +141,7 @@ class HubinController extends Controller
         ->orderBy('users.name')
         ->get();
         
-        $jurusan = DB::table('jurusan')->get();
+        $jurusan = DB::table('jurusan')->whereRaw('id_jurusan != 6')->get();
         $warna = ['','','','','oval',''];
         $lulusan = alumni::select('tahun_lulus')->groupBy('tahun_lulus')->get();
         $ket = 'Semua data Alumni';
@@ -224,7 +224,7 @@ class HubinController extends Controller
         ->join('jurusan','alumni.jurusan','=','jurusan.id_jurusan')
         ->orderBy('users.name')
         ->get();         
-        $jurusan = DB::table('jurusan')->get();
+        $jurusan = DB::table('jurusan')->whereRaw('id_jurusan != 6')->get();
         $warna = ['','oval','','','',''];
         $lulusan = alumni::select('tahun_lulus')->groupBy('tahun_lulus')->get();
         return view('Hubin/dataalumni',['alumni' => $alumni,'warna'=>$warna,'jurusan'=>$jurusan,'lulusan'=>$lulusan]);

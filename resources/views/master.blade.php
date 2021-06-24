@@ -77,12 +77,16 @@
                 <!-- Search input and Toggle icon -->
                 <ul class="nav navbar-top-links navbar-left">
                     <li><a href="javascript:void(0)" class="open-close waves-effect waves-light"><i class="ti-menu"></i></a></li>
+                    @if(Auth::user()->hak_akses == '3')
+
+                    @else
                     <li class="dropdown">
                         <a class="waves-effect waves-light" href="/chat{{ Auth::user()->hak_akses}}"> <i class="mdi mdi-gmail"></i>
                             <div class="notify"> <span class="heartbit"></span> <span class="point"></span> </div>
                         </a>
                         <!-- /.dropdown-messages -->
                     </li>
+                    @endif
                 </ul>
                 <!--  -->
                 <ul class="nav navbar-top-links navbar-right pull-right">

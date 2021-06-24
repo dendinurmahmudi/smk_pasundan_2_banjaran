@@ -22,7 +22,7 @@ class AlumniController extends Controller
         $penelusuran = penelusuran::where('nisn',Auth::user()->nisn)->first();
         $profile = alumni::where('nisn',Auth::user()->nisn)->first();
         $file = alumni::select('file_lamaran','nisn')->where('nisn',Auth::user()->nisn)->first();
-        $perusahaan = DB::select('select nama_perusahaan, count(nama_perusahaan)as jumlah,count(if(sesuai_kompetensi="Y",sesuai_kompetensi,null))as kesesuaian, count(if(kepuasan="Y", kepuasan,null))as kepuasan from penelusuran where nama_perusahaan!="null" group by nama_perusahaan');
+        $perusahaan = DB::select('select nama_perusahaan, count(nama_perusahaan)as jumlah,count(if(sesuai_kompetensi="Y",sesuai_kompetensi,null))as kesesuaian, count(if(kepuasan="Y", kepuasan,null))as kepuasan,count(tahun_lulus)jml from penelusuran join alumni on penelusuran.nisn=alumni.nisn where nama_perusahaan!="null" group by nama_perusahaan order by jumlah desc');
         $warna = ['oval','','','',''];
     	return view('Alumni/index',['info' => $info,'penelusuran' => $penelusuran,'profile'=>$profile,'warna' =>$warna,'file'=>$file,'perusahaan'=>$perusahaan]);
     }
