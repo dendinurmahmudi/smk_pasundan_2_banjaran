@@ -18,6 +18,11 @@ class AlumniController extends Controller
 {
     public function index()
     { 
+        if (Auth::user()->status_aktif != '1') {
+            Session::flash('error', 'Akun kamu di Non-Aktifkan sementara oleh Admin, coba lagi nanti!');
+            Auth::logout();
+            return redirect()->route('login');
+        }else{
         $info = informasi::whereRaw('left(created_at,10)="'.date('Y-m-d').'"')->get();
         $penelusuran = penelusuran::where('nisn',Auth::user()->nisn)->first();
         $profile = alumni::where('nisn',Auth::user()->nisn)->first();
@@ -25,15 +30,22 @@ class AlumniController extends Controller
         $perusahaan = DB::select('select nama_perusahaan, count(nama_perusahaan)as jumlah,count(if(sesuai_kompetensi="Y",sesuai_kompetensi,null))as kesesuaian, count(if(kepuasan="Y", kepuasan,null))as kepuasan,count(tahun_lulus)jml from penelusuran join alumni on penelusuran.nisn=alumni.nisn where nama_perusahaan!="null" group by nama_perusahaan order by jumlah desc');
         $warna = ['oval','','','',''];
     	return view('Alumni/index',['info' => $info,'penelusuran' => $penelusuran,'profile'=>$profile,'warna' =>$warna,'file'=>$file,'perusahaan'=>$perusahaan]);
+        }
     }
     public function profile()
     {
+        if (Auth::user()->status_aktif != '1') {
+            Session::flash('error', 'Akun kamu di Non-Aktifkan sementara oleh Admin, coba lagi nanti!');
+            Auth::logout();
+            return redirect()->route('login');
+        }else{
         $alumni = alumni::join('users','alumni.nisn','=','users.nisn')
         ->join('jurusan','alumni.jurusan','=','jurusan.id_jurusan')
         ->where('alumni.nisn',Auth::user()->nisn)->first();
         $jurusan = DB::select('select * from jurusan where id_jurusan!=6');
         $warna = ['','','','',''];
-        return view('Alumni/profile',['alumni' => $alumni,'jurusan' => $jurusan,'warna'=>$warna]);	
+        return view('Alumni/profile',['alumni' => $alumni,'jurusan' => $jurusan,'warna'=>$warna]);
+        }
     }
     public function updateprofile(Request $request)
     {
@@ -120,9 +132,15 @@ class AlumniController extends Controller
         return redirect()->route('profile');
     }
     public function penelusuran(){
+        if (Auth::user()->status_aktif != '1') {
+            Session::flash('error', 'Akun kamu di Non-Aktifkan sementara oleh Admin, coba lagi nanti!');
+            Auth::logout();
+            return redirect()->route('login');
+        }else{
     	$penelusuran = penelusuran::join('alumni','alumni.nisn','=','penelusuran.nisn')->where('penelusuran.nisn',Auth::user()->nisn)->first();
         $warna = ['','','','oval',''];
     	return view('Alumni/penelusuran',['penelusuran' => $penelusuran,'warna'=>$warna]);
+        }
     }
     
     public function autocomplete($id)
@@ -220,10 +238,16 @@ class AlumniController extends Controller
     }
     public function informasi()
     {
+        if (Auth::user()->status_aktif != '1') {
+            Session::flash('error', 'Akun kamu di Non-Aktifkan sementara oleh Admin, coba lagi nanti!');
+            Auth::logout();
+            return redirect()->route('login');
+        }else{
         $info = informasi::orderBy('created_at','desc')->get();
         $file = alumni::select('file_lamaran','nisn')->where('nisn',Auth::user()->nisn)->first();
         $warna = ['','','oval','',''];
         return view('Alumni/informasi',['info' => $info, 'file' => $file,'warna'=>$warna ]);
+        }
     }
     public function kirimlamaran(Request $request)
     {
@@ -289,9 +313,15 @@ class AlumniController extends Controller
     }
     public function chatalumni1()
     {
+        if (Auth::user()->status_aktif != '1') {
+            Session::flash('error', 'Akun kamu di Non-Aktifkan sementara oleh Admin, coba lagi nanti!');
+            Auth::logout();
+            return redirect()->route('login');
+        }else{
         $warna = ['','','','','',''];
         $history = DB::select('select name,foto,nisn from users u join pesan p on u.nisn=p.untuk or u.nisn=p.dari where p.dari='.Auth::user()->nisn.' or p.untuk='.Auth::user()->nisn.' group by name');
         return view('Alumni/chat1',['warna'=>$warna,'history'=>$history]);        
+        }
     }
     public function search1($id)
     {

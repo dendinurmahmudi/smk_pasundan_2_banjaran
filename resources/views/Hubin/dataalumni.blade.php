@@ -178,7 +178,7 @@
                     <div class="row">
                         <div class="col-sm-5">
                             <div class="white-box">                        
-                                <img width="100%" alt="user" src="{{ asset('data_file/profile/'.$a->foto)}}">
+                                <img width="280" height="220" alt="user" src="{{ asset('data_file/profile/'.$a->foto)}}">
                             </div>
                         </div>
                         <div class="col-sm-7">

@@ -107,9 +107,6 @@
                             </li>
                             <li role="separator" class="divider"></li>
                             <li><a href="/profile{{ Auth::user()->hak_akses}}"><i class="ti-user"></i> Profil</a></li>
-                            @if(Auth::user()->hak_akses=='1')
-                            <li><a href="#"><i class="ti-wallet"></i> Pemberitahuan</a></li>
-                            @endif
                             <li><a href="logout"><i class="fa fa-power-off"></i> Logout</a></li>
                         </ul>
                         <!-- /.dropdown-user -->

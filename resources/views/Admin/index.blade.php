@@ -52,6 +52,7 @@
 			</a>
 		</div>
 		<!-- pengguna -->
+		<div class="col-sm-12">
 		@if (Session::has('success'))
 		<div class="alert alert-success">
 			<button type="button" class="close" data-dismiss="alert" aria-label="Close">
@@ -60,10 +61,9 @@
 			{{ Session::get('success') }}
 		</div>
 		@endif
-		<div class="col-sm-12">
 			<div class="white-box">
 				<p class="text-muted m-b-30">Data pengguna yang menunggu verifikasi</p>
-				<div class="table-responsive">
+				<div class="table-responsive" id="table">
 					<table id="example23" class="display nowrap" cellspacing="0" width="100%">
 						<thead>
 							<tr>
@@ -71,6 +71,8 @@
 								<th>Nisn</th>
 								<th>Nama</th>
 								<th>Email</th>
+								<th>Jurusan</th>
+								<th>Lulusan</th>
 								<th>Akses</th>
 								<th>Status</th>
 								<th class="text-nowrap" width="50px">Pilihan</th>
@@ -84,6 +86,8 @@
 								<td>{{ $a->nisn }}</td>
 								<td>{{ $a->name }}</td>
 								<td>{{ $a->email }}</td>
+								<td>{{ $a->nama_jurusan }}</td>
+								<td>{{ $a->tahun_lulus }}</td>
 								@if($a->hak_akses == 1)
 								<td>Alumni</td>
 								@elseif($a->hak_akses == 2)
@@ -96,11 +100,12 @@
 								@if($a->status_aktif == 1)
 								<td><i class="fa fa-check text-success"></i> Aktif</td>
 								@else
-								<td><i class="fa fa-close text-danger"></i> Non-Aktif</td>
+								<td><i class="fa fa-close text-danger"></i> Menunggu verifikasi</td>
 								@endif
 								<td class="text-nowrap">
-									<a href="/hapusdatap/{{$a->nisn}}" data-toggle="tooltip" title="Hapus data {{$a->name}}" onclick="return confirm('Yakin hapus data {{ $a->name }} ?');"> <i class="fa fa-trash text-inverse m-l-15"></i> </a> 
-									<a href="#" data-toggle="modal" data-target="#edit{{$a->nisn}}" title="Edit data {{$a->name}}"> <i class="fa fa-pencil text-inverse m-l-15"></i> </a> 
+									<!-- <a href="/hapusdatap/{{$a->nisn}}" data-toggle="tooltip" title="Hapus data {{$a->name}}" onclick="return confirm('Yakin hapus data {{ $a->name }} ?');"> <i class="fa fa-trash text-inverse m-l-15"></i> </a>  -->
+									 <a href="#" class="fa fa-trash text-inverse" data-toggle="modal" id="btndltnotif" data-id="{{$a->nisn}}" data-name="{{$a->name}}" title="Hapus data {{$a->name}}"></a>
+									<a href="/verifikasi/{{$a->id}}" title="Verifikasi data {{$a->name}}"> <i class="fa fa-check text-inverse m-l-15"></i> </a> 
 								</td>
 							</tr>
 							@endforeach
@@ -115,6 +120,27 @@
 <script src="{{ asset('assets/templates/plugins/bower_components/datatables/jquery.dataTables.min.js') }}"></script>
 
 <script>
+	 $('#table').on('click', '#btndltnotif', function() {
+            const id = $(this).data('id');
+            var nama = $(this).data('name');
+            swal({
+                title: 'Apakah anda yakin?',
+                text: "Data "+nama+" akan di hapus!",
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                cancelButtonText: 'Batal',
+                confirmButtonText: 'Ya, Hapus!',
+                closeOnConfirm: false 
+            }, function(isConfirm) {
+                if (isConfirm) {
+                    window.location.href = '/hapusdatap/'+id;
+                    swal("Terhapus!", "Data "+nama+" berhasil dihapus.", "success");
+                }
+            });
+        });
+
 	$(document).ready(function() {
 		$('#myTable').DataTable();
 		$(document).ready(function() {

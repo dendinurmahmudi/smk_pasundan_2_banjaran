@@ -72,7 +72,7 @@ class AuthController extends Controller
         ]);
         return redirect()->route('alumni');
     }else{	
-       Session::flash('error', 'Akun kamu belum di verifikasi, coba lagi nanti!');
+       Session::flash('error', 'Akun kamu sedang di verifikasi Admin, coba lagi nanti!');
        return redirect()->route('login');
    }
 }

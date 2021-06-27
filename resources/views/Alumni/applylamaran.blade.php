@@ -25,21 +25,23 @@
                     </tr>
                 </thead>
                 <tbody>
-                 <?php $no=1;
-                 ?>
-                 @foreach($berkas as $p)
-                 <tr>
+                   <?php 
+                   $no=1;
+                   $zona = time()+(60*60*7);
+                   ?>
+                   @foreach($berkas as $p)
+                   <tr>
                     <td>{{ $no++ }}</td>
                     <td>{{ $p->untuk_perusahaan }}</td>
                     <td>{{ $p->created_at }}</td>
                     <td class="text-nowrap">
-                       <a href="#" data-toggle="modal" id="btndltnotif" data-id="{{$p->id}}" data-name="{{$p->untuk_perusahaan}}" title="Batalkan lamaran"><i class="fa fa-close text-inverse"></i></a>
-                   </td>
-               </tr>
-               @endforeach
-           </tbody>
-       </table>
-   </div>
+                     <a href="#" data-toggle="modal" id="btndltnotif" data-id="{{$p->id}}" data-name="{{$p->untuk_perusahaan}}" title="Batalkan lamaran"><i class="fa fa-close text-inverse"></i></a>
+                 </td>
+             </tr>
+             @endforeach
+         </tbody>
+     </table>
+ </div>
 </div>
 </div>
 

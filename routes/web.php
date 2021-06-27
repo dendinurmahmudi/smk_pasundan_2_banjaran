@@ -112,5 +112,6 @@ Route::group(['middleware' => ['auth','CekLevel:4']], function () {
     Route::get('/isichat/{nisn}','AdminController@isichat');
     Route::get('/conf/{perusahaan}','AdminController@confidence');
     Route::get('/prshn/{id}','AdminController@prshn');
+    Route::get('/verifikasi/{id}','AdminController@verifikasi');
     
 });

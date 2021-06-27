@@ -482,4 +482,12 @@ class AdminController extends Controller
         $data = DB::select('select dari,isi,untuk,name,foto,waktu from pesan p join users u on p.dari=u.nisn where dari='.Auth::user()->nisn.' and untuk='.$nisn.' or dari='.$nisn.' and untuk='.Auth::user()->nisn.' order by waktu');
         echo json_encode($data);   
     }
+    public function verifikasi($id)
+    {
+        user::where('id',$id)->update([
+            'status_aktif'  => '1'
+        ]);
+        Session::flash('success', 'Berhasil verifikasi data '.$id);
+        return redirect('/admin');            
+    }
 }
