@@ -5,11 +5,13 @@
 @extends('Admin/sidebar')
 @section('konten')
 @if (Session::has('success'))
-<div class="alert alert-success">
-    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-        <span aria-hidden="true">&times;</span>
-    </button>
-    {{ Session::get('success') }}
+<div class="col-sm-12">
+    <div class="alert alert-success">
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+        {{ Session::get('success') }}
+    </div>
 </div>
 @endif
 <div class="col-sm-12">
@@ -30,9 +32,9 @@
                     </tr>
                 </thead>
                 <tbody>
-                   <?php $no=1; ?>
-                   @foreach($pengguna as $a)
-                   <tr>
+                 <?php $no=1; ?>
+                 @foreach($pengguna as $a)
+                 <tr>
                     <td>{{ $no++ }}</td>
                     <td>{{ $a->nisn }}</td>
                     <td>{{ $a->name }}</td>
@@ -80,25 +82,25 @@
 <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
 <script>
     $('#table').on('click', '#btndltnotif', function() {
-            const id = $(this).data('id');
-            var nama = $(this).data('name');
-            swal({
-                title: 'Apakah anda yakin?',
-                text: "Data "+nama+" akan di hapus!",
-                type: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                cancelButtonText: 'Batal',
-                confirmButtonText: 'Ya, Hapus!',
-                closeOnConfirm: false 
-            }, function(isConfirm) {
-                if (isConfirm) {
-                    window.location.href = '/hapusdatap/'+id;
-                    swal("Terhapus!", "Data "+nama+" berhasil dihapus.", "success");
-                }
-            });
+        const id = $(this).data('id');
+        var nama = $(this).data('name');
+        swal({
+            title: 'Apakah anda yakin?',
+            text: "Data "+nama+" akan di hapus!",
+            type: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            cancelButtonText: 'Batal',
+            confirmButtonText: 'Ya, Hapus!',
+            closeOnConfirm: false 
+        }, function(isConfirm) {
+            if (isConfirm) {
+                window.location.href = '/hapusdatap/'+id;
+                swal("Terhapus!", "Data "+nama+" berhasil dihapus.", "success");
+            }
         });
+    });
 
     $(document).ready(function() {
         $('#myTable').DataTable();
@@ -190,7 +192,7 @@
                                         ?>
                                         <option value="{{$p->hak_akses}}">{{$akses}}</option>
                                         <?php for ($i=1; $i <5 ; $i++) { 
-                                         if($i == 1){
+                                           if($i == 1){
                                             $akses='Alumni';
                                         }
                                         elseif($i == 2){
@@ -217,7 +219,7 @@
                                     } ?>
                                     <option value="{{$p->status_aktif}}">{{$status}}</option>
                                     <?php for ($i=1; $i <3 ; $i++) { 
-                                     if($i == 1){
+                                       if($i == 1){
                                         $status='Aktif';
                                     }
                                     else{
@@ -231,7 +233,7 @@
                         <div class="col-sm-12 col-xs-12">
                             <button type="submit" class="btn btn-success waves-effect waves-light m-r-10">Simpan</button>
                         </form>
-                         <a href="/resetpass/{{$p->nisn}}" class="btn btn-info waves-effect waves-light m-r-10">Reset password</a>
+                        <a href="/resetpass/{{$p->nisn}}" class="btn btn-info waves-effect waves-light m-r-10">Reset password</a>
                     </div>
                 </div>
             </div>

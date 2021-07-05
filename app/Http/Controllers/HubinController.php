@@ -241,13 +241,35 @@ class HubinController extends Controller
                 'kesesuaian'=>$pt->kesesuaian,
                 'kepuasan'=>$pt->kepuasan,
                 'jml'=>$pt->jml,
-                'confidence'=>$this->confidence($pt->nama_perusahaan),
+                'status'=>$this->statusperu($pt->nama_perusahaan),
             ];
         }
         $jmltahun = DB::select('select nama_perusahaan, tahun_lulus from penelusuran join alumni on penelusuran.nisn=alumni.nisn where nama_perusahaan!="null" group by tahun_lulus');
         $allprshn = DB::select('select nama_perusahaan,tahun_lulus from penelusuran p join alumni a on p.nisn=a.nisn');
         $warna = ['','','','','','oval'];
         return view('Hubin/dataperusahaan',['perusahaan' => $perusahaan,'warna'=>$warna,'jmltahun'=>$jmltahun,'allprshn'=>$allprshn]);
+    }
+    public function statusperu($pt)
+    {
+        $jml="";
+        $nmprshn = DB::select('select status from perusahaan where nama_per="'.$pt.'"');
+        foreach ($nmprshn as $k) {
+            $jml= $k->status;
+        }
+        return $jml;
+    }
+    public function editperusahaan(Request $request)
+    {
+        if ($request->mou == null) {
+            perusahaan::where('nama_per',$request->namaperusahaan)->delete();
+        }else{
+            perusahaan::create([
+                'nama_per' => $request->namaperusahaan,
+                'status'   => $request->mou
+            ]);
+        }
+        Session::flash('success', 'Berhasil Mengedit status perusahaan '.$request->namaperusahaan);
+        return redirect('/dataperusahaan');
     }
     public function confidence($perusahaan)
     {
@@ -630,13 +652,129 @@ public function kirimemail(Request $request)
 public function prosesalgo()
 {
     $lulusan = alumni::select('tahun_lulus')->groupBy('tahun_lulus')->get();
-    $th = 2018;
-
+    $dataset = penelusuran::join('users','penelusuran.nisn','=','users.nisn')
+    ->join('alumni','alumni.nisn','=','users.nisn')
+    ->join('jurusan','alumni.jurusan','=','jurusan.id_jurusan')
+    ->whereRaw('nama_perusahaan is not null')
+    ->orderBy('users.name')
+    ->get();
     $peru2018 =DB::select('select nama_perusahaan, count(nama_perusahaan)jumlah from penelusuran right join alumni on penelusuran.nisn=alumni.nisn where nama_perusahaan!="null" and tahun_lulus="2018" group by nama_perusahaan order by jumlah desc');
     $peru2019 =DB::select('select nama_perusahaan, count(nama_perusahaan)jumlah from penelusuran right join alumni on penelusuran.nisn=alumni.nisn where nama_perusahaan!="null" and tahun_lulus="2019" group by nama_perusahaan order by jumlah desc');
     $peru2020 =DB::select('select nama_perusahaan, count(nama_perusahaan)jumlah from penelusuran right join alumni on penelusuran.nisn=alumni.nisn where nama_perusahaan!="null" and tahun_lulus="2020" group by nama_perusahaan order by jumlah desc');
-   
-    return view('Hubin/prosesalgo',['peru2018'=>$peru2018,'peru2019'=>$peru2019,'peru2020'=>$peru2020]);
+    $allperu = DB::select('select nama_perusahaan, count(nama_perusahaan)jumlah from penelusuran right join alumni on penelusuran.nisn=alumni.nisn where nama_perusahaan!="null" group by nama_perusahaan order by jumlah desc');
+    $allperuasc = DB::select('select nama_perusahaan, count(nama_perusahaan)jumlah,tahun_lulus from penelusuran right join alumni on penelusuran.nisn=alumni.nisn where nama_perusahaan!="null" group by nama_perusahaan order by jumlah asc');
+    $jmltahun = DB::select('select nama_perusahaan, tahun_lulus from penelusuran join alumni on penelusuran.nisn=alumni.nisn where nama_perusahaan!="null" group by tahun_lulus');
+    $allperu1 = DB::select('select nama_perusahaan , count(nama_perusahaan)jumlah from penelusuran  where nama_perusahaan!="null" group by nama_perusahaan');
+    $all2d = DB::select('select nama_perusahaan , count(nama_perusahaan)jumlah from penelusuran  where nama_perusahaan!="null" group by nama_perusahaan order by count(nama_perusahaan) desc');
+    $hslallperu = DB::select('select nama_perusahaan, count(nama_perusahaan)jumlah from penelusuran right join alumni on penelusuran.nisn=alumni.nisn where nama_perusahaan!="null" group by nama_perusahaan order by jumlah desc limit 3');
+
+    foreach ($allperu1 as $k) {
+        $fp2018[]=[
+         'tahun'=>'2018',
+         'nama_perusahaan'=>$k->nama_perusahaan,
+         'jumlah'=>$this->jumlahbekerja($k->nama_perusahaan,'2018'),
+     ];
+     $fp2019[]=[
+         'tahun'=>'2019',
+         'nama_perusahaan'=>$k->nama_perusahaan,
+         'jumlah'=>$this->jumlahbekerja($k->nama_perusahaan,'2019'),
+     ];
+     $fp2020[]=[
+         'tahun'=>'2020',
+         'nama_perusahaan'=>$k->nama_perusahaan,
+         'jumlah'=>$this->jumlahbekerja($k->nama_perusahaan,'2020'),
+         'total'=>$this->jumlahbekerjatotal($k->nama_perusahaan),
+     ];
+ }
+ foreach ($allperu as $a) {
+    if($a->jumlah/count($jmltahun) >= 1){
+        $hasil[] =[
+            'nama_perusahaan' => $a->nama_perusahaan,
+            'jumlah' => $a->jumlah,
+            'suport' => $a->jumlah/count($jmltahun)
+        ];
+    }
+}
+foreach ($allperu as $a) {
+       $hslfp2018[]=[
+         'tahun'=>'2018',
+         'nama_perusahaan'=>$a->nama_perusahaan,
+         'jumlah'=>$this->jumlahbekerja($a->nama_perusahaan,'2018'),
+     ];
+     $hslfp2019[]=[
+         'tahun'=>'2019',
+         'nama_perusahaan'=>$a->nama_perusahaan,
+         'jumlah'=>$this->jumlahbekerja($a->nama_perusahaan,'2019'),
+     ];
+     $hslfp2020[]=[
+         'tahun'=>'2020',
+         'nama_perusahaan'=>$a->nama_perusahaan,
+         'jumlah'=>$this->jumlahbekerja($a->nama_perusahaan,'2020'),
+         'total'=>$this->jumlahbekerjatotal($a->nama_perusahaan),
+     ];
+}
+foreach ($allperuasc as $a) {
+    if($a->jumlah/count($jmltahun) >= 1){
+        $hasilasc[] =[
+            'nama_perusahaan' => $a->nama_perusahaan,
+            'jumlah' => $this->nama_pt_anak($a->nama_perusahaan,$a->jumlah,$a->tahun_lulus),
+            'suport' => $a->jumlah
+        ];
+    }
+}
+
+$i=0;
+
+foreach ($all2d as $a) {
+    $j=0;
+    foreach ($all2d as $b) {
+        $jumlah=$b->jumlah;
+        if ($a->jumlah<=$b->jumlah) {
+            $jumlah=$a->jumlah;
+        }
+        $hasil2d[$i][$j] =[
+            'nama_perusahaana' => $a->nama_perusahaan,
+            'nama_perusahaanb' => $b->nama_perusahaan,
+            'frekuensi' => $jumlah,
+            'confidence'=> $this->confidence($a->nama_perusahaan),
+        ];
+        $j++;
+    }
+    $i++;
+}
+
+$warna = ['','','','','','oval'];
+return view('Hubin/prosesalgo',['peru2018'=>$peru2018,'peru2019'=>$peru2019,'peru2020'=>$peru2020,'allperu'=>$allperu,'jmltahun'=>$jmltahun,'hasil'=>$hasil,'dataset'=>$dataset,'warna'=>$warna,'allperu1'=>$allperu1,'fp2018'=>$fp2018,'fp2019'=>$fp2019,'fp2020'=>$fp2020,'hasilasc'=>$hasilasc,'hasil2d'=>$hasil2d,'hslfp2018'=>$hslfp2018,'hslfp2019'=>$hslfp2019,'hslfp2020'=>$hslfp2020,'hslallperu'=>$hslallperu]);
+}
+
+public function nama_pt_anak($nama_perusahaan,$jumlah,$tahun){
+    $ptpt='';
+     $allperu1 = DB::select('select nama_perusahaan,count(nama_perusahaan) jumlah from penelusuran join alumni on penelusuran.nisn=alumni.nisn
+        where nama_perusahaan<>"'.$nama_perusahaan.'"  group by nama_perusahaan order by jumlah desc');
+     foreach ($allperu1 as $a) {
+         if ($a->jumlah >= $jumlah) {
+             $ptpt .=  $a->nama_perusahaan.', ';
+         }
+     }
+    return $ptpt;
+}
+
+
+public function jumlahbekerja($p,$t)
+{
+    $namap = DB::select('select nama_perusahaan, count(nama_perusahaan)jumlah from penelusuran right join alumni on penelusuran.nisn=alumni.nisn where nama_perusahaan="'.$p.'" and tahun_lulus="'.$t.'"');
+    foreach ($namap as $n) {
+        $jumlah = $n->jumlah;
+    }
+    return $jumlah;
+}
+public function jumlahbekerjatotal($p)
+{
+    $namap = DB::select('select nama_perusahaan, count(nama_perusahaan)jumlah from penelusuran right join alumni on penelusuran.nisn=alumni.nisn where nama_perusahaan="'.$p.'"');
+    foreach ($namap as $n) {
+        $jumlah = $n->jumlah;
+    }
+    return $jumlah;
 }
 public function getperusahaan($tahun)
 {

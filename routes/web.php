@@ -73,6 +73,7 @@ Route::group(['middleware' => ['auth','CekLevel:2']], function () {
     Route::get('/kirimemail','HubinController@kirimemail');
     Route::get('/prosesalgo','HubinController@prosesalgo');
     Route::get('/jrsnprthn/{id}','HubinController@jrsnprthn');
+    Route::post('/editperu','HubinController@editperusahaan');
 });
 Route::group(['middleware' => ['auth','CekLevel:3']], function () {
     Route::get('/kepsek', 'KepsekController@index')->name('kepsek');
@@ -113,5 +114,6 @@ Route::group(['middleware' => ['auth','CekLevel:4']], function () {
     Route::get('/conf/{perusahaan}','AdminController@confidence');
     Route::get('/prshn/{id}','AdminController@prshn');
     Route::get('/verifikasi/{id}','AdminController@verifikasi');
+    Route::post('/editperusahaan','AdminController@editperusahaan');
     
 });
