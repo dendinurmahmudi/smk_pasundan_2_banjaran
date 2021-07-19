@@ -19,17 +19,17 @@
                         <th>Opsi</th>
                     </tr>
                 </thead>
-                <tbody>
-                 <?php $no=1;
-                 ?>
-                 @foreach($pelamar as $p)
-                 <tr>
+                <tbody id="table">
+                   <?php $no=1;
+                   ?>
+                   @foreach($pelamar as $p)
+                   <tr>
                     <td>{{ $no++ }}</td>
                     <td>{{ $p->untuk_perusahaan }}</td>
                     <td>{{ $p->name }}</td>
                     <td>{{ $p->email }}</td>
                     <td>{{ $p->created_at }}</td>
-                    <td><a href="/get/{{$p->file_lamaran}}/{{$p->untuk_perusahaan}}" data-toggle="tooltip" title="Unduh file"><i class="fa fa-download text-success fa-fw"></i>Unduh file</a></td>
+                    <td><a href="#" id="download" data-toggle="modal" title="Unduh file" data-file="{{$p->file_lamaran}}"><i class="fa fa-download text-success fa-fw"></i>Unduh file</a></td>
                 </tr>
                 @endforeach
             </tbody>
@@ -37,7 +37,12 @@
     </div>
 </div>
 </div>
-
+<script type="text/javascript">
+    $('#table').on('click', '#download', function() {
+        var file = $(this).data('file');
+        $.getJSON(`/get/${file}`);
+    });
+</script>
 <script src="{{ asset('assets/templates/plugins/bower_components/datatables/jquery.dataTables.min.js') }}"></script>
 <!-- start - This is for export functionality only -->
 <script src="https://cdn.datatables.net/buttons/1.2.2/js/dataTables.buttons.min.js"></script>
@@ -47,7 +52,7 @@
 <script src="https://cdn.rawgit.com/bpampuch/pdfmake/0.1.18/build/vfs_fonts.js"></script>
 <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.html5.min.js"></script>
 <script src="https://cdn.datatables.net/buttons/1.2.2/js/buttons.print.min.js"></script>
-<script>
+<script type="text/javascript">
     $(document).ready(function() {
         $('#myTable').DataTable();
         $(document).ready(function() {
@@ -94,4 +99,5 @@
         ]
     });
 </script>
+
 @endsection

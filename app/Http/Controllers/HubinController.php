@@ -52,6 +52,19 @@ class HubinController extends Controller
         $alljrsn = DB::table('jurusan')->whereRaw('id_jurusan!=6')->get();
 
         $warna = ['oval','','','','',''];
+        foreach ($jmlthn as $k) {
+                foreach ($alljrsn as $th) {
+            $datatahun[] = [
+                'tahun' => $k->tahun_lulus,
+                    'id_jurusan'=>$th->id_jurusan,
+                    'nama_jurusan'=>$th->nama_jurusan,
+                    'jumlah'=>$this->jmljurusan($th->id_jurusan,$k->tahun_lulus),
+                    'pencaker'=>$this->jmlpnckr($th->id_jurusan,$k->tahun_lulus),
+                    'kosong'=>$this->jmlkosong($th->id_jurusan,$k->tahun_lulus),
+                    'sesuai'=>$this->jmlsesuai($th->id_jurusan,$k->tahun_lulus),
+            ];
+                }
+        }
         foreach ($alljrsn as $th) {
             $th2018[] =[ 
                 'tahun'=>'2018',
@@ -82,7 +95,7 @@ class HubinController extends Controller
             ];           
         }
         
-        return view('Hubin/dashboard',['warna'=>$warna,'jurusan'=>$jurusan,'perusahaan'=>$perusahaan,'kelistrikan'=>$kelistrikan,'jmlthn'=>$jmlthn,'th2018'=>$th2018,'th2019'=>$th2019,'th2020'=>$th2020]);
+        return view('Hubin/dashboard',['warna'=>$warna,'jurusan'=>$jurusan,'perusahaan'=>$perusahaan,'kelistrikan'=>$kelistrikan,'jmlthn'=>$jmlthn,'th2018'=>$th2018,'th2019'=>$th2019,'th2020'=>$th2020,'datatahun'=>$datatahun]);
     }
     public function jrsnprthn($tahun)
     {
@@ -229,7 +242,26 @@ class HubinController extends Controller
         $lulusan = alumni::select('tahun_lulus')->groupBy('tahun_lulus')->get();
         return view('Hubin/dataalumni',['alumni' => $alumni,'warna'=>$warna,'jurusan'=>$jurusan,'lulusan'=>$lulusan]);
     }
-
+    public function datatahunlulus()
+    {   
+        $alumni = DB::select('select tahun_lulus from alumni group by tahun_lulus');
+        foreach ($alumni as $a) {    
+            $jmlllsn[] = [
+                'tahun' => $a->tahun_lulus,
+                'jumlah' => $this->gettahun($a->tahun_lulus)
+            ];
+        }
+        $warna = ['','oval','','','',''];
+        return view('Hubin/tahunlulus',['alumni'=>$alumni,'jmlllsn' => $jmlllsn,'warna'=>$warna]);
+    }
+    public function gettahun($thn)
+    {
+        $tahun = DB::select('select name, count(tahun_lulus)jumlah from alumni join users on alumni.nisn=users.nisn where tahun_lulus="'.$thn.'"');
+        foreach ($tahun as $t) {
+            $jml = $t->jumlah;
+        }
+        return $jml;
+    }
     public function dataperusahaan()
     {
         $peru = DB::select('select nama_perusahaan, count(nama_perusahaan)as jumlah,count(if(sesuai_kompetensi="Y",sesuai_kompetensi,null))as kesesuaian, count(if(kepuasan="Y", kepuasan,null))as kepuasan,count(tahun_lulus)jml from penelusuran join alumni on penelusuran.nisn=alumni.nisn where nama_perusahaan!="null" group by nama_perusahaan order by jumlah desc');
@@ -392,12 +424,10 @@ class HubinController extends Controller
         $warna = ['','','oval','','',''];
         return view('Hubin/datalamaran',['pelamar'=> $pelamar,'warna'=>$warna]);
     }
-    public function getlamaran($filename,$id)
+    public function get($filename)
     {
-       return response()->download(Storage::disk('public')->get('index.php'));
-       $pelamar = DB::select('select berkas_lamaran.untuk_perusahaan,berkas_lamaran.file_lamaran, users.name, users.email, berkas_lamaran.created_at from berkas_lamaran join users on berkas_lamaran.nisn=users.nisn where untuk_perusahaan="'.$id.'"');
-       $warna = ['','','oval','','',''];
-       return view('Hubin/datalamaran',['pelamar'=> $pelamar,'warna'=>$warna]);         
+       $file = "./data_file/berkas_lamaran/".$filename;
+       return Response::download($file);
    }
    public function profile()
    {

@@ -27,7 +27,7 @@
                         <th>Email</th>
                         <th>Akses</th>
                         <th>Status</th>
-                        <th>Login</th>
+                        <th>Login terakhir</th>
                         <th class="text-nowrap" width="50px">Pilihan</th>
                     </tr>
                 </thead>

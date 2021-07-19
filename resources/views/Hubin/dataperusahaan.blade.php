@@ -48,7 +48,7 @@
          </tr>
        </thead>
        <tbody>
-        <?php $no=1;$no1=1;$no2=1;$no3=1;
+        <?php $no=1;$no1=1;$no2=1;$no3=1;$no4=1;$no5=1;
         ?>
         @foreach($perusahaan as $p)
         <tr>
@@ -130,7 +130,7 @@
                                     <input type="text" name="namaperusahaan" class="form-control"  value="{{$p['nama_perusahaan']}}" readonly>
                                 </div>
                                 <div class="form-group col-sm-12">
-                                    <b><input type="checkbox" name="mou" value="Y" <?php if ($p['status'] == 'Y')  echo "checked"; ?>> <label> MOU</label></b>
+                                    <b><input type="checkbox" id="{{$no4++}}" name="mou" value="Y" <?php if ($p['status'] == 'Y')  echo "checked"; ?>> <label for="{{$no5++}}"> MOU</label></b>
                                 </div>
                             </div>
                             <div class="col-sm-12 col-xs-12">
