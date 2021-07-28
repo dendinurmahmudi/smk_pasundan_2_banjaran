@@ -107,7 +107,7 @@
 				<div class="col-sm-9 m-l-10">
 				<h4 class="box-title">`+slimtest3.target.dataset.nama+`</h4></div>
 				<div class="col-sm-1 m-l-10">
-				<a href="#" title="Hapus pesan `+slimtest3.target.dataset.nama+`" class="btn btn-danger btn-circle"><i class="fa fa-trash"></i></a>
+				<a href="#" data-toggle="modal" id="btndltnotif" data-pesan="`+slimtest3.target.dataset.nama+`" data-id="`+slimtest3.target.dataset.nisn+`" title="Hapus pesan `+slimtest3.target.dataset.nama+`" class="btn btn-danger btn-circle"><i class="fa fa-trash"></i></a>
 				</div>
 				`);
 			$('#isikirim').html('')
@@ -174,6 +174,27 @@
 				</li>`);
 			$.getJSON(`/kirimp1/${n}/${p}`);
 			$('#isipesan').val('');
+		});
+
+		$('#nama').on('click', '#btndltnotif', function() {
+			const id = $(this).data('id');
+			var pesan = $(this).data('pesan');
+			swal({
+				title: 'Apakah anda yakin?',
+				text: "Pesan dengan "+pesan+" akan di hapus!",
+				type: 'warning',
+				showCancelButton: true,
+				confirmButtonColor: '#3085d6',
+				cancelButtonColor: '#d33',
+				cancelButtonText: 'Batal',
+				confirmButtonText: 'Ya, Hapus!',
+				closeOnConfirm: false 
+			}, function(isConfirm) {
+				if (isConfirm) {
+					window.location.href = '/hapuspesan/'+id;
+					swal("Terhapus!", "Pesan "+pesan+" telah dihapus.", "success");
+				}
+			});
 		});
 
 	</script>

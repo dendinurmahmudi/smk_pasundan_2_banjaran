@@ -43,6 +43,7 @@ Route::group(['middleware' => ['auth','CekLevel:1']], function () {
     Route::get('/search1/{id}', 'AlumniController@search1');
     Route::get('/kirimp1/{nisn}/{pesan}','AlumniController@kirimp');
     Route::get('/isichat1/{nisn}','AlumniController@isichat1');
+    Route::get('/hapuspesan/{id}','AlumniController@hapuspesan');
 });
 Route::group(['middleware' => ['auth','CekLevel:2']], function () {
     Route::get('/hubin', 'HubinController@index')->name('hubin');
