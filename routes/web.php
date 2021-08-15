@@ -22,7 +22,8 @@ Route::get('login', 'AuthController@showFormLogin')->name('login');
 Route::post('login', 'AuthController@login');
 Route::get('register', 'AuthController@showFormRegister')->name('register');
 Route::post('register', 'AuthController@register');
-Route::get('ubahpass', 'AuthController@ubahpass')->name('ubahpass');
+Route::get('ubahpass/{id}', 'AuthController@ubahpass');
+Route::post('resetpassword', 'AuthController@resetpassword')->name('resetpassword');
 Route::get('/logout', 'AuthController@logout')->name('logout');
 Route::post('lupapass/send','AuthController@send');
 
@@ -41,7 +42,7 @@ Route::group(['middleware' => ['auth','CekLevel:1']], function () {
     Route::post('/gantipass1','AlumniController@gantipass1');
     Route::get('/chat1','AlumniController@chatalumni1');
     Route::get('/search1/{id}', 'AlumniController@search1');
-    Route::get('/kirimp1/{nisn}/{pesan}','AlumniController@kirimp');
+    Route::get('/kirimp1/{nisn}/{pesan}','AlumniController@kirimp1');
     Route::get('/isichat1/{nisn}','AlumniController@isichat1');
     Route::get('/hapuspesan/{id}','AlumniController@hapuspesan');
 });
@@ -86,6 +87,7 @@ Route::group(['middleware' => ['auth','CekLevel:3']], function () {
     Route::get('/datapencaker1','KepsekController@datapencaker1');
     Route::get('/datakuliah1','KepsekController@datakuliah1');
     Route::get('/datasesuai1','KepsekController@datasesuai1');
+    Route::get('/dashboard1','KepsekController@dashboard');
 });
 Route::group(['middleware' => ['auth','CekLevel:4']], function () {
     Route::get('/admin', 'AdminController@index')->name('admin');
@@ -111,7 +113,7 @@ Route::group(['middleware' => ['auth','CekLevel:4']], function () {
     Route::get('/resetpass/{id}','AdminController@resetpass');
     Route::get('/chat4','AdminController@chatadmin');
     Route::get('/search/{id}', 'AdminController@search');
-    Route::get('/kirimp/{nisn}/{pesan}','AdminController@kirimp');
+    Route::get('/kirimp3/{nisn}/{pesan}','AdminController@kirimp3');
     Route::get('/isichat/{nisn}','AdminController@isichat');
     Route::get('/conf/{perusahaan}','AdminController@confidence');
     Route::get('/prshn/{id}','AdminController@prshn');

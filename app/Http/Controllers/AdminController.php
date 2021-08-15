@@ -488,7 +488,7 @@ public function search($id)
     $data = user::select('name','foto','nisn')->whereRaw('name LIKE "%'.$id.'%" limit 5')->get();
     echo json_encode($data);
 }
-public function kirimp($nisn,$pesan)
+public function kirimp3($nisn,$pesan)
 {   
     $zona = time()+(60*60*7);
     DB::table('pesan')->insert([

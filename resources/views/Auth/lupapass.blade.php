@@ -25,7 +25,7 @@
               <tr>
                 <td style='padding:10px 0 30px 0;'><p>Untuk mereset dan memperbaharui password anda, silahkan klik tombol di bawah ini:</p>
                   <center>
-                    <a href="{{ route('ubahpass') }}" style='display: inline-block; padding: 11px 30px; margin: 20px 0px 30px; font-size: 15px; color: #fff; background: #00c0c8; border-radius: 60px; text-decoration:none;'>Reset Password</a>
+                    <a href="http://127.0.0.1:8000/ubahpass/{{$id}}" style='display: inline-block; padding: 11px 30px; margin: 20px 0px 30px; font-size: 15px; color: #fff; background: #00c0c8; border-radius: 60px; text-decoration:none;'>Reset Password</a>
                   </center>
                   <b>- Thanks (SMK Pasundan 2 Banjaran)</b> </td>
                 </tr>

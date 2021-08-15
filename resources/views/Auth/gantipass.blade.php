@@ -5,10 +5,11 @@
 	<div class="container-login100" style="background-image: url('{{ asset('assets/loginn/images/bg-01.jpg') }}')">
 		<div class="wrap-login100">
 			
-			<form action="{{ route('register') }}" method="post">
+			<form action="{{ route('resetpassword') }}" method="post">
 				@csrf
+				<input type="hidden" name="id" value="{{$id}}" placeholder="">
 				<span class="login100-form-logo">
-					<img src="{{ asset('assets/loginn/images/bg-01.jpg') }}" alt="" width="130px" height="130px" class="rounded-circle">
+					<img src="{{ asset('assets/favicon.png') }}" alt="" width="170px" height="170px" class="img-responsive">
 				</span>
 
 				<span class="login100-form-title p-b-34 p-t-27">

@@ -180,10 +180,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-sm-6 m-b-20">
-            <a href="/kirimemail"><button class="btn btn-outline btn-success btn-lg btn-block">Minta Alumni isi data penelusuran</button></a>
-        </div>
-        <div class="col-sm-6 m-b-20">
+        <div class="col-sm-12 m-b-20">
             <a href="/dashboard"><button class="btn btn-outline btn-info btn-lg btn-block">Informasi Lainya</button></a>
         </div>
     </div>

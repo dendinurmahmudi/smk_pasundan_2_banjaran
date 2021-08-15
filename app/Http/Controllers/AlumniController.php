@@ -110,10 +110,10 @@ class AlumniController extends Controller
         else if ($request->file2 != null) {
 
             $rules = [
-                'file2' => 'file|mimes:pdf'
+                'file2' => 'file|mimes:pdf,zip,rar'
             ];
             $messages = [
-                'file2.mimes'            => 'File yang diperbolehkan pdf'
+                'file2.mimes'            => 'File yang diperbolehkan pdf/zip/rar'
             ];
 
             $validator = Validator::make($request->all(), $rules, $messages);
@@ -328,7 +328,7 @@ class AlumniController extends Controller
         echo json_encode($data);
     }
 
-    public function kirimp($nisn,$pesan)
+    public function kirimp1($nisn,$pesan)
     {   
         $zona = time()+(60*60*7);
         DB::table('pesan')->insert([

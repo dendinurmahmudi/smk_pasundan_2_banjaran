@@ -8,7 +8,6 @@
     <div class="col-sm-12">
         <div class="white-box">
             <div class="row row-in">
-                <a href="/dataalumni1" title="">
                 <div class="col-lg-4 col-sm-12 row-in-br">
                     <ul class="col-in">
                         <li>
@@ -27,8 +26,6 @@
                             </li>
                         </ul>
                     </div>
-                    </a>
-                    <a href="/datapenelusuran1" title="">
                     <div class="col-lg-4 col-sm-12 row-in-br  b-r-none">
                         <ul class="col-in">
                             <li>
@@ -50,7 +47,6 @@
                                 </li>
                             </ul>
                         </div>
-                        </a>
                         <div class="col-lg-4 col-sm-12  b-0">
                             <ul class="col-in">
                                 <li>
@@ -84,9 +80,7 @@
                             $hitung1 = $bekerja/$all*100;
                             ?>
                             <div class="col-sm-3">
-                                <a href="/databekerja1" title="">
                                 <div class="chart easy-pie-chart-3" data-percent="{{ $hitung1 }}"> <span class="percent"></span> <br><h5>Alumni yang bekerja</h5></div>
-                                </a>
                             </div>
                             <div class="col-sm-3">
                                 <?php 
@@ -94,9 +88,7 @@
                                 $pencaker = count($pencaker); 
                                 $hitung2 = $pencaker/$all*100;
                                 ?>
-                                <a href="/datapencaker1" title="">
                                 <div class="chart easy-pie-chart-4" data-percent="{{ $hitung2 }}"> <span class="percent"></span> <br><h5>Alumni yang belum bekerja</h5></div>
-                                </a>
                             </div>
                             <div class="col-sm-3">
                                 <?php 
@@ -104,9 +96,7 @@
                                 $kuliah = count($kuliah); 
                                 $hitung3 = $kuliah/$all*100;
                                 ?>
-                                <a href="/datakuliah1" title="">
                                 <div class="chart easy-pie-chart-5" data-percent="{{ $hitung3 }}"> <span class="percent"></span>  <br><h5>Alumni yang melanjutkan sekolah</h5></div>
-                                </a>
                             </div>
                             <div class="col-sm-3">
                                 <?php 
@@ -114,9 +104,7 @@
                                 $sesuai = count($sesuai); 
                                 $hitung = $sesuai/$kesesuaian*100;
                                 ?>
-                                <a href="/datasesuai1" title="">
                                 <div class="chart easy-pie-chart-2" data-percent="{{$hitung}}"> <span class="percent"></span>  <br><h5>kesesuaian jurusan dan pekerjaan</h5></div>
-                                </a>
                             </div>
                         </div>
                     </div>
@@ -158,7 +146,7 @@
                 </div>
             </div>
             <div class="col-sm-12 m-b-20">
-                <a href="#"><button class="btn btn-outline btn-info btn-lg btn-block">Informasi Lainya</button></a>
+                <a href="/dashboard1"><button class="btn btn-outline btn-info btn-lg btn-block">Informasi Lainya</button></a>
             </div>
         </div>
         <script src="{{ asset('assets/templates/plugins/bower_components/datatables/jquery.dataTables.min.js') }}"></script>

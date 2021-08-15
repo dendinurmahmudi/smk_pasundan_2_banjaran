@@ -196,8 +196,10 @@ public function logout()
           return redirect()->route('login');
       } else{
        $email = DB::table('users')->where('nisn',$request->id)->value('email');
+       $id = DB::table('users')->where('nisn',$request->id)->value('nisn');
+
        try{
-        Mail::send('Auth/lupapass', array('email' => $email) , function($pesan) use($request){
+        Mail::send('Auth/lupapass', array('email' => $email,'id' =>$id) , function($pesan) use($request){
            $email = DB::table('users')->where('nisn',$request->id)->value('email');
            $pesan->to($email,'Lupa password')->subject('Layanan Lupa password');
            $pesan->from(env('MAIL_USERNAME','careerdevcenter.smkpasundan@gmail.com'),'Layanan Lupa password');
@@ -209,9 +211,33 @@ public function logout()
     }
 }
 }
-public function ubahpass()
+public function ubahpass($id)
 {
-   return view('Auth/gantipass');
+  return view('Auth/gantipass',['id'=>$id]);
+}
+public function resetpassword(Request $request)
+{
+ $rules = [
+       'password'              => 'required|confirmed|min:6'
+   ];
+
+   $messages = [
+       'password.required'     => 'Password wajib diisi',
+       'password.min'          => 'Password minimal 6 karakter',
+       'password.confirmed'    => 'Password tidak sama'
+   ];
+
+   $validator = Validator::make($request->all(), $rules, $messages);
+
+   if($validator->fails()){
+    return redirect()->back()->withErrors($validator)->withInput($request->all);
+}else{
+  DB::table('users')->where('nisn',$request->id)->update([
+    'password' => Hash::make($request->password),
+  ]);
+  Session::flash('success', 'Berhasil ubah password, Silahkan login');
+        return redirect()->route('login');
+    }
 }
 
 }

@@ -170,7 +170,7 @@
 				<p>`+p+`</p> <b>`+w+`</b> </div>
 				</div>
 				</li>`);
-			$.getJSON(`/kirimp/${n}/${p}`);
+			$.getJSON(`/kirimp3/${n}/${p}`);
 			$('#isipesan').val('');
 		});
 

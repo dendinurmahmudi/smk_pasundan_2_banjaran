@@ -82,7 +82,6 @@
        <th>Alumni bekerja</th>
        <th>Sesuai kompetensi</th>
        <th>Merasa puas</th>
-       <th>Pilihan</th>
      </tr>
    </thead>
    <tbody>
@@ -101,9 +100,6 @@
      <td>{{ $p['jumlah'] }}</td>
      <td>{{ $p['kesesuaian'] }}</td>
      <td>{{ $p['kepuasan'] }}</td>
-     <td class="text-nowrap">
-      <a href="#" data-toggle="modal" data-target="#edit{{$no3++}}" title="Edit {{$p['nama_perusahaan']}}"> <i class="fa fa-pencil text-inverse m-l-15"></i> </a>
-    </td>
   </tr>
   @endif
   @endforeach

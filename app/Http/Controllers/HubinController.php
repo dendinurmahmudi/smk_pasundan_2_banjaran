@@ -695,7 +695,7 @@ public function prosesalgo()
     $allperuasc = DB::select('select nama_perusahaan, count(nama_perusahaan)jumlah,tahun_lulus from penelusuran right join alumni on penelusuran.nisn=alumni.nisn where nama_perusahaan!="null" group by nama_perusahaan order by jumlah asc');
     $jmltahun = DB::select('select nama_perusahaan, tahun_lulus from penelusuran join alumni on penelusuran.nisn=alumni.nisn where nama_perusahaan!="null" group by tahun_lulus');
     $allperu1 = DB::select('select nama_perusahaan , count(nama_perusahaan)jumlah from penelusuran  where nama_perusahaan!="null" group by nama_perusahaan');
-    $all2d = DB::select('select nama_perusahaan , count(nama_perusahaan)jumlah from penelusuran  where nama_perusahaan!="null" group by nama_perusahaan order by count(nama_perusahaan) desc');
+    $all2d = DB::select('select nama_perusahaan, count(nama_perusahaan)jumlah from penelusuran right join alumni on penelusuran.nisn=alumni.nisn where nama_perusahaan!="null" group by nama_perusahaan order by jumlah desc');
     $hslallperu = DB::select('select nama_perusahaan, count(nama_perusahaan)jumlah from penelusuran right join alumni on penelusuran.nisn=alumni.nisn where nama_perusahaan!="null" group by nama_perusahaan order by jumlah desc limit 3');
 
     foreach ($allperu1 as $k) {

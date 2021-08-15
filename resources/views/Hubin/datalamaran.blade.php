@@ -29,7 +29,7 @@
                     <td>{{ $p->name }}</td>
                     <td>{{ $p->email }}</td>
                     <td>{{ $p->created_at }}</td>
-                    <td><a href="#" id="download" data-toggle="modal" title="Unduh file" data-file="{{$p->file_lamaran}}"><i class="fa fa-download text-success fa-fw"></i>Unduh file</a></td>
+                    <td><a href="#" class="download" data-toggle="modal" title="Unduh file {{$p->file_lamaran}}" data-file="{{$p->file_lamaran}}"><i class="fa fa-download text-success fa-fw"></i>Unduh file</a></td>
                 </tr>
                 @endforeach
             </tbody>
@@ -38,7 +38,7 @@
 </div>
 </div>
 <script type="text/javascript">
-    $('#table').on('click', '#download', function() {
+    $('#table').on('click', '.download', function() {
         var file = $(this).data('file');
         $.getJSON(`/get/${file}`);
     });

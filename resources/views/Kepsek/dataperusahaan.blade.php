@@ -8,39 +8,36 @@
     <div class="white-box">
         <p class="text-muted m-b-30">Export data ke Excel, PDF & Print</p>
         <div class="table-responsive">
-            <table id="example23" class="display nowrap" cellspacing="0" width="100%">
-                <thead>
-                    <tr>
-                        <th>No</th>
-                        <th>Perusahaan</th>
-                        <th>Alumni bekerja</th>
-                        <th>Sesuai kompetensi</th>
-                        <th>Tidak sesuai</th>
-                        <th>Merasa puas</th>
-                        <th>Tidak puas</th>
-                    </tr>
-                </thead>
-                <tbody>
-                 <?php $no=1;
-                 ?>
-                 @foreach($perusahaan as $p)
-                 <tr>
-                    @if($p->nama_perusahaan==null)
-
-                    @else
-                    <td>{{ $no++ }}</td>
-                    <td>{{ $p->nama_perusahaan }}</td>
-                    <td>{{ $p->jumlah }}</td>
-                    <td>{{ $p->kesesuaian }}</td>
-                    <td>{{ $p->tdksesuai }}</td>
-                    <td>{{ $p->kepuasan }}</td>
-                    <td>{{ $p->tdkpuas }}</td>
-                    @endif
-
-                </tr>
-                @endforeach
-            </tbody>
-        </table>
+            <table id="example23" class="table table-striped display nowrap" cellspacing="0" width="100%">
+         <thead>
+          <tr>
+           <th>No</th>
+           <th>Perusahaan</th>
+           <th>Status</th>
+           <th>Alumni bekerja</th>
+           <th>Sesuai kompetensi</th>
+           <th>Merasa puas</th>
+         </tr>
+       </thead>
+       <tbody>
+        <?php $no=1;$no1=1;$no2=1;$no3=1;$no4=1;$no5=1;
+        ?>
+        @foreach($perusahaan as $p)
+        <tr>
+         <td>{{ $no++ }}</td>
+         <td>{{ $p['nama_perusahaan'] }}</td>
+         @if($p['status'] == 'Y')
+         <td><i class="fa fa-check text-success"></i> MOU</td>
+         @else
+         <td><i class="fa fa-close text-danger"></i> Belum MOU</td>
+         @endif
+         <td>{{ $p['jumlah'] }}</td>
+         <td>{{ $p['kesesuaian'] }}</td>
+         <td>{{ $p['kepuasan'] }}</td>
+      </tr>
+      @endforeach
+    </tbody>
+  </table>
     </div>
 </div>
 </div>
