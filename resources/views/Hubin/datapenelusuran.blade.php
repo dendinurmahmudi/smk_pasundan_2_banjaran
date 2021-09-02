@@ -7,6 +7,26 @@
 <div class="col-sm-12">
     <div class="white-box">
         <div class="row">
+            @if($ket == 'Data belum isi penelusuran')
+            <form method="POST" action="/kirimemail2">
+                {{ csrf_field() }}
+                <div class="col-sm-3">
+                    {{$ket}}
+                    <p class="text-muted m-b-30">Export data ke Excel, PDF & Print</p>
+                </div>
+                <div class="form-group" style="margin-bottom: 50px">
+                    <div class="col-sm-7">
+                        <?php $i=0 ?>
+                       @foreach($emailalumni as $e)
+                       <input type="hidden" <?= 'name="email['.$i++.']" '?> value="{{$e->email}}" placeholder="">
+                       @endforeach
+                    </div>
+                    <div class="col-sm-2">
+                        <button type="submit" class="btn btn-outline btn-success btn-block">Kirim Email</button>
+                    </div>
+                </div>
+            </form>
+            @else
             <form method="POST" action="/penelusuranBy_jurusan_tahun">
                 {{ csrf_field() }}
                 <div class="col-sm-3">
@@ -49,6 +69,7 @@
                     </div>
                 </div>
             </form>
+            @endif
         </div>
         <div class="table-responsive">
             <table id="example23" class="display nowrap" cellspacing="0" width="100%">

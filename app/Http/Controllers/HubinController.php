@@ -167,12 +167,17 @@ class HubinController extends Controller
         ->where('nama_perusahaan',null)->where('nama_kampus',null)->where('pencaker',null)
         ->orderBy('users.name')
         ->get();
-        
+        $emailalumni = alumni::join('users','alumni.nisn','=','users.nisn')
+        ->join('penelusuran','alumni.nisn','=','penelusuran.nisn')
+        ->join('jurusan','alumni.jurusan','=','jurusan.id_jurusan')
+        ->where('nama_perusahaan',null)->where('nama_kampus',null)->where('pencaker',null)
+        ->orderBy('users.name')
+        ->get();
         $jurusan = DB::table('jurusan')->get();
         $warna = ['','','','','oval',''];
         $lulusan = alumni::select('tahun_lulus')->groupBy('tahun_lulus')->get();
         $ket = 'Data belum isi penelusuran';
-        return view('Hubin/datapenelusuran',['penelusuran' => $penelusuran,'warna'=>$warna,'jurusan'=>$jurusan,'lulusan'=>$lulusan,'ket'=>$ket]);
+        return view('Hubin/datapenelusuran',['penelusuran' => $penelusuran,'warna'=>$warna,'jurusan'=>$jurusan,'lulusan'=>$lulusan,'ket'=>$ket,'emailalumni'=>$emailalumni]);
     }
     public function databekerja(){
         $penelusuran = penelusuran::join('users','penelusuran.nisn','=','users.nisn')
@@ -813,6 +818,27 @@ public function getperusahaan($tahun)
         $jml= $k->nama_perusahaan;
     }
     return $jml;
+}
+public function kirimemail2(Request $request)
+{
+    $status = $request->email;
+        $jml = count($status);
+        for ($i=0; $i < $jml; $i++) { 
+            try{
+            Mail::send('Hubin/kirimemail', array('email' => $request->email[$i]) , function($pesan) use($request){
+                $status = $request->email;
+        $jml = count($status);
+        for ($i=0; $i < $jml; $i++) { 
+                 $pesan->to($request->email[$i],$request->email[$i])->subject('Pemberitahuan pendataan penelusuran alumni');
+                 $pesan->from(env('MAIL_USERNAME','careerdevcenter.smkpasundan@gmail.com'),'CareerDevCenterSMKPasundan2Banjaran');
+             }
+         });
+        }catch (Exception $e){
+            return response (['status' => false,'errors' => $e->getMessage()]);
+        }
+        }
+    Session::flash('success', 'Email telah dikirim ke alumni');
+    return redirect('/hubin');
 }
 
 }

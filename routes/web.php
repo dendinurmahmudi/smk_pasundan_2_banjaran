@@ -77,6 +77,7 @@ Route::group(['middleware' => ['auth','CekLevel:2']], function () {
     Route::get('/jrsnprthn/{id}','HubinController@jrsnprthn');
     Route::post('/editperu','HubinController@editperusahaan');
     Route::get('/tahunlulus','HubinController@datatahunlulus');
+    Route::post('/kirimemail2','HubinController@kirimemail2');
 });
 Route::group(['middleware' => ['auth','CekLevel:3']], function () {
     Route::get('/kepsek', 'KepsekController@index')->name('kepsek');
